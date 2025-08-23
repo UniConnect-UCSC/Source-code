@@ -8,15 +8,16 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Sync to DigitalOcean
+      - name: Sync public folder to DigitalOcean
         uses: easingthemes/ssh-deploy@v2.1.5
         with:
-          ssh-private-key: ${{ secrets.DROPLET_SSH_KEY }}
-          remote-user: root
-          server-ip: uniconnect.ddns.net
-          remote-path: /var/www/uniconnect
-          local-path: public
+          SSH_PRIVATE_KEY: ${{ secrets.DROPLET_SSH_KEY }}
+          REMOTE_HOST: uniconnect.ddns.net
+          REMOTE_USER: root
+          SOURCE: public
+          TARGET: /var/www/uniconnect
