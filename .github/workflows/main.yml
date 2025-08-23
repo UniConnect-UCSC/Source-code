@@ -19,4 +19,4 @@ jobs:
           remote-user: root
           server-ip: uniconnect.ddns.net
           remote-path: /var/www/uniconnect
-          local-path: .
+          local-path: public
