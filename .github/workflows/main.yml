@@ -19,5 +19,5 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.DROPLET_SSH_KEY }}
           REMOTE_HOST: uniconnect.ddns.net
           REMOTE_USER: root
-          SOURCE: public
+          SOURCE: public/
           TARGET: /var/www/uniconnect
