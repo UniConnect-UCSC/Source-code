@@ -20,21 +20,4 @@ h1 {
     margin-bottom: 20px;
 }
 
-.status {
-    font-size: 1.2em;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 20px;
-}
 
-.status.success {
-    background: #e0ffe0;
-    color: #2e7d32;
-    border: 1px solid #81c784;
-}
-
-.status.error {
-    background: #ffe0e0;
-    color: #c62828;
-    border: 1px solid #e57373;
-}
