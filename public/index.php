@@ -18,7 +18,7 @@ try {
 </head>
 <body>
     <div class="container">
-        <h1>Database Connection Test</h1>
+        <h1>Database Connection Test 2.0</h1>
         <p class="status <?php echo ($status === 'Database connection successful!') ? 'success' : 'error'; ?>">
             <?php echo $status; ?>
         </p>
