@@ -1,0 +1,78 @@
+/* Reset CSS */
+/* Remove all default margin/padding and box sizing */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Remove default body styles */
+body {
+  font-family: system-ui, sans-serif;
+  line-height: 1;
+  background: none;
+  color: inherit;
+}
+
+/* Headings and paragraphs */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  font-weight: normal;
+  font-size: inherit;
+}
+
+/* Lists */
+ul,
+ol {
+  list-style: none; /* removes bullets/numbers */
+  margin: 0;
+  padding: 0;
+}
+
+/* Links */
+a {
+  text-decoration: none; /* removes underline */
+  color: inherit; /* inherit text color */
+}
+
+/* Images */
+img {
+  display: block; /* removes inline spacing */
+  max-width: 100%;
+  height: auto;
+}
+
+/* Buttons and inputs */
+button,
+input,
+textarea,
+select {
+  all: unset; /* removes default styling */
+  box-sizing: border-box;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Remove quotes from blockquotes and q */
+blockquote,
+q {
+  quotes: none;
+}
+blockquote::before,
+blockquote::after,
+q::before,
+q::after {
+  content: "";
+}

@@ -1,16 +1,18 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ob_start();
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Page</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Welcome to the Dummy Website</h1>
-        <p>This is a simple HTML page styled with CSS.</p>
-    </div>
-</body>
-</html>
+// Session setup
+$sessionPath = __DIR__ . "/../storage/sessions";
+if (!is_dir($sessionPath)) mkdir($sessionPath, 0777, true);
+session_save_path($sessionPath);
+session_start();
+
+require '../app/core/init.php';
+
+handleAuth();
+
+// Load controllers
+$app = new App;
+$app->loadController();

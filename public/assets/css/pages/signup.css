@@ -1,0 +1,242 @@
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--spacing-8);
+  background-color: var(--color-brand-50);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  padding: var(--spacing-6) var(--spacing-4);
+  border: 2px solid var(--color-primary-gray);
+  border-radius: var(--rounded-xl);
+  box-shadow: var(--shadow-md);
+  background-color: white;
+}
+
+.logo-image__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--spacing-4);
+}
+
+.logo-image {
+  object-fit: contain;
+  margin: 0 var(--spacing-4);
+}
+
+.heading-container {
+  text-align: center;
+  padding-bottom: var(--spacing-4);
+}
+
+.heading {
+  font-size: var(--text-2xl);
+  font-weight: 500;
+  margin-bottom: var(--spacing-1);
+}
+
+.sub-heading {
+  font-size: var(--text-base);
+  color: #6b7280;
+}
+
+.input-field__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  width: 100%;
+  margin: var(--spacing-6) 0;
+}
+
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Birthday section wrapper */
+.birthday-section {
+  width: 100%;
+}
+
+.section-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+/* Input styles */
+.input-field {
+  width: 100%;
+  padding: 16px 12px 8px 12px;
+  font-size: 16px;
+  border: 2px solid var(--color-primary-gray);
+  border-radius: var(--rounded-md);
+  background: white;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  border-color: var(--color-brand-400);
+}
+
+.input-label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #6b7280;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  background: white;
+  padding: 0 4px;
+}
+
+.input-field:focus + .input-label,
+.input-field:not([type="date"]):not(:placeholder-shown) + .input-label,
+.input-field[type="date"]:valid + .input-label,
+.input-field:-webkit-autofill + .input-label {
+  top: -8px;
+  left: 8px;
+  transform: none;
+  font-size: 12px;
+  color: var(--color-brand-400);
+  font-weight: 500;
+}
+
+.input-field::placeholder {
+  color: transparent;
+}
+
+/* --- Date input specifics --- */
+
+/* In most browsers date inputs don't support :placeholder-shown.
+   Use required + :valid to know when a date is selected. */
+.input-field[type="date"] {
+  color-scheme: light;
+}
+
+.input-field[type="date"]:not(:focus):invalid {
+  color: transparent;
+}
+
+.input-field[type="date"]:focus,
+.input-field[type="date"]:valid {
+  color: #374151;
+}
+
+.input-field[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+/* Submit button */
+.signup-button {
+  border-radius: var(--rounded-full);
+  background-color: var(--color-brand-400);
+  width: 100%;
+  text-align: center;
+  padding: var(--spacing-2) var(--spacing-4);
+  font-weight: 500;
+  color: white;
+  margin-top: var(--spacing-4);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-button:hover {
+  background-color: var(--color-brand-600);
+}
+
+.login-container {
+  padding-top: var(--spacing-6);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.login-link {
+  color: var(--color-brand-400);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* ✅ Fixed Error states */
+.input-field.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-field.error + .input-label {
+  color: #ef4444;
+}
+
+.input-field.error:focus + .input-label,
+.input-field.error:not(:placeholder-shown) + .input-label {
+  color: #ef4444;
+}
+
+/* ✅ Fixed Success state */
+.input-field.success {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.input-field.success + .input-label {
+  color: #10b981;
+}
+
+.input-field.success:focus + .input-label,
+.input-field.success:not(:placeholder-shown) + .input-label {
+  color: #10b981;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 14px;
+  margin-top: 6px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: all 0.3s ease;
+  min-height: 20px;
+}
+
+.error-message.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Input variants (optional for future) */
+.input-variant-purple .input-field:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.input-variant-purple .input-field:focus + .input-label,
+.input-variant-purple .input-field:not(:placeholder-shown) + .input-label {
+  color: #8b5cf6;
+}
+
+.input-variant-emerald .input-field:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.input-variant-emerald .input-field:focus + .input-label,
+.input-variant-emerald .input-field:not(:placeholder-shown) + .input-label {
+  color: #10b981;
+}

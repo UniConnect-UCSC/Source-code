@@ -1,0 +1,48 @@
+# Composer dependencies (if using Composer)
+/vendor/
+
+# Environment variables
+.env
+.env.*
+
+# Cache, logs, and session files
+/storage/logs/
+storage/cache/
+storage/sessions/
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# PHPUnit (if using)
+phpunit.xml
+phpunit.xml.dist
+
+# Node modules (if using frontend tooling)
+node_modules/
+
+# Build output (if any)
+public/build/
+public/dist/
+
+# Uploads (if you store them in your project root)
+public/uploads/
+
+# Backup files
+*.bak
+*.tmp
+*.swp
+*.swo
+
+# XAMPP-related
+xamppfiles/
+
+#Sessions files
+/storage/
+
