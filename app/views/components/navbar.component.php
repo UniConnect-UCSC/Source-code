@@ -6,7 +6,7 @@
         <img src="/assets/images/logo.svg" width="150">
     </a>
 
-    <div class="links__container">
+    <!-- <div class="links__container">
         <?php
         foreach ($navbarLinks as $link) {
             echo '<span>';
@@ -16,7 +16,7 @@
             echo '</span>';
         }
         ?>
-    </div>
+    </div> -->
 
     <div class="profile__container">
 

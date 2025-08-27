@@ -1,0 +1,7 @@
+.home-layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--spacing-4);
+
+  margin: var(--spacing-4) var(--spacing-4);
+}

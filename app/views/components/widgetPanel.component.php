@@ -1,0 +1,1 @@
+<div class="widget-panel">Widget</div>

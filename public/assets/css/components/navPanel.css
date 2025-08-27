@@ -1,0 +1,9 @@
+.nav-panel {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  background-color: var(--color-primary-white);
+
+  border-radius: var(--rounded-xl);
+  /* margin: var(--spacing-6) var(--spacing-2); */
+  padding: var(--spacing-3) var(--spacing-3);
+}

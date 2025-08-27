@@ -1,0 +1,9 @@
+.feed {
+  grid-column-start: 4;
+  grid-column-end: 10;
+
+  background-color: var(--color-primary-white);
+
+  border-radius: var(--rounded-xl);
+  /* margin: var(--spacing-6) var(--spacing-4); */
+}
