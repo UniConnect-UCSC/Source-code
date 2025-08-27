@@ -13,11 +13,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Sync public folder to DigitalOcean
+      - name: Sync public folder
         uses: easingthemes/ssh-deploy@v2.1.5
         with:
           SSH_PRIVATE_KEY: ${{ secrets.DROPLET_SSH_KEY }}
           REMOTE_HOST: uniconnect.ddns.net
           REMOTE_USER: root
-          SOURCE: public/
+          SOURCE: public
+          TARGET: /var/www/uniconnect
+
+      - name: Sync app folder
+        uses: easingthemes/ssh-deploy@v2.1.5
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.DROPLET_SSH_KEY }}
+          REMOTE_HOST: uniconnect.ddns.net
+          REMOTE_USER: root
+          SOURCE: app
           TARGET: /var/www/uniconnect
