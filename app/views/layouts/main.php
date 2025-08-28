@@ -17,6 +17,9 @@
 
     <!-- Page-specific head content -->
     <?= $head ?? '' ?>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
 </head>
 
 <body>

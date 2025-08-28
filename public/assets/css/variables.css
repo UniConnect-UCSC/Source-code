@@ -39,15 +39,6 @@
   --font-serif: "Merriweather", serif;
   --font-mono: "Fira Code", monospace;
 
-  /* Spacing */
-  --spacing-0: 0;
-  --spacing-1: 0.25rem; /* 4px */
-  --spacing-2: 0.5rem; /* 8px */
-  --spacing-4: 1rem; /* 16px */
-  --spacing-6: 1.5rem; /* 24px */
-  --spacing-8: 2rem; /* 32px */
-  --spacing-12: 3rem; /* 48px */
-
   /* Shadow */
   --shadow-none: none;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -71,6 +62,7 @@
   --rounded-full: 9999px; /* Fully rounded (circle/pill) */
 
   /* Spacing scale */
+  --spacing-0: 0;
   --spacing-1: 0.25rem; /* 4px */
   --spacing-2: 0.5rem; /* 8px */
   --spacing-3: 0.75rem; /* 12px */
