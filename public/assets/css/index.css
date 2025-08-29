@@ -8,3 +8,6 @@ body {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE/Edge */
 }
+  padding: var(--spacing-20) 0;
+  background-color: var(--color-secondary-white);
+}

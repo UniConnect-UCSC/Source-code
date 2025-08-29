@@ -7,4 +7,8 @@
   margin: var(--spacing-20) 0;
 
   border-radius: var(--rounded-xl);
+
+  background-color: var(--color-primary-white);
+
+  border-radius: var(--rounded-xl);
 }

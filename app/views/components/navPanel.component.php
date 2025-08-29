@@ -17,3 +17,14 @@
 <script>
 lucide.createIcons();
 </script>
+        <?php
+        foreach ($navbarLinks as $link) {
+            echo '<div>';
+            echo '<a href="' . htmlspecialchars($link["pageLink"]) . '">';
+            echo htmlspecialchars($link["pageName"]);
+            echo '</a>';
+            echo '</div>';
+        }
+        ?>
+    </div>
+</div>

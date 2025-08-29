@@ -2,6 +2,7 @@
   height: fit-content;
   position: sticky;
   top: var(--spacing-24);
+
   grid-column-start: 1;
   grid-column-end: 4;
   background-color: var(--color-primary-white);
@@ -29,4 +30,5 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-3);
 }

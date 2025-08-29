@@ -5,6 +5,11 @@
   grid-column-start: 10;
   grid-column-end: 13;
 
+  grid-column-start: 10;
+  grid-column-end: 13;
+
+  background-color: var(--color-primary-white);
+
   border-radius: var(--rounded-xl);
   /* margin: var(--spacing-6) var(--spacing-4); */
 }
