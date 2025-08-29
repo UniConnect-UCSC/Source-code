@@ -1,4 +1,10 @@
 .widget-panel {
+  height: fit-content;
+  position: sticky;
+  top: var(--spacing-24);
+  grid-column-start: 10;
+  grid-column-end: 13;
+
   grid-column-start: 10;
   grid-column-end: 13;
 

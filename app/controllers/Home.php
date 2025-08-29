@@ -12,6 +12,7 @@ class Home extends Controller
             <link rel="stylesheet" href="/assets/css/components/navPanel.css">
             <link rel="stylesheet" href="/assets/css/components/feed.css">
             <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
+            <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
             '
         ]);
     }

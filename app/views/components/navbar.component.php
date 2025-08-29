@@ -21,31 +21,39 @@
     <div class="profile__container">
 
 
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+            <i data-lucide="search" class="search-icon"></i>
+            <input placeholder="Search Uniconnect" class="search">
+        </div>
+
+        <!-- Notifications -->
+        <div class="bell__container">
+            <i data-lucide="bell"></i>
+        </div>
+
+        <!-- User Icon -->
         <?php
         $userModel = new User();
 
-        $userEmail = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : "";
-
+        $userEmail = $_SESSION['user_email'] ?? "";
         $user = $userModel->first(["email" => $userEmail]);
 
-        $profilePic = $user->profile_picture;
-
-        if ($profilePic) {
-            echo ('<a href="/profile">');
-            echo ('<img class="profile-image" src=' . $profilePic . '>');
-            echo ("</a>");
-        } else {
-            $fNameInitial = strtoupper($user->f_name[0]);
-            $lNameInitial = strtoupper($user->l_name[0]);
-
-            echo ('<a class="profile" href="/profile">');
-            echo (htmlspecialchars($fNameInitial));
-            echo (htmlspecialchars($lNameInitial));
-            echo ("</a>");
-        }
-
-
+        $profilePic = $user->profile_picture ?? null;
         ?>
+
+        <?php if ($profilePic): ?>
+        <a href="/profile">
+            <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
         </a>
+        <?php else: ?>
+        <?php
+            $fNameInitial = strtoupper($user->f_name[0] ?? '');
+            $lNameInitial = strtoupper($user->l_name[0] ?? '');
+            ?>
+        <a class="profile" href="/profile">
+            <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+        </a>
+        <?php endif; ?>
     </div>
 </nav>
