@@ -1,0 +1,32 @@
+body {
+  margin:0;
+}
+.kuppi-layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 2fr));
+  gap: var(--spacing-4);
+  margin: var(--spacing-4) var(--spacing-4);
+}
+
+.Nav-panel {
+  grid-column: 1 / 4;
+}
+
+.kuppi-feed {
+  grid-column: 4 / 13;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-6);
+  padding: var(--spacing-5);
+}
+
+
+
+.feed-title {
+  margin-top: var(--spacing-10);
+    grid-column: 1 / -1;
+    color: var(--color-gray-800);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: var(--spacing-4);
+}

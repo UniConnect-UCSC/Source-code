@@ -7,10 +7,10 @@ if ($_SERVER['SERVER_NAME'] == 'uniconnect.local') {
     define('ROOT', 'https://www.yourwebsite.com');
 }
 
-define('DBHOST', "localhost");
+define('DBHOST', "db");
 define('DBPORT', 5432);
 define('DBNAME', "uniconnect");
 define('DBUSER', "postgres");
-define('DBPASSWORD', "0000");
+define('DBPASSWORD', "admin");
 
 define('DEBUG', true);

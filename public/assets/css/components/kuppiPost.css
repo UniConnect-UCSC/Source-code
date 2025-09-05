@@ -1,0 +1,57 @@
+.kuppi-post {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+  width: 100%;
+}
+
+.kuppi-post:hover {
+  transform: translateY(-5px);
+}
+
+.post-image {
+  position: relative;
+}
+
+.post-image img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.post-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-topic {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 8px;
+  color: #222;
+}
+
+.post-university {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.post-datetime {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 12px;
+}
+
+.card-platform {
+  display: inline-block;
+  background: #eef2f7;
+  color: #333;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
+  align-self: flex-start;
+}
