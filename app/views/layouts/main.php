@@ -13,9 +13,13 @@
     <link rel="stylesheet" href="/assets/css/variables.css">
     <link rel="stylesheet" href="/assets/css/reset.css">
     <link rel="stylesheet" href="/assets/css/typography.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
 
     <!-- Page-specific head content -->
     <?= $head ?? '' ?>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
 </head>
 
 <body>

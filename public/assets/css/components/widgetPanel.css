@@ -1,0 +1,26 @@
+.widget-panel {
+  height: fit-content;
+  position: sticky;
+  top: var(--spacing-24);
+  grid-column-start: 10;
+  grid-column-end: 13;
+
+  grid-column-start: 10;
+  grid-column-end: 13;
+
+  background-color: var(--color-primary-white);
+
+  border-radius: var(--rounded-xl);
+  /* margin: var(--spacing-6) var(--spacing-4); */
+}
+
+.widget-panel {
+  height: fit-content;
+  position: sticky;
+  top: var(--spacing-24);
+  grid-column-start: 10;
+  grid-column-end: 13;
+
+  border-radius: var(--rounded-xl);
+  /* margin: var(--spacing-6) var(--spacing-4); */
+}
