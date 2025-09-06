@@ -28,9 +28,6 @@
 .nav-panel__link {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
-<<<<<<< HEAD
-=======
-  padding: var(--spacing-3) var(--spacing-3);
->>>>>>> origin/dev
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-3);
 }

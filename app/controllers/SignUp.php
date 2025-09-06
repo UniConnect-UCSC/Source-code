@@ -25,6 +25,9 @@ class SignUp extends Controller
                 $data['errors']['password'] = 'Password is required';
             }
 
+            //Check if the email is a valid uni email
+            //Code goes here
+
             //Match email to the university
             $universityId = "";
             if ($email) {
