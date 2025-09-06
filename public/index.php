@@ -10,7 +10,6 @@ session_save_path($sessionPath);
 session_start();
 
 require '../app/core/init.php';
-
 handleAuth();
 
 // Load controllers
