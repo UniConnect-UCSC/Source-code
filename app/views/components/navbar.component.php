@@ -34,12 +34,11 @@
 
         <!-- User Icon -->
         <?php
-        $userModel = new User();
 
         $userEmail = $_SESSION['user_email'] ?? "";
-        $user = $userModel->first(["email" => $userEmail]);
-
-        $profilePic = $user->profile_picture ?? null;
+        $userFName = $_SESSION['user_fName'] ?? "";
+        $userLName = $_SESSION['user_lName'] ?? "";
+        $profilePic = $_SESSION['user_profilePicture'] ?? null;
         ?>
 
         <?php if ($profilePic): ?>
@@ -48,8 +47,8 @@
         </a>
         <?php else: ?>
         <?php
-            $fNameInitial = strtoupper($user->f_name[0] ?? '');
-            $lNameInitial = strtoupper($user->l_name[0] ?? '');
+            $fNameInitial = strtoupper($userFName[0] ?? '');
+            $lNameInitial = strtoupper($userLName[0] ?? '');
             ?>
         <a class="profile" href="/profile">
             <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
