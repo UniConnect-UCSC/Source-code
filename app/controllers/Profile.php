@@ -9,6 +9,7 @@ class Profile extends Controller
             'head' => '
             <link rel="stylesheet" href="/assets/css/pages/profile.css">
             <link rel="stylesheet" href="/assets/css/components/navbar.css">
+            <link rel="stylesheet" href="/assets/css/components/navPanel.css">
             '
         ]);
     }
