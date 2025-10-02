@@ -1,0 +1,9 @@
+.create-post {
+  height: fit-content;
+
+  background-color: var(--color-primary-white);
+}
+
+.input-bar {
+  display: flex;
+}
