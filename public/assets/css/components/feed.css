@@ -2,13 +2,7 @@
   grid-column-start: 4;
   grid-column-end: 10;
   min-height: 200vh;
-
-<<<<<<< HEAD
   background-color: var(--color-primary-white);
-  margin: var(--spacing-20) 0;
-=======
   margin-top: var(--spacing-20);
->>>>>>> 6511c0bd6573beafcd7535feb9ae75f99e263f5b
-
   border-radius: var(--rounded-xl);
 }
