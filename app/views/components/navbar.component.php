@@ -18,7 +18,7 @@
         ?>
     </div> -->
 
-    <div class="profile__container">
+    <div class="navigation__container">
 
 
         <!-- Search Bar -->
@@ -40,20 +40,56 @@
         $user = $userModel->first(["email" => $userEmail]);
 
         $profilePic = $user->profile_picture ?? null;
+
+        $userEmail = $_SESSION['user_email'] ?? "";
+        $userFName = $_SESSION['user_fName'] ?? "";
+        $userLName = $_SESSION['user_lName'] ?? "";
+        $profilePic = $_SESSION['user_profilePicture'] ?? null;
         ?>
 
-        <?php if ($profilePic): ?>
-        <a href="/profile">
-            <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-        </a>
-        <?php else: ?>
-        <?php
-            $fNameInitial = strtoupper($user->f_name[0] ?? '');
-            $lNameInitial = strtoupper($user->l_name[0] ?? '');
-            ?>
-        <a class="profile" href="/profile">
-            <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-        </a>
-        <?php endif; ?>
+        <div class="profile__container">
+            <?php if ($profilePic): ?>
+            <div>
+                <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+            </div>
+            <?php else: ?>
+            <?php
+
+                $fNameInitial = strtoupper($user->f_name[0] ?? '');
+                $lNameInitial = strtoupper($user->l_name[0] ?? '');
+
+                $fNameInitial = strtoupper($userFName[0] ?? '');
+                $lNameInitial = strtoupper($userLName[0] ?? '');
+                ?>
+            <div class="profile">
+                <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+            </div>
+            <?php endif; ?>
+
+            <!-- <i data-lucide="chevron-down" class="chevron-down"></i> -->
+
+
+            <div class="profile__content" id="user-content">
+                <a href="/profile" class="user__profile">
+                    <?php if ($profilePic): ?>
+                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                    <?php else: ?>
+                    <span class="profile">
+                        <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+                    </span>
+                    <?php endif; ?>
+                    <span>
+                        <?= htmlspecialchars($userFName) ?> <?= htmlspecialchars($userLName) ?>
+                    </span>
+                </a>
+                <a class="user__logout" href="/logout">
+                    <i data-lucide="log-out"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+
+        </div>
+
+
     </div>
 </nav>

@@ -1,7 +1,7 @@
 body {
   margin:0;
 }
-.kuppi-layout {
+.studyMaterial-layout {
   display: grid;
   grid-template-columns: 3fr 9fr;
   gap: var(--spacing-5);
@@ -27,7 +27,7 @@ body {
   grid-column: 3 / 4;
 }
 
-.kuppi-feed {
+.studyMaterial-feed {
   grid-column: 2 / 3; 
   display: grid;
   grid-template-columns: repeat(3, 1fr); 
@@ -42,13 +42,13 @@ body {
   margin-bottom: 20px;
 }
 @media (max-width: 1024px) {
-  .kuppi-feed {
+  .studyMaterial-feed {
     grid-template-columns: repeat(2, 1fr); /* 2 per row on medium screens */
   }
 }
 
 @media (max-width: 768px) {
-  .kuppi-feed {
+  .studyMaterial-feed {
     grid-template-columns: 1fr; /* 1 per row on small screens */
   }
 }

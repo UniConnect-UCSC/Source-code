@@ -1,5 +1,6 @@
 .widget-panel {
   height: fit-content;
+<<<<<<< HEAD
   position: sticky;
   top: var(--spacing-24);
   grid-column-start: 10;
@@ -18,9 +19,15 @@
   height: fit-content;
   position: sticky;
   top: var(--spacing-24);
+=======
+>>>>>>> 6511c0bd6573beafcd7535feb9ae75f99e263f5b
   grid-column-start: 10;
   grid-column-end: 13;
 
   border-radius: var(--rounded-xl);
+<<<<<<< HEAD
   /* margin: var(--spacing-6) var(--spacing-4); */
+=======
+  margin-top: var(--spacing-20);
+>>>>>>> 6511c0bd6573beafcd7535feb9ae75f99e263f5b
 }

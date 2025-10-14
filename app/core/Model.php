@@ -6,10 +6,19 @@ trait Model
 
     public $errors = [];
 
+    private $limit = 10;
+    private $offset = 0;
+
     public function __construct()
     {
-        // Ensure PDO is connected
         $this->connect();
+    }
+
+    public function findAll($limit = null)
+    {
+        $limit = $limit ? $limit : $this->limit;
+        $sql = "SELECT * from $this->table limit $limit offset $this->offset";
+        return $this->query($sql);
     }
 
     public function where($data)
@@ -18,9 +27,7 @@ trait Model
             $keys = array_keys($data);
             $conditions = implode(" AND ", array_map(fn($key) => "$key = :$key", $keys));
             $sql = "SELECT * FROM {$this->table} WHERE $conditions";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($data);
-            return $stmt->fetchAll(PDO::FETCH_OBJ);
+            return $this->query($sql, $data);
         } catch (PDOException $e) {
             die("WHERE query failed: " . $e->getMessage());
         }
@@ -32,9 +39,7 @@ trait Model
             $keys = array_keys($data);
             $conditions = implode(" AND ", array_map(fn($key) => "$key = :$key", $keys));
             $sql = "SELECT * FROM {$this->table} WHERE $conditions LIMIT 1";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($data);
-            return $stmt->fetch(PDO::FETCH_OBJ);
+            return $this->get_row($sql, $data);
         } catch (PDOException $e) {
             die("FIRST query failed: " . $e->getMessage());
         }
@@ -47,8 +52,7 @@ trait Model
             $columns = implode(", ", $keys);
             $placeholders = implode(", ", array_map(fn($key) => ":$key", $keys));
             $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
-            $stmt = $this->pdo->prepare($sql);
-            return $stmt->execute($data);
+            return $this->query($sql, $data);
         } catch (PDOException $e) {
             die("INSERT failed: " . $e->getMessage());
         }
@@ -60,18 +64,12 @@ trait Model
             $keys = array_keys($data);
             $columns = implode(", ", $keys);
             $placeholders = implode(", ", array_map(fn($key) => ":$key", $keys));
-
-            // Use RETURNING * to get the inserted row
             $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders) RETURNING *";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($data);
-
-            return $stmt->fetch(PDO::FETCH_OBJ);
+            return $this->get_row($sql, $data);
         } catch (PDOException $e) {
             die("INSERT+FETCH failed: " . $e->getMessage());
         }
     }
-
 
     public function update($id, $data, $id_column = 'id')
     {
@@ -80,8 +78,7 @@ trait Model
             $set = implode(", ", array_map(fn($key) => "$key = :$key", $keys));
             $sql = "UPDATE {$this->table} SET $set WHERE $id_column = :id";
             $data['id'] = $id;
-            $stmt = $this->pdo->prepare($sql);
-            return $stmt->execute($data);
+            return $this->query($sql, $data);
         } catch (PDOException $e) {
             die("UPDATE failed: " . $e->getMessage());
         }
@@ -91,8 +88,7 @@ trait Model
     {
         try {
             $sql = "DELETE FROM {$this->table} WHERE $id_column = :id";
-            $stmt = $this->pdo->prepare($sql);
-            return $stmt->execute(['id' => $id]);
+            return $this->query($sql, ['id' => $id]);
         } catch (PDOException $e) {
             die("DELETE failed: " . $e->getMessage());
         }

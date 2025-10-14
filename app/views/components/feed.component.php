@@ -1,1 +1,4 @@
-<div class="feed">Feed</div>
+<div class="feed">
+    <?php component("createPost") ?>
+
+</div>

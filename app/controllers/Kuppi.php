@@ -13,6 +13,7 @@ class Kuppi extends Controller
             <link rel="stylesheet" href="/assets/css/components/feed.css">
             <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
             <link rel="stylesheet" href="/assets/css/components/kuppiPost.css">
+            <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
             '
         ]);
     }

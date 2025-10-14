@@ -1,5 +1,5 @@
 
-.kuppi-post {
+.studyMaterial-post {
   width: 100%; 
   max-width: 350px;
   background: #fff;
@@ -9,11 +9,11 @@
   transition: transform 0.2s ease;
 }
 
-.kuppi-post:hover {
+.studyMaterial-post:hover {
   transform: translateY(-5px);
 }
 
-.post-image img {
+.studyMaterial-image img {
   width: 100%;
   height: 180px;
   object-fit: cover;
@@ -40,13 +40,13 @@
   margin-bottom: 4px;
 }
 
-.post-datetime {
+.post-views {
   font-size: 5px;
   color: #777;
   margin-bottom: 12px;
 }
 
-.card-platform {
+.card-type {
   display: inline-block;
   background: #eef2f7;
   color: #333;
