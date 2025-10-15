@@ -14,10 +14,11 @@ trait Model
         $this->connect();
     }
 
-    public function findAll($limit = null)
+    public function findAll($limit = null, $offset = null)
     {
         $limit = $limit ? $limit : $this->limit;
-        $sql = "SELECT * from $this->table limit $limit offset $this->offset";
+        $offset = $offset ? $offset : $this->offset;
+        $sql = "SELECT * from $this->table limit $limit offset $offset";
         return $this->query($sql);
     }
 
