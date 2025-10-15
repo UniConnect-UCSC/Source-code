@@ -22,13 +22,53 @@ trait Model
         return $this->query($sql);
     }
 
-    public function where($data)
+    /**
+     * @param array $conditions Array of conditions in format [field ,operator, value]]
+     * @param int $limit [DEFAULT: queries EVERYTHING]
+     * @param int $offset [DEFAULT: 0]
+     * @param array $orderBy Array of fields to order by with direction [field => 'ASC|DESC']
+     * Note: In this method only the condition inputs are prepared for execution
+     */
+    public function where($conditions, $limit = null, $offset = null, $orderBy = [])
     {
         try {
-            $keys = array_keys($data);
-            $conditions = implode(" AND ", array_map(fn($key) => "$key = :$key", $keys));
-            $sql = "SELECT * FROM {$this->table} WHERE $conditions";
+            $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE'];
+            $data = [];
+
+            $sql = "SELECT * FROM {$this->table} WHERE ";
+
+            // Build the WHERE clause
+            foreach ($conditions as $condition){
+
+                if (is_array($condition) && count($condition) == 3 && in_array($condition[1], $operators)) {
+                    $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
+
+                    $data[$condition[0]] = $condition[2];
+                }else{
+
+                    // Handle invalid condition format
+                    return false;
+                }
+            }
+
+            // Handle the trailing AND in the previous loop
+            $sql .= "TRUE ";
+
+            $sql .= $limit ? "LIMIT $limit" : "";
+            $sql .= $offset ? "OFFSET $offset" : "";
+
+
+            // Build the ORDER BY clause
+            foreach ($orderBy as $field => $direction) {
+                if(!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
+                    return false; // Invalid direction
+                }
+
+                $sql .= " ORDER BY $field $direction";
+            }
+
             return $this->query($sql, $data);
+
         } catch (PDOException $e) {
             die("WHERE query failed: " . $e->getMessage());
         }
