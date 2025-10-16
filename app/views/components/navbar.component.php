@@ -6,7 +6,7 @@
         <img src="/assets/images/logo.svg" width="150">
     </a>
 
-    <div class="links__container">
+    <!-- <div class="links__container">
         <?php
         foreach ($navbarLinks as $link) {
             echo '<span>';
@@ -16,36 +16,80 @@
             echo '</span>';
         }
         ?>
-    </div>
+    </div> -->
 
-    <div class="profile__container">
+    <div class="navigation__container">
 
 
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+            <i data-lucide="search" class="search-icon"></i>
+            <input placeholder="Search Uniconnect" class="search">
+        </div>
+
+        <!-- Notifications -->
+        <div class="bell__container">
+            <i data-lucide="bell"></i>
+        </div>
+
+        <!-- User Icon -->
         <?php
         $userModel = new User();
 
-        $userEmail = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : "";
-
+        $userEmail = $_SESSION['user_email'] ?? "";
         $user = $userModel->first(["email" => $userEmail]);
 
-        $profilePic = $user->profile_picture;
+        $profilePic = $user->profile_picture ?? null;
 
-        if ($profilePic) {
-            echo ('<a href="/profile">');
-            echo ('<img class="profile-image" src=' . $profilePic . '>');
-            echo ("</a>");
-        } else {
-            $fNameInitial = strtoupper($user->f_name[0]);
-            $lNameInitial = strtoupper($user->l_name[0]);
-
-            echo ('<a class="profile" href="/profile">');
-            echo (htmlspecialchars($fNameInitial));
-            echo (htmlspecialchars($lNameInitial));
-            echo ("</a>");
-        }
-
-
+        $userEmail = $_SESSION['user_email'] ?? "";
+        $userFName = $_SESSION['user_fName'] ?? "";
+        $userLName = $_SESSION['user_lName'] ?? "";
+        $profilePic = $_SESSION['user_profilePicture'] ?? null;
         ?>
-        </a>
+
+        <div class="profile__container">
+            <?php if ($profilePic): ?>
+            <div>
+                <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+            </div>
+            <?php else: ?>
+            <?php
+
+                $fNameInitial = strtoupper($user->f_name[0] ?? '');
+                $lNameInitial = strtoupper($user->l_name[0] ?? '');
+
+                $fNameInitial = strtoupper($userFName[0] ?? '');
+                $lNameInitial = strtoupper($userLName[0] ?? '');
+                ?>
+            <div class="profile">
+                <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+            </div>
+            <?php endif; ?>
+
+            <!-- <i data-lucide="chevron-down" class="chevron-down"></i> -->
+
+
+            <div class="profile__content" id="user-content">
+                <a href="/profile" class="user__profile">
+                    <?php if ($profilePic): ?>
+                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                    <?php else: ?>
+                    <span class="profile">
+                        <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+                    </span>
+                    <?php endif; ?>
+                    <span>
+                        <?= htmlspecialchars($userFName) ?> <?= htmlspecialchars($userLName) ?>
+                    </span>
+                </a>
+                <a class="user__logout" href="/logout">
+                    <i data-lucide="log-out"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+
+        </div>
+
+
     </div>
 </nav>

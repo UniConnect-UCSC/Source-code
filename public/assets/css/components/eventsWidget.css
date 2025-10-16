@@ -1,0 +1,54 @@
+.events-widget {
+  background-color: var(--color-primary-white);
+  padding: var(--spacing-3) var(--spacing-3);
+}
+
+.events-widget > div:first-child > p {
+  font-weight: 500;
+  color: var(--color-brand-800);
+}
+
+.event {
+  display: flex;
+  gap: var(--spacing-3);
+  margin: var(--spacing-2) var(--spacing-0);
+}
+
+.event-date {
+  background-color: var(--color-brand-100);
+  border-radius: var(--rounded-md);
+  padding: var(--spacing-1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  aspect-ratio: 1/1;
+  font-size: var(--text-xs);
+  color: var(--color-brand-800);
+}
+
+.event-date > span:first-child {
+  font-weight: 500;
+  font-size: var(--text-sm);
+}
+
+.event-info {
+  font-size: var(--text-xs);
+}
+
+.event-info p {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.view-all-events {
+  text-align: center;
+  color: var(--color-brand-800);
+  padding: var(--spacing-1) 0;
+  font-weight: 500;
+}
+
+.view-all-events:hover {
+  color: var(--color-brand-900);
+}

@@ -1,0 +1,8 @@
+.feed {
+  grid-column-start: 4;
+  grid-column-end: 10;
+  min-height: 200vh;
+  background-color: var(--color-primary-white);
+  margin-top: var(--spacing-20);
+  border-radius: var(--rounded-xl);
+}

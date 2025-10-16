@@ -1,19 +1,48 @@
 <?php
-$navbarLinks = [
+$navbarPanelLinks = [
     [
-        "pageName" => "Feed",
-        "pageLink" => "/"
+        "pageName" => "Global Feed",
+        "pageLink" => "/",
+        "icon" => "house"
+    ],
+    [
+        "pageName" => "University Feed",
+        "pageLink" => "/",
+        "icon" => "university"
     ],
     [
         "pageName" => "Marketplace",
-        "pageLink" => "/marketplace"
+        "pageLink" => "/",
+        "icon" => "store"
     ],
     [
-        "pageName" => "Learning",
-        "pageLink" => "/learning"
+        "pageName" => "Rooms & Boardings",
+        "pageLink" => "/",
+        "icon" => "bed"
+    ],
+    [
+        "pageName" => "Study Materials",
+        "pageLink" => "/",
+        "icon" => "notebook-pen"
+    ],
+    [
+        "pageName" => "Kuppi",
+        "pageLink" => "/",
+        "icon" => "graduation-cap"
     ],
     [
         "pageName" => "Events",
-        "pageLink" => "/events"
+        "pageLink" => "/",
+        "icon" => "calendar"
+    ],
+    [
+        "pageName" => "Friend Requests",
+        "pageLink" => "/",
+        "icon" => "handshake"
+    ],
+    [
+        "pageName" => "Groups",
+        "pageLink" => "/",
+        "icon" => "users"
     ],
 ];

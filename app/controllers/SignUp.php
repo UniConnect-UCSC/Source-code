@@ -25,6 +25,9 @@ class SignUp extends Controller
                 $data['errors']['password'] = 'Password is required';
             }
 
+            //Check if the email is a valid uni email
+            //Code goes here
+
             //Match email to the university
             $universityId = "";
             if ($email) {
@@ -73,6 +76,7 @@ class SignUp extends Controller
                     $_SESSION['user_fName'] = $user->f_name;
                     $_SESSION['user_lName'] = $user->l_name;
                     $_SESSION['user_universityID'] = $user->university;
+                    $_SESSION['user_profilePicture'] = $user->profile_picture;
 
                     // Ensure session is saved before redirect
                     session_write_close();
