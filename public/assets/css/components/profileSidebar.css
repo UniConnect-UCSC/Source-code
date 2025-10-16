@@ -1,0 +1,4 @@
+.profile-sidebar {
+  grid-column-start: 10;
+  grid-column-end: 13;
+}
