@@ -24,10 +24,20 @@ trait Model
     public function where($data)
     {
         try {
-            $keys = array_keys($data);
-            $conditions = implode(" AND ", array_map(fn($key) => "$key = :$key", $keys));
-            $sql = "SELECT * FROM {$this->table} WHERE $conditions";
-            return $this->query($sql, $data);
+            $conditions = [];
+            $params = [];
+            foreach ($data as $key => $value) {
+                if (is_array($value)) {
+                    // Example: ['user_id' => [5, '!=']]
+                    $conditions[] = "$key {$value[1]} :$key";
+                    $params[$key] = $value[0];
+                } else {
+                    $conditions[] = "$key = :$key";
+                    $params[$key] = $value;
+                }
+            }
+            $sql = "SELECT * FROM {$this->table} WHERE " . implode(" AND ", $conditions);
+            return $this->query($sql, $params);
         } catch (PDOException $e) {
             die("WHERE query failed: " . $e->getMessage());
         }

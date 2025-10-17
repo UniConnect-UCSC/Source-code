@@ -1,7 +1,7 @@
-<?php require_once(__DIR__ . "/../../models/Post.php"); ?>
+<?php require_once(__DIR__ . "/../../models/GlobalPost.php"); ?>
 <div class="profile-feed">
     <?php
-    $postsModel = new Post();
+    $postsModel = new GlobalPost();
     $posts = $postsModel->where(["user_id" => $_SESSION['user_id']]);
     ?>
 
@@ -9,6 +9,7 @@
         <?php
         component("post", [
             "postId" => $post->id,
+            "authorId" => $post->user_id,
             "author" => $post->is_anonymous ? "Anonymous" : $_SESSION['user_fName'] . " " . $_SESSION['user_lName'],
             "caption" => $post->caption,
             "createdAt" => $post->created_at,

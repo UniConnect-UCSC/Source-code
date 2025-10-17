@@ -47,3 +47,32 @@ function getEmailDomain($email)
     $parts = explode('@', $email);
     return isset($parts[1]) ? $parts[1] : null;
 }
+
+
+function timeAgo($datetime)
+{
+    // Set timezone to match your database
+    date_default_timezone_set('Asia/Colombo');
+
+    // Remove microseconds
+    $datetime = preg_replace('/\.\d+/', '', $datetime);
+
+    $timestamp = strtotime($datetime);
+    $now = time();
+    $diff = $now - $timestamp;
+
+    if ($diff < 60) {
+        return $diff === 1 ? '1 second ago' : "$diff seconds ago";
+    } elseif ($diff < 3600) {
+        $minutes = floor($diff / 60);
+        return $minutes === 1 ? '1 minute ago' : "$minutes minutes ago";
+    } elseif ($diff < 86400) {
+        $hours = floor($diff / 3600);
+        return $hours === 1 ? '1 hour ago' : "$hours hours ago";
+    } elseif ($diff < 172800) {
+        return "Yesterday";
+    } else {
+        $days = floor($diff / 86400);
+        return "$days days ago";
+    }
+}

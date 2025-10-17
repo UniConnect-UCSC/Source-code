@@ -1,9 +1,28 @@
 <?php
 
+require_once(__DIR__ . "/../models/GlobalPost.php");
+
 class Profile extends Controller
 {
     public function index()
     {
+        //Edit Post Handling
+        // if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['edit_post_id'])) {
+        //     $postId = $_POST['edit_post_id'];
+        //     $newContent = $_POST['new_content'] ?? '';
+        //     $postModel = new Post();
+        // }
+
+
+        //Delete Post Handling
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete_post_id'])) {
+            $postId = $_POST['delete_post_id'];
+            $postModel = new Post();
+
+            $postModel->delete($postId);
+            exit;
+        }
+
         $this->view('profile', [
             'title' => 'Profile | UniConnect',
             'head' => '
@@ -18,6 +37,8 @@ class Profile extends Controller
             <link rel="stylesheet" href="/assets/css/components/feedType.css">
             <link rel="stylesheet" href="/assets/css/components/profileFeed.css">
             <link rel="stylesheet" href="/assets/css/components/post.css">
+            <link rel="stylesheet" href="/assets/css/components/friendsWidget.css">
+            <link rel="stylesheet" href="/assets/css/components/photosWidget.css">
             '
         ]);
     }
