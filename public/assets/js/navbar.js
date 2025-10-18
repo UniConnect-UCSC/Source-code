@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("navbar.js loaded");
   const profileContainer = document.querySelector(".profile__container");
   const profileContent = document.getElementById("user-content");
   let isOpen = false;

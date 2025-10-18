@@ -2,15 +2,13 @@
 <?php require_once(__DIR__ . "/../../models/User.php"); ?>
 
 <div class="feed">
-    <?php component("createPost") ?>
+    <?php component("createPost", ["type" => "global"]) ?>
 
 
     <div class="global-feed">
         <?php
         $postsModel = new GlobalPost();
-        $posts = $postsModel->where([
-            ["user_id", '!=', $_SESSION['user_id']]
-        ]);
+        $posts = $postsModel->where([], null, null, ['created_at' => 'DESC']);
         ?>
 
         <?php foreach ($posts as $post): ?>

@@ -31,6 +31,7 @@
 
     <script src="/assets/js/navbar.js"></script>
     <script src="/assets/js/postOptions.js"></script>
+    <script src="/assets/js/createPost.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
