@@ -1,0 +1,77 @@
+.profile-banner {
+  width: 100%;
+  margin: 0 auto;
+  border-radius: var(--rounded-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-4);
+  background-color: var(--color-primary-white);
+}
+.banner-image {
+  width: 100%;
+  height: 200px;
+  background-color: var(--color-brand-700);
+  background-size: cover;
+  background-position: center;
+}
+.profile-section {
+  display: flex;
+}
+.user-profile-picture {
+  margin: var(--spacing-0) var(--spacing-3);
+  border-radius: var(--rounded-full);
+  overflow: hidden;
+  min-width: 150px;
+  min-height: 150px;
+  aspect-ratio: 1/1;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.banner-profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.banner-profile {
+  background-color: var(--color-brand-600);
+  width: 100%;
+  height: 100%;
+  padding: var(--spacing-3);
+  color: white;
+  font-size: var(--text-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-about {
+  width: 100%;
+  margin: var(--spacing-3) var(--spacing-3);
+}
+
+.user-about h2 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+}
+
+.user-about p {
+  font-size: var(--text-sm);
+  margin-bottom: var(--spacing-2);
+}
+
+.user-about i[data-lucide] svg {
+  color: var(--color-secondary-gray);
+  margin-right: var(--spacing-1);
+  width: 5px;
+  font-size: 5px;
+}
+
+.user-university-info {
+  color: var(--color-secondary-gray);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--text-sm);
+}

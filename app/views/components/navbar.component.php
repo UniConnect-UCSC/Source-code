@@ -1,5 +1,5 @@
-<?php require(__DIR__ . "/../../core/utils.php"); ?>
-<?php require(__DIR__ . "/../../models/User.php"); ?>
+<?php require_once(__DIR__ . "/../../core/utils.php"); ?>
+<?php require_once(__DIR__ . "/../../models/User.php"); ?>
 
 <nav class="navbar">
     <a class="image__container-" href="/">
@@ -41,19 +41,19 @@
 
         $profilePic = $user->profile_picture ?? null;
 
+
         $userEmail = $_SESSION['user_email'] ?? "";
         $userFName = $_SESSION['user_fName'] ?? "";
         $userLName = $_SESSION['user_lName'] ?? "";
         $profilePic = $_SESSION['user_profilePicture'] ?? null;
         ?>
-
         <div class="profile__container">
             <?php if ($profilePic): ?>
-            <div>
-                <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-            </div>
+                <div>
+                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                </div>
             <?php else: ?>
-            <?php
+                <?php
 
                 $fNameInitial = strtoupper($user->f_name[0] ?? '');
                 $lNameInitial = strtoupper($user->l_name[0] ?? '');
@@ -61,9 +61,9 @@
                 $fNameInitial = strtoupper($userFName[0] ?? '');
                 $lNameInitial = strtoupper($userLName[0] ?? '');
                 ?>
-            <div class="profile">
-                <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-            </div>
+                <div class="profile">
+                    <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+                </div>
             <?php endif; ?>
 
             <!-- <i data-lucide="chevron-down" class="chevron-down"></i> -->
@@ -72,11 +72,11 @@
             <div class="profile__content" id="user-content">
                 <a href="/profile" class="user__profile">
                     <?php if ($profilePic): ?>
-                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                        <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
                     <?php else: ?>
-                    <span class="profile">
-                        <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-                    </span>
+                        <span class="profile">
+                            <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+                        </span>
                     <?php endif; ?>
                     <span>
                         <?= htmlspecialchars($userFName) ?> <?= htmlspecialchars($userLName) ?>
@@ -89,7 +89,6 @@
             </div>
 
         </div>
-
 
     </div>
 </nav>
