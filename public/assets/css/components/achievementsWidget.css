@@ -1,0 +1,27 @@
+.achievements-widget {
+  border-radius: var(--rounded-2xl);
+  box-shadow: var(--shadow-md);
+  background-color: var(--color-primary-white);
+  padding: var(--spacing-3) var(--spacing-3);
+  width: 100%;
+}
+
+.achievements-widget h2 {
+  font-weight: 500;
+  color: var(--color-brand-800);
+  margin-bottom: var(--spacing-3);
+  font-size: var(--text-lg);
+}
+
+.achievements-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-2);
+  font-size: var(--text-sm);
+  font-size: var(--text-md);
+  background-color: var(--color-brand-100);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--rounded-lg);
+  font-weight: 500;
+}

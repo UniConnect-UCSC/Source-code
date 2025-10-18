@@ -38,13 +38,13 @@ trait Model
             $sql = "SELECT * FROM {$this->table} WHERE ";
 
             // Build the WHERE clause
-            foreach ($conditions as $condition){
+            foreach ($conditions as $condition) {
 
                 if (is_array($condition) && count($condition) == 3 && in_array($condition[1], $operators)) {
                     $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
 
                     $data[$condition[0]] = $condition[2];
-                }else{
+                } else {
 
                     // Handle invalid condition format
                     return false;
@@ -60,7 +60,7 @@ trait Model
 
             // Build the ORDER BY clause
             foreach ($orderBy as $field => $direction) {
-                if(!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
+                if (!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
                     return false; // Invalid direction
                 }
 
@@ -68,7 +68,6 @@ trait Model
             }
 
             return $this->query($sql, $data);
-
         } catch (PDOException $e) {
             die("WHERE query failed: " . $e->getMessage());
         }

@@ -7,7 +7,7 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "University Feed",
-        "pageLink" => "/",
+        "pageLink" => "/universityfeed",
         "icon" => "university"
     ],
     [
