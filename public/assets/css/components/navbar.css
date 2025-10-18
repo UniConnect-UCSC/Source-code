@@ -47,6 +47,7 @@
   position: relative;
   width: fit-content;
   cursor: pointer;
+  user-select: none;
 }
 
 .profile-image {

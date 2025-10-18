@@ -17,7 +17,7 @@ class Profile extends Controller
         //Delete Post Handling
         if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete_post_id'])) {
             $postId = $_POST['delete_post_id'];
-            $postModel = new Post();
+            $postModel = new GlobalPost();
 
             $postModel->delete($postId);
             exit;

@@ -9,7 +9,7 @@
         <?php
         $postsModel = new GlobalPost();
         $posts = $postsModel->where([
-            "user_id" => [$_SESSION['user_id'], '!=']
+            ["user_id", '!=', $_SESSION['user_id']]
         ]);
         ?>
 

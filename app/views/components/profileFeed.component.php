@@ -2,7 +2,9 @@
 <div class="profile-feed">
     <?php
     $postsModel = new GlobalPost();
-    $posts = $postsModel->where(["user_id" => $_SESSION['user_id']]);
+    $posts = $postsModel->where([
+        ["user_id", '=', $_SESSION['user_id']]
+    ]);
     ?>
 
     <?php foreach ($posts as $post): ?>
