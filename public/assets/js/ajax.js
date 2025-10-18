@@ -36,11 +36,11 @@ class Ajax {
     }
 
     static #buildHeader(method){
-        const headers = { ...Ajax.defaults.headers, ...headers };
+        const tempHeader = { ...Ajax.defaults.headers, ...headers };
         if(method === 'POST'){
-            headers['Content-Type'] = 'application/json';
+            tempHeader['Content-Type'] = 'application/json';
         }
-        return headers;
+        return tempHeader;
     }
     
     static #buildBody(method, data){
