@@ -35,8 +35,8 @@ class Ajax {
         }
     }
 
-    static #buildHeader(method){
-        const tempHeader = { ...Ajax.defaults.headers, ...headers };
+    static #buildHeader(method, passedHeaders){
+        const tempHeader = { ...Ajax.defaults.headers, ...passedHeaders };
         if(method === 'POST'){
             tempHeader['Content-Type'] = 'application/json';
         }
@@ -50,9 +50,9 @@ class Ajax {
         return null;
     }
 	// Core request
-	static async request(method = 'POST', urlPath, data = null, headers = {}, timeout = 0, credentials ) {
+	static async request(method = 'POST', urlPath, data = null, passedHeaders = {}, timeout = 0, credentials ) {
 
-		const finalHeaders = this.#buildHeader(method); // Overrides defaults if provided
+		const finalHeaders = this.#buildHeader(method, passedHeaders); // Overrides defaults if provided
 		const finalTimeout = typeof timeout === 'number' && timeout > 0 ? timeout : Ajax.defaults.timeout;
         const finalCredentials = credentials || Ajax.defaults.credentials;
 
