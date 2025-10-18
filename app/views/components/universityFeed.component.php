@@ -9,8 +9,8 @@
         <?php
         $uniPostsModel = new UniversityPost();
         $uniPosts = $uniPostsModel->where([
-            "user_id" => [$_SESSION['user_id'], '!='],
-            "university_id" => $_SESSION['user_universityID']
+            ["user_id", '!=', $_SESSION['user_id']],
+            ["university_id", '=', $_SESSION['user_universityID']]
         ]);
 
         ?>
