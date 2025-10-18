@@ -30,6 +30,7 @@
     <?= $content ?>
 
     <script src="/assets/js/ajax.js"></script>
+    <script src="/assets/js/infinityScrolling.js"></script>
     <script src="/assets/js/navbar.js"></script>
     <script src="/assets/js/postOptions.js"></script>
 
