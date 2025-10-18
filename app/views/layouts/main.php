@@ -30,8 +30,6 @@
 <body>
     <?= $content ?>
 
-    <script src="/assets/js/ajax.js"></script>
-    <script src="/assets/js/infinityScroll.js"></script>
     <script src="/assets/js/navbar.js"></script>
     <script src="/assets/js/postOptions.js"></script>
 
