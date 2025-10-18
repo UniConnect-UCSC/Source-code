@@ -32,20 +32,43 @@ trait Model
     public function where($conditions, $limit = null, $offset = null, $orderBy = [])
     {
         try {
-            $conditions = [];
-            $params = [];
-            foreach ($data as $key => $value) {
-                if (is_array($value)) {
-                    // Example: ['user_id' => [5, '!=']]
-                    $conditions[] = "$key {$value[1]} :$key";
-                    $params[$key] = $value[0];
-                } else {
-                    $conditions[] = "$key = :$key";
-                    $params[$key] = $value;
+            $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE'];
+            $data = [];
+
+            $sql = "SELECT * FROM {$this->table} WHERE ";
+
+            // Build the WHERE clause
+            foreach ($conditions as $condition){
+
+                if (is_array($condition) && count($condition) == 3 && in_array($condition[1], $operators)) {
+                    $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
+
+                    $data[$condition[0]] = $condition[2];
+                }else{
+
+                    // Handle invalid condition format
+                    return false;
                 }
             }
-            $sql = "SELECT * FROM {$this->table} WHERE " . implode(" AND ", $conditions);
-            return $this->query($sql, $params);
+
+            // Handle the trailing AND in the previous loop
+            $sql .= "TRUE ";
+
+            $sql .= $limit ? "LIMIT $limit" : "";
+            $sql .= $offset ? "OFFSET $offset" : "";
+
+
+            // Build the ORDER BY clause
+            foreach ($orderBy as $field => $direction) {
+                if(!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
+                    return false; // Invalid direction
+                }
+
+                $sql .= " ORDER BY $field $direction";
+            }
+
+            return $this->query($sql, $data);
+
         } catch (PDOException $e) {
             die("WHERE query failed: " . $e->getMessage());
         }
