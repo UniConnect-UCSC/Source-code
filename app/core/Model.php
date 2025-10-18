@@ -14,14 +14,22 @@ trait Model
         $this->connect();
     }
 
-    public function findAll($limit = null)
+    public function findAll($limit = null, $offset = null)
     {
         $limit = $limit ? $limit : $this->limit;
-        $sql = "SELECT * from $this->table limit $limit offset $this->offset";
+        $offset = $offset ? $offset : $this->offset;
+        $sql = "SELECT * from $this->table limit $limit offset $offset";
         return $this->query($sql);
     }
 
-    public function where($data)
+    /**
+     * @param array $conditions Array of conditions in format [field ,operator, value]]
+     * @param int $limit [DEFAULT: queries EVERYTHING]
+     * @param int $offset [DEFAULT: 0]
+     * @param array $orderBy Array of fields to order by with direction [field => 'ASC|DESC']
+     * Note: In this method only the condition inputs are prepared for execution
+     */
+    public function where($conditions, $limit = null, $offset = null, $orderBy = [])
     {
         try {
             $conditions = [];
