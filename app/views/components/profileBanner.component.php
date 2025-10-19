@@ -19,23 +19,26 @@
     <div class="profile-section">
         <div class="user-profile-picture">
             <?php if ($profilePic): ?>
-                <a href="/profile">
-                    <img class="banner-profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-                </a>
+            <a href="/profile">
+                <img class="banner-profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+            </a>
             <?php else: ?>
-                <?php
+            <?php
                 $fNameInitial = strtoupper($userFName[0] ?? '');
                 $lNameInitial = strtoupper($userLName[0] ?? '');
                 ?>
-                <a class="banner-profile" href="/profile">
-                    <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-                </a>
+            <a class="banner-profile" href="/profile">
+                <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+            </a>
             <?php endif; ?>
         </div>
 
         <div class="user-about">
             <h2 class=""><?= htmlspecialchars($userFName . ' ' . $userLName) ?></h2>
-            <p class="user-bio">bio</p>
+            <!-- //if bio exists -->
+            <?php if (!empty($user->bio)): ?>
+            <p class="user-bio"><?= htmlspecialchars($user->bio) ?></p>
+            <?php endif; ?>
 
             <div class="user-university-info">
                 <i data-lucide="university"></i>

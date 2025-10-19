@@ -12,7 +12,7 @@
         ?>
 
         <?php foreach ($posts as $post): ?>
-            <?php
+        <?php
             $userModel = new User();
             $user = $userModel->first(["id" => $post->user_id]);
 
@@ -23,7 +23,6 @@
                 "caption" => $post->caption,
                 "createdAt" => $post->created_at,
                 "updatedAt" => $post->updated_at,
-                "groupID" => $post->group_id,
                 "mediaUrl" => $post->media_url,
                 "isAnonymous" => $post->is_anonymous,
             ]);

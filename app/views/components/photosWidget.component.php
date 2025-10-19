@@ -28,13 +28,13 @@ $photos = [
 
     <div class="photos-grid">
         <?php foreach ($photos as $photo): ?>
-            <a class="photo" href="/">
-                <img src="<?= htmlspecialchars($photo->profile_picture) ?>" alt="Photo" />
-            </a>
+        <a class="photo" href="/">
+            <img src="<?= htmlspecialchars($photo->profile_picture) ?>" alt="Photo" />
+        </a>
         <?php endforeach; ?>
     </div>
 
-    <a class="see-all-photos" href="/">
+    <a class="see-all-photos" href="/photos">
         See All
     </a>
 </div>

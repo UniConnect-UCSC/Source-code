@@ -34,15 +34,15 @@ $friends = [
 
     <div class="friends-grid">
         <?php foreach ($friends as $friend): ?>
-            <a class="friend" href="/">
-                <img src="<?= htmlspecialchars($friend->profile_picture) ?>"
-                    alt="<?= htmlspecialchars($friend->name) ?>'s profile picture" />
-                <p><?= htmlspecialchars($friend->name) ?></p>
-            </a>
+        <a class="friend" href="/">
+            <img src="<?= htmlspecialchars($friend->profile_picture) ?>"
+                alt="<?= htmlspecialchars($friend->name) ?>'s profile picture" />
+            <p><?= htmlspecialchars($friend->name) ?></p>
+        </a>
         <?php endforeach; ?>
     </div>
 
-    <a class="see-all-friends" href="/">
+    <a class="see-all-friends" href="/friends">
         See All
     </a>
 </div>

@@ -5,7 +5,7 @@
   padding: var(--spacing-6) var(--spacing-0);
 }
 
-.feed-type div {
+.feed-type button {
   cursor: pointer;
   padding: var(--spacing-2) var(--spacing-10);
   border-radius: var(--rounded-full);
@@ -13,10 +13,21 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-2);
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.2s, color 0.2s;
+  font-size: var(--text-sm);
+}
+
+.feed-type-item-inactive {
+  background-color: var(--color-brand-100);
+}
+
+.feed-type-item-inactive:hover {
+  background-color: var(--color-brand-300);
+}
+
+.feed-type-item-active {
   background-color: var(--color-brand-600);
   color: var(--color-primary-white);
-  font-size: var(--text-sm);
 }
 
 .feed-type div:hover {
