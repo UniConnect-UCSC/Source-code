@@ -22,10 +22,10 @@
 
 
         <!-- Search Bar -->
-        <div class="search-wrapper">
-            <i data-lucide="search" class="search-icon"></i>
-            <input placeholder="Search Uniconnect" class="search">
-        </div>
+        <form class="search-wrapper" action="/search" method="GET" role="search">
+            <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
+            <input name="q" placeholder="Search Uniconnect" class="search" aria-label="Search" />
+        </form>
 
         <!-- Notifications -->
         <?php component('notification'); ?>

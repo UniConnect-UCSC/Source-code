@@ -34,6 +34,7 @@
     <script src="/assets/js/postOptions.js"></script>
     <script src="/assets/js/createPost.js"></script>
     <script src="/assets/js/notification.js"></script>
+    <script src="/assets/js/feedType.js"></script>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {

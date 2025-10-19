@@ -78,7 +78,7 @@ $friendRequests = [
     <div class="friend-requests">
         <?php foreach ($friendRequests as $request): ?>
         <div class="friend-request-card">
-            <a href="/profile/<?php echo $request['id']; ?>">
+            <a href="/users/<?php echo $request['id']; ?>">
                 <img src="<?php echo $request['profile_picture']; ?>"
                     alt="<?php echo $request['firstname'] . ' ' . $request['lastname']; ?>"
                     class="friend-request-profile-picture">

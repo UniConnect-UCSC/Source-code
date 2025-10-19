@@ -134,7 +134,7 @@ $friends = [
 <div class="friends-container">
     <div class="friends-header">Friends</div>
     <?php foreach ($friends as $friend): ?>
-    <a class="friend-card" href="/friends/<?php echo $friend['id']; ?>">
+    <a class="friend-card" href="/users/<?php echo $friend['id']; ?>">
         <img src="<?php echo $friend['profile_picture']; ?>"
             alt="<?php echo $friend['firstname'] . ' ' . $friend['lastname']; ?>">
         <div>
