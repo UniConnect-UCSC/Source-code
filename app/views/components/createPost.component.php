@@ -8,17 +8,17 @@
             $profilePic = $_SESSION['user_profilePicture'] ?? null;
             ?>
             <?php if ($profilePic): ?>
-                <a href="/profile">
-                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-                </a>
+            <a href="/profile">
+                <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+            </a>
             <?php else: ?>
-                <?php
+            <?php
                 $fNameInitial = strtoupper($userFName[0] ?? '');
                 $lNameInitial = strtoupper($userLName[0] ?? '');
                 ?>
-                <a class="profile" href="/profile">
-                    <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-                </a>
+            <a class="profile" href="/profile">
+                <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+            </a>
             <?php endif; ?>
         </div>
 
@@ -28,11 +28,11 @@
     </div>
 
     <div class="post-options">
-        <div>
+        <div onclick="openImageSelector()">
             <i data-lucide="image"></i>
             Photo
         </div>
-        <div>
+        <div onclick="openImageSelector()">
             <i data-lucide="video"></i>
             Video
         </div>
@@ -46,13 +46,13 @@
         <div class="modal-header">
             <div>
                 <?php if ($profilePic): ?>
-                    <a href="/profile">
-                        <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-                    </a>
+                <a href="/profile">
+                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                </a>
                 <?php else: ?>
-                    <a class="profile" href="/profile">
-                        <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-                    </a>
+                <a class="profile" href="/profile">
+                    <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+                </a>
                 <?php endif; ?>
             </div>
 
@@ -60,10 +60,10 @@
                 <p><?= htmlspecialchars($userFName) ?> <?= htmlspecialchars($userLName) ?></p>
                 <div>
                     <?php if ($type === "global"): ?>
-                        <i data-lucide="globe" class="feed-type-svg"></i><i data-lucide="dot"></i><span>Global Feed</span>
+                    <i data-lucide="globe" class="feed-type-svg"></i><i data-lucide="dot"></i><span>Global Feed</span>
                     <?php else: ?>
-                        <i data-lucide="university" class="feed-type-svg"></i><i data-lucide="dot"></i><span>University
-                            Feed</span>
+                    <i data-lucide="university" class="feed-type-svg"></i><i data-lucide="dot"></i><span>University
+                        Feed</span>
                     <?php endif; ?>
                 </div>
             </div>
@@ -91,11 +91,11 @@
 
         <div class="modal-actions">
             <div class="post-options">
-                <div>
+                <div onclick="openImageSelector()">
                     <i data-lucide="image"></i>
                     Photo
                 </div>
-                <div>
+                <div onclick="openImageSelector()">
                     <i data-lucide="video"></i>
                     Video
                 </div>

@@ -32,11 +32,12 @@
     <script src="/assets/js/navbar.js"></script>
     <script src="/assets/js/postOptions.js"></script>
     <script src="/assets/js/createPost.js"></script>
+    <script src="/assets/js/notification.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.lucide?.createIcons) lucide.createIcons();
-        });
+    document.addEventListener('DOMContentLoaded', () => {
+        if (window.lucide?.createIcons) lucide.createIcons();
+    });
     </script>
 </body>
 

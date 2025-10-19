@@ -14,7 +14,7 @@ class Home extends Controller
             $isAnonymous = (isset($_POST['isAnonymous']) && ($_POST['isAnonymous'] === '1' || $_POST['isAnonymous'] === 'true')) ? 1 : 0;
             $mediaURL = null;
 
-            // handle uploaded file (media)
+            // handle media upload
             if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
                 $tmpPath = $_FILES['media']['tmp_name'];
                 $uploadedUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');

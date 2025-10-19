@@ -54,7 +54,6 @@
 
 .post-options div:hover {
   background-color: var(--color-brand-300);
-  color: var(--color-primary-gray);
 }
 
 .create-post-modal {
@@ -158,4 +157,8 @@
   margin-left: var(--spacing-2);
   font-size: var(--text-md);
   color: var(--color-secondary-gray);
+}
+
+.post-media-input {
+  display: none;
 }

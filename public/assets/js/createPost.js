@@ -25,7 +25,14 @@ function closeCreatePostModal() {
   });
 }
 
-// ...existing code...
+function openImageSelector() {
+  openCreatePostModal();
+  const photosInput = document.getElementById("post-media");
+  if (photosInput) {
+    photosInput.click();
+  }
+}
+
 function createPost() {
   const submitBtn = document.querySelector(".create-post-button");
 
