@@ -34,13 +34,13 @@
         </div>
 
         <div class="post-more-options">
-            <i data-lucide="more-horizontal" onclick="toggleOptionsMenu(this)"></i>
+            <i data-lucide="more-horizontal" class="more-options-icon" onclick="toggleOptionsMenu(this)"></i>
 
             <div class="post-more-options-menu" data-post-id="<?= htmlspecialchars($postId) ?>">
                 <!-- Optionally render if the post belongs to the user -->
                 <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $authorId): ?>
                 <div>Edit Post</div>
-                <div class="delete-post-btn" onclick="deletePost(this)">Delete Post</div>
+                <div class="delete-post-btn" onclick="deletePost(this, event)">Delete Post</div>
                 <?php endif; ?>
 
                 <div>Copy URL</div>
@@ -49,8 +49,6 @@
                 <?php if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != $authorId): ?>
                 <div>Report Post</div>
                 <?php endif; ?>
-
-
             </div>
         </div>
     </div>

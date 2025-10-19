@@ -5,8 +5,9 @@ class Home extends Controller
 {
     public function index()
     {
+
         //create post
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['delete_post_id'])) {
             // respond with JSON for AJAX
             header('Content-Type: application/json');
 
@@ -45,6 +46,15 @@ class Home extends Controller
                 http_response_code(500);
                 echo json_encode(['success' => false, 'message' => 'Server error']);
             }
+            exit;
+        }
+
+        //delete post
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete_post_id'])) {
+            $postId = $_POST['delete_post_id'];
+            $postModel = new GlobalPost();
+
+            $postModel->delete($postId);
             exit;
         }
 

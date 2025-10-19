@@ -22,6 +22,10 @@ function openNotifications() {
     opacity: 1,
     ease: "power2.out",
     zIndex: 2000,
+    onStart: () => {
+      // allow clicks once we're opening
+      notificationsContainer.style.pointerEvents = "auto";
+    },
   });
 }
 
@@ -34,6 +38,10 @@ function closeNotifications() {
     duration: 0.2,
     opacity: 0,
     ease: "power2.in",
-    zIndex: -1,
+    zIndex: -20,
+    onComplete: () => {
+      // prevent the hidden container from intercepting clicks
+      notificationsContainer.style.pointerEvents = "none";
+    },
   });
 }
