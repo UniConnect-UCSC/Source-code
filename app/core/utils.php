@@ -37,12 +37,12 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "Friend Requests",
-        "pageLink" => "/",
+        "pageLink" => "/friends",
         "icon" => "handshake"
     ],
-    [
-        "pageName" => "Groups",
-        "pageLink" => "/",
-        "icon" => "users"
-    ],
+    // [
+    //     "pageName" => "Groups",
+    //     "pageLink" => "/",
+    //     "icon" => "users"
+    // ],
 ];
