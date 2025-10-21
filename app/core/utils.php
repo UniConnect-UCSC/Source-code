@@ -12,12 +12,12 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "Marketplace",
-        "pageLink" => "/",
+        "pageLink" => "/marketplace",
         "icon" => "store"
     ],
     [
         "pageName" => "Rooms & Boardings",
-        "pageLink" => "/",
+        "pageLink" => "/rooms-and-boardings",
         "icon" => "bed"
     ],
     [
