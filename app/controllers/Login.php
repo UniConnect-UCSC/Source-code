@@ -51,4 +51,5 @@ class Login extends Controller
             'errors' => $data['errors'],
         ]);
     }
+}
 

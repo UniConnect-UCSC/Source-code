@@ -9,6 +9,13 @@ class Kuppi extends Controller
         $Kuppis = $kuppi->getKuppi();
         $KuppiCategory = new KuppiCategoryModel();
         $KuppiCategories = $KuppiCategory->getAllKuppiCategories();
+    //    $universitymodel = new University();
+
+    /*    foreach ($Kuppis as $kuppi) {
+            $university_id = $kuppi->university_id;
+            $kuppi->university_name = $universitymodel->getUniversityName($university_id);
+
+        }*/
  //changes to be made : university id to university name
 
         $this->view('kuppi', [
@@ -29,7 +36,8 @@ class Kuppi extends Controller
     }
     public  function create(){
         $user = new User();
-        $university_id = $user->getUniId($_SESSION['user_id']);
+        $university_id = $_SESSION['user_universityID'] ?? null;
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Retrieve form data
             $topic = $_POST['topic'] ?? '';
@@ -54,7 +62,7 @@ class Kuppi extends Controller
                 'image_url' => 'assets/images/ml-banner.jpg', // Placeholder image URL
                 'host_id' => $_SESSION['user_id'],
                 'category_id' => $category_id,
-                'university_id' => $university_id// Placeholder requester ID, replace with actual user ID
+                'university' => $_SESSION['user_universityID'] ?? 'Unknown University'
                 // Add other necessary fields like university_id, image_url, etc.
             ];
 
@@ -62,16 +70,13 @@ class Kuppi extends Controller
             $insertedId = $kuppiModel->insert($data);
 
             if ($insertedId) {
-                // Redirect to the Kuppi page or show a success message
                 echo "Kuppi session created successfully!";
                 header('Location: /kuppi');
                 exit();
             } else {
-                // Handle insertion failure (e.g., show an error message)
                 echo "Error creating Kuppi session.";
             }
         } else {
-            // If not a POST request, redirect to the Kuppi page
             header('Location: /kuppi');
             exit();
         }
@@ -115,7 +120,6 @@ class Kuppi extends Controller
         $kuppiModel = new KuppiModel();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Get updated data from form
             $topic = $_POST['topic'] ?? '';
             $date = $_POST['date'] ?? '';
             $time = $_POST['time'] ?? '';
@@ -123,7 +127,6 @@ class Kuppi extends Controller
             $category_id = $_POST['category_id'] ?? '';
             $kuppiDateTime = $date . ' ' . $time;
 
-            // Prepare data for update
             $data = [
                 'topic' => $topic,
                 'kuppi_date_time' => $kuppiDateTime,
@@ -131,7 +134,6 @@ class Kuppi extends Controller
                 'category_id' => $category_id,
             ];
 
-            // Update the Kuppi session
             $updated = $kuppiModel->update($id, $data);
 
             if ($updated) {
@@ -141,7 +143,6 @@ class Kuppi extends Controller
                 echo "Error updating Kuppi session.";
             }
         } else {
-            // GET: Show the edit form
             $kuppi = $kuppiModel->getKuppiById($id);
             $KuppiCategory = new KuppiCategoryModel();
             $KuppiCategories = $KuppiCategory->getAllKuppiCategories();

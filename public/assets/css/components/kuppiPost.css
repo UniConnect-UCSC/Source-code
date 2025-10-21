@@ -3,7 +3,7 @@
   width: 100%; 
   max-width: 350px;
   background: var(--color-primary-white);
-  border-radius: var(--rounded-xl);
+  border-radius: var(--rounded none);
   padding: 20px;
   box-shadow: var(--shadow-md);
   transition: transform 0.2s ease;
@@ -17,7 +17,7 @@
   width: 100%;
   height: 180px;
   object-fit: cover;
-  border-radius: var(--rounded-lg);
+  border-radius: var(--rounded none);
 }
 
 
