@@ -1,0 +1,47 @@
+.friends-widget {
+  border-radius: var(--rounded-2xl);
+  box-shadow: var(--shadow-md);
+  background-color: var(--color-primary-white);
+  padding: var(--spacing-3) var(--spacing-3);
+  width: 100%;
+  margin-bottom: var(--spacing-6);
+}
+
+.friends-widget h2 {
+  font-weight: 500;
+  color: var(--color-brand-800);
+  margin-bottom: var(--spacing-3);
+  font-size: var(--text-lg);
+}
+
+.friends-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-2);
+}
+
+.friends-grid img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--rounded-lg);
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+  object-position: top;
+}
+
+.friend p {
+  font-size: var(--text-xs);
+  color: var(--color-secondary-gray);
+  text-align: center;
+  margin-top: var(--spacing-1);
+}
+
+.see-all-friends {
+  display: block;
+  text-align: center;
+  margin-top: var(--spacing-4);
+  font-weight: 500;
+  color: var(--color-brand-600);
+  text-decoration: none;
+  font-size: var(--text-sm);
+}

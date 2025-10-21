@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("navbar.js loaded");
   const profileContainer = document.querySelector(".profile__container");
   const profileContent = document.getElementById("user-content");
   let isOpen = false;
@@ -41,6 +42,21 @@ document.addEventListener("DOMContentLoaded", () => {
         onComplete: () => gsap.set(profileContent, { display: "none" }),
       });
       isOpen = false;
+    }
+  });
+});
+
+ocument.addEventListener("DOMContentLoaded", () => {
+  const input =
+    document.querySelector(".search-wrapper .search") ||
+    document.querySelector(".search");
+  if (!input) return;
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const q = input.value.trim();
+      if (!q) return; // do nothing on empty query
+      // redirect to search page with query param
+      window.location.href = `/search?q=${encodeURIComponent(q)}`;
     }
   });
 });
