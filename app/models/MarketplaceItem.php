@@ -1,24 +1,28 @@
-<?php   
+<?php
 
-class MarketplaceItemModel
+class MarketplaceItem
 {
     use Model;
     protected $table = 'marketplace_items';
-    
-    public function getItems(){
+
+    public function getItems()
+    {
         return $this->findAll();
     }
-    public function getMyitems($user_id){
-        $result = $this->where(conditions: [['student_id','=',$user_id]],limit: 10 );
+    public function getMyitems($user_id)
+    {
+        $result = $this->where(conditions: [['student_id', '=', $user_id]], limit: 10);
         return $result;
     }
-    public function getitemsById($id){
-        $result = $this->where(conditions: [['id','=',$id]], limit: 1);
+    public function getitemsById($id)
+    {
+        $result = $this->where(conditions: [['id', '=', $id]], limit: 1);
         return $result ? $result[0] : null;
     }
-    public function getStatusOptions(){
+    public function getStatusOptions()
+    {
 
-        return ['Available','Sold','Reserved','Not Available'];
+        return ['Available', 'Sold', 'Reserved', 'Not Available'];
     }
 
     public function create($data)
@@ -40,4 +44,4 @@ class MarketplaceItemModel
     {
         return $this->delete($id);
     }
-}   
+}

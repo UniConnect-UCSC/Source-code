@@ -1,24 +1,26 @@
-<?php 
-require_once(__DIR__."/../models/MarketplaceItem.php");
-require_once(__DIR__."/../models/ItemCategory.php");
+<?php
+require_once(__DIR__ . "/../models/MarketplaceItem.php");
+require_once(__DIR__ . "/../models/ItemCategory.php");
+
 class Marketplace extends Controller
 {
     public function index()
     {
-        $allitemsModel = new MarketplaceItemModel();
+        $allitemsModel = new MarketplaceItem();
         $items = $allitemsModel->getItems();
+
         $this->view('marketplace', [
             'title' => 'Marketplace - UniConnect',
             'head' => '
             <link rel="stylesheet" href="/assets/css/pages/marketplace.css">
             <link rel="stylesheet" href="/assets/css/pages/home.css">
-            <link rel="stylesheet" href="/assets/css/components/feed.css">
             <link rel="stylesheet" href="/assets/css/components/navbar.css">
             <link rel="stylesheet" href="/assets/css/components/navPanel.css">
-            <link rel="stylesheet" href="/assets/css/components/marketplaceItem.css">
-            <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
-            <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
             <link rel="stylesheet" href="/assets/css/components/createPost.css">
+            <link rel="stylesheet" href="/assets/css/components/marketplaceFeed.css">
+            <link rel="stylesheet" href="/assets/css/components/marketplaceCard.css">
+            
+
             ',
             'items' => $items
         ]);
@@ -47,7 +49,7 @@ class Marketplace extends Controller
 
     public function myItems()
     {
-        $itemModel = new MarketplaceItemModel();
+        $itemModel = new MarketplaceItem();
         $items = $itemModel->getMyitems($_SESSION['user_id']);
 
         $this->view('myItems', [
@@ -69,7 +71,7 @@ class Marketplace extends Controller
     public function createItem()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $itemModel = new MarketplaceItemModel();
+            $itemModel = new MarketplaceItem();
             $itemData = [
                 'title' => $_POST['title'],
                 'description' => $_POST['description'],
@@ -89,12 +91,12 @@ class Marketplace extends Controller
 
     public function editItem($itemId)
     {
-        $itemModel = new MarketplaceItemModel();
+        $itemModel = new MarketplaceItem();
         $item = $itemModel->getitemsById($itemId);
         $statusOptions = $itemModel->getStatusOptions();
 
         if (!$item) {
-            echo "Item not found"; 
+            echo "Item not found";
             header('Location: /marketplace');
             exit();
         }
@@ -133,7 +135,7 @@ class Marketplace extends Controller
     }
     public function deleteItem($itemId)
     {
-        $itemModel = new MarketplaceItemModel();
+        $itemModel = new MarketplaceItem();
         $itemModel->deleteItem($itemId);
         header('Location: /marketplace/myItems');
         exit();

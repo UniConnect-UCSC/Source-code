@@ -1,8 +1,8 @@
 <?php component("navbar"); ?>
 
-<div class="home-layout">
+<div class="marketplace-layout">
     <?php component("navPanel"); ?>
-    <div class="feed">
+    <div class="marketplace-container">
         <div class="market-items-header">
             <h2>Marketplace</h2>
             <div class="market-items-header-buttons">
@@ -27,5 +27,4 @@
             ?>
         </div>
     </div>
-    <?php component("widgetPanel"); ?>
 </div>

@@ -1,49 +1,6 @@
-.market-items-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border-bottom: 2px solid var(--color-gray-200);
-  margin-bottom: 0;
-  background-color: var(--color-white);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.market-items-header h2 {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-  color: var(--color-gray-900);
-}
-
-.market-items-header-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.market-items-header .btn-sellItem,
-.market-items-header .btn-myItems {
-  background-color: var(--color-brand-700);
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: var(--rounded-md);
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
-}
-
-.market-items-header .btn-sellItem:hover,
-.market-items-header .btn-myItems:hover {
-  background-color: var(--color-brand-800);
-}
-
-.market-items {
+.marketplace-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--spacing-4);
+  margin: var(--spacing-24) var(--spacing-4);
 }
