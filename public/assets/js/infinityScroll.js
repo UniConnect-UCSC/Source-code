@@ -19,9 +19,28 @@ class InfinityScroll{
         this.renderer = renderer;
         this.offset = offset;
         this.limit = limit;
+        this.loading = false;
+        this.maxRefreshLimit = 100;
+    }
+
+    resetScroll() {
+        this.offset = 0;
+        this.parentElement.innerHTML = '';
+    }
+
+    refresh() {
+        var tempLimit = this.limit;
+        this.limit = (this.offset < this.maxRefreshLimit) ? this.offset : this.maxRefreshLimit;
+        this.resetScroll();
+        this.loadNextElements();
+        this.limit = tempLimit;
+
     }
 
     async loadNextElements(){
+        if (this.loading) return;
+        this.loading = true;
+
         const data = {
             scrollIdentifier: this.scrollIdentifier,
             offset: this.offset,
@@ -31,6 +50,10 @@ class InfinityScroll{
         try {
             const response = await Ajax.post(this.fetchUrl, data);
 
+            if(!Array.isArray(response) || response.length === 0){
+                throw new Error('No more data to load');
+            }
+
             response.forEach(item => {
                 const element = this.renderer(item);
                 this.parentElement.appendChild(element);
@@ -38,9 +61,14 @@ class InfinityScroll{
 
             this.offset += this.limit;
 
+            this.loading = false;
+            return true;
+
         } catch(error){
             console.error('InfinityScroll.loadNextElements: Error fetching data', error);
-        }
 
+            this.loading = false;
+            return false;
+        }
     }
 }
