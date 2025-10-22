@@ -4,10 +4,15 @@ class KuppiModel {
     protected $table = 'kuppi';
 
     public function getKuppi(){
-        return $this->findAll();
+        $result = $this->where(conditions: [['status','=','In Progress']], limit: 10);
+        return $result;
     }
     public function getMyKuppies($user_id){
-        $result = $this->where(conditions: [['host_id','=',$user_id]],limit: 10 );
+        // Get Kuppies where user is host OR requester
+        $result = $this->query(
+            "SELECT * FROM {$this->table} WHERE host_id = :user_id OR requester_id = :user_id LIMIT 20",
+            ['user_id' => $user_id]
+        );
         error_log(print_r($result, true));
         return $result;
     }
@@ -31,5 +36,8 @@ class KuppiModel {
 
         // Use the Model trait's update method
         return $this->update($id, $data, $id_column);
+    }
+    public function getKuppiRequests(){
+        return $this->where(conditions: [['status','=','Requested']], limit: 10);
     }
 }

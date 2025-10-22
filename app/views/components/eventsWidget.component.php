@@ -1,6 +1,6 @@
 <?php
-require(__DIR__ . "/../../models/Event.php");
-require(__DIR__ . "/../../models/University.php");
+require_once(__DIR__ . "/../../models/Event.php");
+require_once(__DIR__ . "/../../models/University.php");
 
 $eventModel = new Event();
 $universityModel = new University();
