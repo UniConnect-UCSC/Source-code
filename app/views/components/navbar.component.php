@@ -22,15 +22,13 @@
 
 
         <!-- Search Bar -->
-        <div class="search-wrapper">
-            <i data-lucide="search" class="search-icon"></i>
-            <input placeholder="Search Uniconnect" class="search">
-        </div>
+        <form class="search-wrapper" action="/search" method="GET" role="search">
+            <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
+            <input name="q" placeholder="Search Uniconnect" class="search" aria-label="Search" />
+        </form>
 
         <!-- Notifications -->
-        <div class="bell__container">
-            <i data-lucide="bell"></i>
-        </div>
+        <?php component('notification'); ?>
 
         <!-- User Icon -->
         <?php
@@ -49,11 +47,11 @@
         ?>
         <div class="profile__container">
             <?php if ($profilePic): ?>
-                <div>
-                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-                </div>
+            <div>
+                <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+            </div>
             <?php else: ?>
-                <?php
+            <?php
 
                 $fNameInitial = strtoupper($user->f_name[0] ?? '');
                 $lNameInitial = strtoupper($user->l_name[0] ?? '');
@@ -61,9 +59,9 @@
                 $fNameInitial = strtoupper($userFName[0] ?? '');
                 $lNameInitial = strtoupper($userLName[0] ?? '');
                 ?>
-                <div class="profile">
-                    <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-                </div>
+            <div class="profile">
+                <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+            </div>
             <?php endif; ?>
 
             <!-- <i data-lucide="chevron-down" class="chevron-down"></i> -->
@@ -72,11 +70,11 @@
             <div class="profile__content" id="user-content">
                 <a href="/profile" class="user__profile">
                     <?php if ($profilePic): ?>
-                        <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
                     <?php else: ?>
-                        <span class="profile">
-                            <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-                        </span>
+                    <span class="profile">
+                        <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+                    </span>
                     <?php endif; ?>
                     <span>
                         <?= htmlspecialchars($userFName) ?> <?= htmlspecialchars($userLName) ?>
