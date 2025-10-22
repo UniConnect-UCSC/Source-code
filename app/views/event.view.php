@@ -1,65 +1,72 @@
-<h1>Testing Event Page</h1>
+<?php component('formEventModal'); ?>
+<?php component('viewEventsModal', ['headerName' => 'My Events']); ?>
 
-<h2>Create a New Event</h2>
 
-<form method="POST" action="/event/createNewEvent">
-    <label>Title: <input type="text" name="title" maxlength="255" required></label><br>
-    <label>Description:<br>
-        <textarea name="description" required></textarea>
-    </label><br>
-    <label>Event Date: <input type="datetime-local" name="event_timestamp"></label><br>
-    <label>Location: <input type="text" name="held_at" maxlength="255"></label><br>
-    <button type="submit">Create Event</button>
-</form>
-<hr>
+<?php component("navbar"); ?>
 
-<h2>Your Upcoming Events</h2>
+<div class="home-layout">
 
-<?php foreach ($data['events'] as $event): ?>
-    <div>
-        <h2><?php print_r($event); ?></h2>
+<?php component("navPanel"); ?>
+<?php component("formEventModal"); ?>
+
+<div class="feed">
+    <header>
+        <h1>University Events</h1>
+        <p class="subtitle">Discover and connect with your university community</p>
+    </header>
+
+    <div class="controls">
+            <div class="controls-top">
+                <div class="search-container">
+                
+                    <!--change the icon to an actual icon image -->
+                    <button class="search-btn" id="searchToggleBtn">🔍</button>
+                    <div class="search-input-wrapper" id="searchInputWrapper">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search events...">
+                    </div>
+                </div>
+                <div class="filter-buttons" id="filterButtons">
+                    <button class="btn active" data-filter="for-you">For You</button>
+                    <button class="btn" data-filter="my-university">My University</button>
+                </div>
+
+                <button class="btn btn-primary" id="viewFavoritesBtn">+ My Favorites</button>
+
+            </div>
+
+            <div class="categories-wrapper">
+                <div class="categories-section" id="categoriesSection">
+                    <button class="category-btn active" data-category="all">All</button>
+                    <button class="category-btn" data-category="sports">Sports</button>
+                    <button class="category-btn" data-category="music">Music</button>
+                    <button class="category-btn" data-category="computer-science">Computer Science</button>
+                    <button class="category-btn" data-category="business">Business</button>
+                    <button class="category-btn" data-category="arts">Arts</button>
+                    <button class="category-btn" data-category="networking">Networking</button>
+                    <button class="category-btn" data-category="wellness">Wellness</button>
+                </div>
+
+            </div>
+
+            <div class='rep-btn-wrapper'>
+                <button class="btn btn-primary" id="createEventBtn">Create Event</button>
+                <button class="btn btn-primary" id="viewEventBtn">Manage Events</button>
+            </div>
+
+        </div>
+
+    <div class="events-grid" id="eventsGrid">
     </div>
-<?php endforeach; ?>
+</div>
 
-<hr>
+<?php component("widgetPanel"); ?>
 
-<h2>Your university upcoming events</h2>
-
-<?php foreach ($data['university_events'] as $event): ?>
-    <div>
-        <h2><?php print_r($event); ?></h2>
-    </div>
-<?php endforeach; ?>
-
-<?php var_dump($data['university_events']); ?>
-
-<hr>
-
-<h2>Update an Event</h2>
-
-<?php foreach ($data['university_events'] as $event): ?>
-
-    <form method="POST" action="/event/updateEvent" >
-        <input type="hidden" name="event_id" value="<?php echo htmlspecialchars($event->id); ?>">
-        <label>Title: <input type="text" name="title" maxlength="255" required value="<?php echo htmlspecialchars($event->title); ?>"></label><br>
-        <label>Description:<br>
-            <textarea name="description" required><?php echo htmlspecialchars($event->description); ?></textarea>
-        </label><br>
-        <label>Event Date: <input type="datetime-local" name="event_timestamp" value="<?php echo isset($event->event_timestamp) ? date('Y-m-d\TH:i', strtotime($event->event_timestamp)) : ''; ?>"></label><br>
-        <label>Location: <input type="text" name="held_at" maxlength="255" value="<?php echo htmlspecialchars($event->held_at); ?>"></label><br>
-        <button type="submit">Update Event</button>
-    </form>
-<?php endforeach; ?>
+</div>
 
 
-<hr>
-<h2>Delete an Event</h2>
+<script src="/assets/js/event/rendererModules.js"></script>
+<script src="/assets/js/event/form.js"></script>
+<script src="/assets/js/event/scrollable.js"></script>
+<script src="/assets/js/event/viewRepEvents.js"></script>
 
-<?php foreach ($data['university_events'] as $event): ?>
-
-    <form method="POST" action="/event/deleteEvent" >
-        <input type="hidden" name="event_id" value="<?php echo htmlspecialchars($event->id); ?>">
-        <p>Are you sure you want to delete the event: <strong><?php echo htmlspecialchars($event->title); ?></strong>?</p>
-        <button type="submit">Delete Event</button>
-    </form>
-<?php endforeach; ?>
+<script src="/assets/js/event/event.js"></script>

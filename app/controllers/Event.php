@@ -4,11 +4,16 @@ require_once(__DIR__ . "/../models/Event.php");
 
 class Event extends Controller
 {
-    private function getEventData($offset)
+    private function parseAjaxData(){
+        $json = file_get_contents('php://input');
+        return json_decode($json, true);
+    }
+
+    private function getEventData($limit, $offset)
     {
         error_log("Fetching event data with offset: " . $offset);
         $eventModel = new EventModel();
-        return $eventModel->getEvents($offset);
+        return $eventModel->getEvents($limit, $offset);
     }
 
     private function checkIfUniRep($userId){
@@ -26,22 +31,28 @@ class Event extends Controller
     }
 
     
-    public function getRepEvents(){
+    public function getRepEvents($limit, $offset){
+
+        if(!$this->checkIfUniRep($_SESSION['user_id'])){
+            return null;
+        }
+
         $eventModel = new EventModel();
         $universityId = $this->getUniRepUniversity($_SESSION['user_id']);
 
         if ($universityId) {
-            $events = $eventModel->getUniUpcomingEvents($universityId);
+            $events = $eventModel->getUniUpcomingEvents($universityId, $limit, $offset);
             return $events;
-            //echo json_encode($events);
         } else {
-            http_response_code(403);
-            echo json_encode(['error' => 'User is not a university representative']);
+            return null;
         }
     }
 
-    // Fix redundent verification code
+    // Fix redundant verification code
     public function deleteEvent(){
+
+        header('Content-Type: application/json');
+        $data = $this->parseAjaxData();
 
         if($_SERVER['REQUEST_METHOD'] !== 'POST'){
             http_response_code(405);
@@ -60,7 +71,7 @@ class Event extends Controller
 
         //Fetch user's university for verification
         $universityId = $this->getUniRepUniversity($_SESSION['user_id']);
-        $eventUniId = $eventModel->getEventUni($_POST['event_id']);
+        $eventUniId = $eventModel->getEventUni($data['event_id']);
 
         if($eventUniId != $universityId){
             http_response_code(403);
@@ -68,7 +79,7 @@ class Event extends Controller
             return;
         }
 
-        $result = $eventModel->deleteEvent($_POST['event_id']);
+        $result = $eventModel->deleteEvent($data['event_id']);
 
         if($result){
             echo json_encode(['success' => 'Event deleted successfully']);
@@ -81,11 +92,15 @@ class Event extends Controller
 
     public function updateEvent(){
 
+        header('Content-Type: application/json');
+
         if($_SERVER['REQUEST_METHOD'] !== 'POST'){
             http_response_code(405);
             echo json_encode(['error' => 'Invalid request method']);
             return;
         }
+
+        $data = $this->parseAjaxData();
 
         $eventModel = new EventModel();
 
@@ -98,7 +113,7 @@ class Event extends Controller
 
         //Fetch user's university for verification
         $universityId = $this->getUniRepUniversity($_SESSION['user_id']);
-        $eventUniId = $eventModel->getEventUni($_POST['event_id']);
+        $eventUniId = $eventModel->getEventUni($data['event_id']);
 
         if($eventUniId != $universityId){
             http_response_code(403);
@@ -108,19 +123,19 @@ class Event extends Controller
 
         // Data from view to model conversion
         $eventData = [
-            'id' => $_POST['event_id'], // unset and used as condition in model method
+            'id' => $data['event_id'], // unset and used as condition in model method
             'posted_by' => $_SESSION['user_id'],
-            'title' => trim($_POST['title']),
-            'description' => trim($_POST['description']),
-            'event_timestamp' => trim($_POST['event_timestamp']),
-            'held_at' => trim($_POST['held_at']),
+            'title' => trim($data['title']),
+            'description' => trim($data['description']),
+            'event_timestamp' => trim($data['event_timestamp']),
+            'held_at' => trim($data['held_at']),
             'updated_at' => date('Y-m-d H:i:s', time())
         ];
 
-        $result = $eventModel->update($_POST['event_id'], $eventData);
+        $result = $eventModel->update($data['event_id'], $eventData);
 
         if($result){
-            echo json_encode(['success' => 'Event updated successfully']);
+            echo json_encode(['status' => 'success']);
         }else{
             http_response_code(500);
             echo json_encode(['error' => 'Failed to update event']);
@@ -129,15 +144,21 @@ class Event extends Controller
     
     public function createNewEvent(){
 
+        $data = $this->parseAjaxData();
+
         $error = [];
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $error['method_invalid']++;
+            echo json_encode($error); 
+            return;
         }
 
         // Validation of user
         if (!isset($_SESSION['user_id']) || !$this->checkIfUniRep($_SESSION['user_id'])) {
-
+            $error['unauthorized_access']++;
+            echo json_encode($error);
+            return;
         }
 
         //Fetching required data for submission
@@ -148,32 +169,62 @@ class Event extends Controller
         $eventData = [
             'university_id' => $universityId,
             'posted_by' => $_SESSION['user_id'],
-            'title' => trim($_POST['title']),
-            'description' => trim($_POST['description']),
-            'event_timestamp' => trim($_POST['event_timestamp']),
-            'held_at' => trim($_POST['held_at'])
+            'title' => trim($data['title']),
+            'description' => trim($data['description']),
+            'event_timestamp' => trim($data['event_timestamp']),
+            'held_at' => trim($data['held_at'])
         ];
 
         $eventModel = new EventModel();
         $result = $eventModel->createEvent($eventData);
 
+        header('Content-Type: application/json');
         if ($result) {
-            echo json_encode(["success" => "Event created successfully"]);
+            echo json_encode(["status" => "success"]);
         } else {
             http_response_code(500);
-            echo json_encode(["error" => "Failed to create event"]);
+            echo json_encode($error);
+
+        }
+    }
+
+    public function scrollable(){
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $data = $this->parseAjaxData();
+
+            header('Content-Type: application/json');
+            if($data['scrollIdentifier'] === 'getEvents'){
+                $response = $this->getEventData($data["limit"], $data['offset']) ?? [];
+                echo json_encode($response);
+                exit;
+
+            }else if($data['scrollIdentifier'] === 'getRepEvents'){
+                $response = $this->getRepEvents($data["limit"], $data['offset']) ?? [];
+                error_log("Scrollable Rep Events Response: " . print_r($response, true));
+                echo json_encode($response);
+                exit;
+            }
         }
     }
 
     public function index(){
 
-        error_log(print_r($this->getEventData(0), true));
-
         $this->view('event', [
             'title' => 'Event Page',
-            'events' => $this->getEventData(0),
-            'head' => '',
-            'university_events' => $this->getRepEvents()
+            'head' => 
+                '<link rel="stylesheet" href="/assets/css/components/event.css">
+                <link rel="stylesheet" href="/assets/css/components/eventControls.css">
+                <link rel="stylesheet" href="/assets/css/components/modal.css">
+                <link rel="stylesheet" href="/assets/css/components/viewEventsModal.css">
+                <link rel="stylesheet" href="/assets/css/components/feed.css"> 
+                <link rel="stylesheet" href="/assets/css/components/navbar.css"> 
+                <link rel="stylesheet" href="/assets/css/components/navPanel.css">
+                <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
+                <!--<link rel="stylesheet" href="/assets/css/components/eventsWidget.css">-->
+                <link rel="stylesheet" href="/assets/css/pages/home.css">
+                ',
+
         ]);
     }
 

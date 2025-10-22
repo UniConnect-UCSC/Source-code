@@ -34,9 +34,9 @@ class EventModel
         return $this->where(['university_id' => $universityId]);
     }
 
-    public function getEvents($offset){
-        
-        return $this->findAll(offset: $offset);
+    public function getEvents($limit, $offset){
+
+        return $this->findAll(limit: $limit, offset: $offset);
 
     }
 
@@ -51,8 +51,8 @@ class EventModel
         return $this->insert($data);
     }
 
-    public function getUniUpcomingEvents($universityId){
-        return $this->where([['university_id','=', $universityId], ['event_timestamp', '>=', date('Y-m-d H:i:s', time())]]);
+    public function getUniUpcomingEvents($universityId , $limit, $offset){
+        return $this->where(conditions: [['university_id','=', $universityId], ['event_timestamp', '>=', date('Y-m-d H:i:s', time())]], limit: $limit, offset: $offset, orderBy: ['event_timestamp' => 'ASC']);
     }
 
     public function updateEvent($eventId, $data){
