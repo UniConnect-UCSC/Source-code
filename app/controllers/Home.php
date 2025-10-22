@@ -60,7 +60,6 @@ class Home extends Controller
 
         //edit post
         if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['edit_post_id'])) {
-            require_once(__DIR__ . "/../models/GlobalPost.php");
             $postId = $_POST['edit_post_id'];
             $caption = $_POST['caption'] ?? '';
             $updatedAt = date('Y-m-d H:i:s');
