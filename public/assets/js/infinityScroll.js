@@ -31,6 +31,10 @@ class InfinityScroll{
         try {
             const response = await Ajax.post(this.fetchUrl, data);
 
+            if(!Array.isArray(response) || response.length === 0){
+                throw new Error('No more data to load');
+            }
+
             response.forEach(item => {
                 const element = this.renderer(item);
                 this.parentElement.appendChild(element);
