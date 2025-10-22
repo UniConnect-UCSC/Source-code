@@ -110,6 +110,13 @@ select:focus {
     margin-bottom: var(--spacing-3);
 }
 
+/* Actions on the right of the header */
+.event-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
 .event-title {
     font-size: var(--text-xl);
     font-weight: 600;
@@ -147,6 +154,66 @@ select:focus {
     display: flex;
     align-items: center;
     gap: var(--spacing-2);
+}
+
+/* Generic icon button (used by favorite) */
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--rounded-full);
+    border: 2px solid var(--color-primary-gray);
+    background: var(--color-primary-white);
+    color: #374151;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.icon-btn:hover {
+    border-color: var(--color-brand-300);
+    box-shadow: var(--shadow-sm);
+}
+
+.icon-btn:active {
+    transform: translateY(1px);
+}
+
+/* Heart/favorite button states */
+.favorite-btn.active {
+    background: var(--color-brand-50);
+    border-color: var(--color-brand-300);
+    color: var(--color-brand-700);
+}
+
+/* Participants pill button */
+.pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--rounded-full);
+    border: 2px solid var(--color-primary-gray);
+    background: var(--color-primary-white);
+    color: #111827;
+    font-size: var(--text-sm);
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.pill-btn:hover {
+    border-color: var(--color-brand-300);
+    box-shadow: var(--shadow-sm);
+}
+
+.pill-btn:active {
+    transform: translateY(1px);
+}
+
+.participants-btn .participants-count {
+    font-weight: 600;
 }
 
 .empty-state {

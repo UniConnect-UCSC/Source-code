@@ -37,7 +37,7 @@ class InfinityScroll{
 
     }
 
-    async loadNextElements(){
+    async loadNextElements(context = null){
         if (this.loading) return;
         this.loading = true;
 
@@ -46,6 +46,8 @@ class InfinityScroll{
             offset: this.offset,
             limit: this.limit
         }
+
+        if(context){data['context'] = context;}
 
         try {
             const response = await Ajax.post(this.fetchUrl, data);

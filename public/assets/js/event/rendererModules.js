@@ -5,6 +5,11 @@ function eventCardRenderer($data){
     const description = $data.description || '';
     const heldAt = $data.held_at || $data.location || '';
     const timestamp = $data.event_timestamp || $data.date || '';
+    const id = $data.id || $data.event_id || '';
+    const participantsCount = Number(
+        $data.participants_count ?? $data.attendees_count ?? $data.attendees ?? $data.participants ?? 0
+    );
+    const isFavorite = Boolean($data.is_favorite ?? $data.favorite ?? false);
 
     // Format: "D, M d, Y h:i A"
     const formatDate = (value) => {
@@ -56,6 +61,41 @@ function eventCardRenderer($data){
     uniSpan.textContent = universityName;
     headerLeft.appendChild(uniSpan);
 
+    // Header right: actions (participants + favorite)
+    const headerRight = document.createElement('div');
+    headerRight.className = 'event-actions';
+
+    // Participants button
+    const participantsBtn = document.createElement('button');
+    participantsBtn.className = 'pill-btn participants-btn';
+    participantsBtn.type = 'button';
+    participantsBtn.setAttribute('aria-label', 'View participants');
+    if (id) participantsBtn.dataset.eventId = id;
+
+    const participantsIcon = document.createElement('i');
+    participantsIcon.setAttribute('data-lucide', 'users');
+    const participantsText = document.createElement('span');
+    participantsText.className = 'participants-count';
+    participantsText.textContent = String(isFinite(participantsCount) ? participantsCount : 0);
+    participantsBtn.appendChild(participantsIcon);
+    participantsBtn.appendChild(participantsText);
+
+    // Favorite button
+    const favBtn = document.createElement('button');
+    favBtn.className = 'icon-btn favorite-btn' + (isFavorite ? ' active' : '');
+    favBtn.type = 'button';
+    favBtn.setAttribute('aria-pressed', isFavorite ? 'true' : 'false');
+    favBtn.setAttribute('aria-label', isFavorite ? 'Unfavorite event' : 'Favorite event');
+    if (id) favBtn.dataset.eventId = id;
+
+    const favIcon = document.createElement('i');
+    favIcon.setAttribute('data-lucide', 'heart');
+    favBtn.appendChild(favIcon);
+
+    headerRight.appendChild(participantsBtn);
+    headerRight.appendChild(favBtn);
+    header.appendChild(headerRight);
+
     // Date
     const dateDiv = document.createElement('div');
     dateDiv.className = 'event-date';
@@ -73,6 +113,26 @@ function eventCardRenderer($data){
     locationDiv.className = 'event-location';
     locationDiv.textContent = heldAt;
     content.appendChild(locationDiv);
+
+    // Wire minimal click behavior: dispatch custom events for parent listeners
+    participantsBtn.addEventListener('click', () => {
+        const ev = new CustomEvent('event:participants-click', {
+            bubbles: true,
+            detail: { id, source: 'participants' }
+        });
+        participantsBtn.dispatchEvent(ev);
+    });
+
+    favBtn.addEventListener('click', () => {
+        const next = !favBtn.classList.contains('active');
+        favBtn.classList.toggle('active');
+        favBtn.setAttribute('aria-pressed', next ? 'true' : 'false');
+        const ev = new CustomEvent('event:favorite-toggle', {
+            bubbles: true,
+            detail: { id, favorite: next, source: 'favorite' }
+        });
+        favBtn.dispatchEvent(ev);
+    });
 
     return card;
 }
@@ -139,4 +199,16 @@ function repEventRenderer($data){
     row.appendChild(actionsCell);
 
     return row;
+}
+
+function categoryRenderer($data){
+    const id = $data["id"] || '';
+    const name = $data["name"].charAt(0).toUpperCase() + $data["name"].slice(1) || '';
+
+    const categoryBtn = document.createElement('button');
+    categoryBtn.className = 'category-btn';
+    categoryBtn.setAttribute('data-category-id', id);
+    categoryBtn.textContent = name;
+
+    return categoryBtn;
 }

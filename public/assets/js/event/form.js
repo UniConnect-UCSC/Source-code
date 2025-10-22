@@ -23,7 +23,14 @@ eventForm.addEventListener('submit', async (e) => {
         title: document.getElementById('eventTitle').value,
         event_timestamp: document.getElementById('eventDate').value,
         held_at: document.getElementById('eventHeldAt').value,
-        description: document.getElementById('eventDescription').value
+        description: document.getElementById('eventDescription').value,
+        image: document.getElementById('eventImage').value,
+        categories: (() => {
+            try {
+                const raw = document.getElementById('eventCategories');
+                return raw ? JSON.parse(raw.value || '[]') : [];
+            } catch (_) { return []; }
+        })()
     };
 
     var url = '';

@@ -1,6 +1,7 @@
 <?php
 
 require_once(__DIR__ . "/../models/Event.php");
+require_once __DIR__ . '/../core/functions.php';
 
 class Event extends Controller
 {
@@ -9,7 +10,7 @@ class Event extends Controller
         return json_decode($json, true);
     }
 
-    private function getEventData($limit, $offset)
+    private function getEventData($limit, $offset, $categories = [])
     {
         error_log("Fetching event data with offset: " . $offset);
         $eventModel = new EventModel();
@@ -28,6 +29,25 @@ class Event extends Controller
         $repModel = new UniversityRepresentative();
         $repDetails = $repModel->getRepDetails($userId);
         return $repDetails ? $repDetails->university_id : null;
+    }
+
+    private function getEventCategories($limit, $offset){
+        require_once(__DIR__ . "/../models/eventCategory.php");
+        $categoryModel = new EventCategoryModel();
+        return $categoryModel->getAllCategories($limit, $offset) ?? null;
+    }
+    
+    private function uploadEventImage($file){
+
+        if(!empty($file) && $file['error'] === UPLOAD_ERR_OK){
+            $uploadedUrl = uploadImageToCloudinary($file['tmp_name'], 'uniconnect_events');
+            if($uploadedUrl){
+                return $uploadedUrl;
+            }else{
+                error_log('Cloudinary upload failed for event image by user ' . ($_SESSION['user_id'] ?? 'unknown'));
+                return null;
+            }
+        }
     }
 
     
@@ -194,16 +214,27 @@ class Event extends Controller
             $data = $this->parseAjaxData();
 
             header('Content-Type: application/json');
-            if($data['scrollIdentifier'] === 'getEvents'){
-                $response = $this->getEventData($data["limit"], $data['offset']) ?? [];
-                echo json_encode($response);
-                exit;
 
-            }else if($data['scrollIdentifier'] === 'getRepEvents'){
-                $response = $this->getRepEvents($data["limit"], $data['offset']) ?? [];
-                error_log("Scrollable Rep Events Response: " . print_r($response, true));
-                echo json_encode($response);
-                exit;
+            switch($data['scrollIdentifier']){
+                case 'getEvents':
+                    $response = $this->getEventData($data["limit"], $data['offset'], $data['context']['categories'] ?? []) ?? [];
+                    echo json_encode($response);
+                    break;
+
+                case 'getRepEvents':
+                    $response = $this->getRepEvents($data["limit"], $data['offset']) ?? [];
+                    echo json_encode($response);
+                    break;
+
+                case 'getCategories':
+                    $response = $this->getEventCategories($data["limit"], $data['offset']) ?? [];
+                    echo json_encode($response);
+                    break;
+
+                default:
+                    http_response_code(400);
+                    echo json_encode(['error' => 'Invalid scroll identifier']);
+                    exit;
             }
         }
     }

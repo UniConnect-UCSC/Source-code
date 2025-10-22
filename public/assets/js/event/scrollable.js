@@ -6,7 +6,9 @@ const newEventScroll = new InfinityScroll(
     0,
     100
 );
-newEventScroll.loadNextElements();
+newEventScroll.loadNextElements().then(() => {
+    lucide.createIcons();
+});
 
 const repEventScroll = new InfinityScroll(
     'getRepEvents',
@@ -17,3 +19,13 @@ const repEventScroll = new InfinityScroll(
     100
 );
 
+const categoryScroll = new InfinityScroll(
+    'getCategories',
+    '/event/scrollable',
+    document.getElementById('categoriesSection'),
+    categoryRenderer,
+    0,
+    50
+);
+
+categoryScroll.loadNextElements();

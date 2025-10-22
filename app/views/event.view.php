@@ -34,16 +34,10 @@
 
             </div>
 
-            <div class="categories-wrapper">
+            <div class="categories-wrapper" id="categoryWrapper">
+                    <button class="category-btn active" id="allCategoriesBtn">All</button>
                 <div class="categories-section" id="categoriesSection">
-                    <button class="category-btn active" data-category="all">All</button>
-                    <button class="category-btn" data-category="sports">Sports</button>
-                    <button class="category-btn" data-category="music">Music</button>
-                    <button class="category-btn" data-category="computer-science">Computer Science</button>
-                    <button class="category-btn" data-category="business">Business</button>
-                    <button class="category-btn" data-category="arts">Arts</button>
-                    <button class="category-btn" data-category="networking">Networking</button>
-                    <button class="category-btn" data-category="wellness">Wellness</button>
+
                 </div>
 
             </div>
@@ -65,6 +59,7 @@
 
 
 <script src="/assets/js/event/rendererModules.js"></script>
+<script src="/assets/js/event/categoryPicker.js"></script>
 <script src="/assets/js/event/form.js"></script>
 <script src="/assets/js/event/scrollable.js"></script>
 <script src="/assets/js/event/viewRepEvents.js"></script>

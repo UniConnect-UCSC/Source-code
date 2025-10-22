@@ -34,7 +34,9 @@ class EventModel
         return $this->where(['university_id' => $universityId]);
     }
 
-    public function getEvents($limit, $offset){
+    public function getEvents($limit, $offset, $categories = []){
+
+        
 
         return $this->findAll(limit: $limit, offset: $offset);
 
