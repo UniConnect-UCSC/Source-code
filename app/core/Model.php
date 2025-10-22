@@ -54,18 +54,17 @@ trait Model
             // Handle the trailing AND in the previous loop
             $sql .= "TRUE ";
 
-            $sql .= $limit ? "LIMIT $limit" : "";
-            $sql .= $offset ? "OFFSET $offset" : "";
-
-
             // Build the ORDER BY clause
             foreach ($orderBy as $field => $direction) {
                 if (!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
                     return false; // Invalid direction
                 }
 
-                $sql .= " ORDER BY $field $direction";
+                $sql .= " ORDER BY $field $direction ";
             }
+            
+            $sql .= $limit ? "LIMIT $limit" : "";
+            $sql .= $offset ? "OFFSET $offset" : "";
 
             return $this->query($sql, $data);
         } catch (PDOException $e) {

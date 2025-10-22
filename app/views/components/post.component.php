@@ -1,3 +1,9 @@
+<?php
+if (!isset($postType)) {
+    $postType = "";
+}
+?>
+
 <div class="post">
     <div class="post-header">
         <div class="post-author">
@@ -29,7 +35,7 @@
             <div>
 
                 <p><?= htmlspecialchars($author) ?></p>
-                <span>Posted <?= htmlspecialchars(timeAgo($createdAt)) ?></span>
+                <span class="post-time">Posted <?= htmlspecialchars(timeAgo($createdAt)) ?></span>
             </div>
         </div>
 
@@ -39,8 +45,9 @@
             <div class="post-more-options-menu" data-post-id="<?= htmlspecialchars($postId) ?>">
                 <!-- Optionally render if the post belongs to the user -->
                 <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $authorId): ?>
-                <div>Edit Post</div>
-                <div class="delete-post-btn" onclick="deletePost(this, event)">Delete Post</div>
+                <div onclick="openEditPostModal('<?= htmlspecialchars($mediaUrl) ?>')">Edit Post</div>
+                <div class="delete-post-btn" onclick="deletePost(this, event, '<?= htmlspecialchars($postType) ?>')">
+                    Delete Post</div>
                 <?php endif; ?>
 
                 <div>Copy URL</div>
@@ -73,5 +80,75 @@
         <div> <i data-lucide="thumbs-up"></i>Like</div>
         <div><i data-lucide="message-circle"></i>Comment</div>
         <div><i data-lucide="repeat-2"></i>Repost</div>
+    </div>
+</div>
+
+<!-- Edit Post Modal -->
+
+<div class="edit-post-modal" onclick="closeEditPostModal()">
+    <div class="edit-modal-content" onclick="event.stopPropagation()">
+
+        <div class="loading-spinner" id="edit-post-loading-spinner" style="display:none;">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="edit-modal-header">
+            <div>
+                <?php if ($profilePic): ?>
+                <a href="/profile">
+                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                </a>
+                <?php else: ?>
+                <a class="profile" href="/profile">
+                    <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+                </a>
+                <?php endif; ?>
+            </div>
+
+            <div class="user-info">
+                <p><?= htmlspecialchars($userFName) ?> <?= htmlspecialchars($userLName) ?></p>
+                <span class="post-time"><?= htmlspecialchars(timeAgo($createdAt)) ?></span>
+            </div>
+        </div>
+
+        <div class="">
+            <div class="edit-post-caption">
+                <textarea id="edit-post-caption"><?= htmlspecialchars($caption) ?></textarea>
+            </div>
+
+            <div class="anonymous-edit-post-option">
+                <label class="switch" id="edit-anonymousSwitch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+
+                <span class="post-anonymously">Post Anonymously</span>
+            </div>
+
+            <div class="edit-post-image">
+                <img id="edit-preview-img" src="<?= htmlspecialchars($mediaUrl) ?>" alt="Post Media">
+            </div>
+
+            <div class="modal-actions">
+
+                <!-- media picker -->
+                <div class="edit-post-media-input">
+                    <input id="edit-media" type="file" accept="image/*,video/*" />
+                </div>
+
+                <div class="post-options">
+                    <div onclick="openEditImageSelector()">
+                        <i data-lucide="image"></i>
+                        Photo
+                    </div>
+                    <div onclick="openEditImageSelector()">
+                        <i data-lucide="video"></i>
+                        Video
+                    </div>
+                </div>
+                <button class="create-post-button"
+                    onclick="editPost(<?= htmlspecialchars($postId) ?>, '<?= htmlspecialchars($postType) ?>')">Post</button>
+            </div>
+        </div>
     </div>
 </div>

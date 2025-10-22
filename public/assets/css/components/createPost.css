@@ -77,6 +77,9 @@
   width: 90%;
   padding: var(--spacing-4) var(--spacing-6);
   max-width: 600px;
+  min-height: 70vh;
+  max-height: 90vh;
+  overflow: hidden;
 }
 
 .modal-header {
@@ -100,6 +103,13 @@
   align-items: center;
 }
 
+.create-post-image img {
+  margin: var(--spacing-2) var(--spacing-0);
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+}
+
 .feed-type-svg {
   width: var(--text-sm);
   height: var(--text-sm);
@@ -112,6 +122,7 @@
 .modal-post-content textarea {
   width: 100%;
   min-height: 200px;
+  max-height: 300px;
   border: none;
   resize: none;
   font-size: var(--text-md);

@@ -89,6 +89,10 @@
             <span class="post-anonymously">Post Anonymously</span>
         </div>
 
+        <div class="create-post-image">
+            <img id="create-preview-img" src="" alt="Preview" style="display:none; max-width:100%; border-radius:8px;">
+        </div>
+
         <div class="modal-actions">
             <div class="post-options">
                 <div onclick="openImageSelector()">
@@ -102,6 +106,9 @@
             </div>
             <button class="create-post-button" onclick="createPost()">Post</button>
         </div>
+    </div>
 
+    <div class="loading-spinner" id="create-post-loading-spinner" style="display:none;">
+        <div class="spinner"></div>
     </div>
 </div>

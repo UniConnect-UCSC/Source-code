@@ -58,6 +58,43 @@ class Home extends Controller
             exit;
         }
 
+        //edit post
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['edit_post_id'])) {
+            $postId = $_POST['edit_post_id'];
+            $caption = $_POST['caption'] ?? '';
+            $updatedAt = date('Y-m-d H:i:s');
+            $isAnonymous = isset($_POST['is_anonymous']) ? (int)$_POST['is_anonymous'] : 0;
+
+            // Handle file upload if present
+            $mediaUrl = null;
+            if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
+                $tmpPath = $_FILES['media']['tmp_name'];
+                $uploadedUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
+                if ($uploadedUrl) {
+                    $mediaUrl = $uploadedUrl;
+                } else {
+                    // log but continue (or return error)
+                    error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
+                }
+            }
+
+            $updateData = [
+                'caption' => $caption,
+                'is_anonymous' => $isAnonymous,
+                'updated_at' => $updatedAt
+            ];
+            if ($mediaUrl) {
+                $updateData['media_url'] = $mediaUrl;
+            }
+
+            $postModel = new GlobalPost();
+            $postModel->update($postId, $updateData);
+
+            // Respond for AJAX (no layout)
+            http_response_code(200);
+            exit;
+        }
+
         $this->view('home', [
             'title' => 'UniConnect',
             'head' => '
