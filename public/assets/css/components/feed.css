@@ -4,6 +4,7 @@
   min-height: 200vh;
   margin-top: var(--spacing-20);
   border-radius: var(--rounded-xl);
+  padding: var(--spacing-4);
 }
 
 .global-feed {
