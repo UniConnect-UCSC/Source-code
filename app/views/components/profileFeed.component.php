@@ -40,6 +40,7 @@ $uniPosts = $uniModel->where(
                     "updatedAt" => $post->updated_at,
                     "mediaUrl" => $post->media_url,
                     "isAnonymous" => $post->is_anonymous,
+                    "postType" => "global"
                 ]);
                 ?>
         <?php endforeach; ?>
@@ -61,6 +62,7 @@ $uniPosts = $uniModel->where(
                     "updatedAt" => $post->updated_at,
                     "mediaUrl" => $post->media_url,
                     "isAnonymous" => $post->is_anonymous,
+                    "postType" => "university",
                 ]);
                 ?>
         <?php endforeach; ?>

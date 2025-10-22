@@ -32,7 +32,7 @@
   font-size: var(--text-lg);
 }
 
-.post-author div span {
+.post-time {
   font-size: var(--text-sm);
   color: var(--color-secondary-gray);
 }
@@ -127,4 +127,56 @@
 
 .post-actions div:hover {
   background-color: var(--color-brand-100);
+}
+
+.edit-post-modal {
+  position: fixed;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: -10;
+}
+
+.edit-modal-content {
+  background-color: white;
+  max-width: 600px;
+  border-radius: var(--rounded-lg);
+  padding: var(--spacing-4);
+  box-shadow: var(--shadow-2xl);
+}
+
+.edit-modal-header {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  margin-bottom: var(--spacing-8);
+}
+
+.edit-post-media-input {
+  display: none;
+}
+
+.edit-post-caption {
+  width: 100%;
+}
+
+.edit-post-caption textarea {
+  width: 100%;
+}
+
+.anonymous-edit-post-option {
+  margin: var(--spacing-4) var(--spacing-0);
+}
+
+.edit-post-image {
+  max-width: 600px;
+  max-height: 600px;
+  object-fit: contain;
 }

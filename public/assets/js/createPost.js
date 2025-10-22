@@ -23,6 +23,12 @@ function closeCreatePostModal() {
       document.body.style.overflow = "auto";
     },
   });
+
+  const previewImg = document.getElementById("create-preview-img");
+  if (previewImg) {
+    previewImg.src = "";
+    previewImg.style.display = "none";
+  }
 }
 
 function openImageSelector() {
@@ -33,12 +39,36 @@ function openImageSelector() {
   }
 }
 
+//Preivew selected image
+document.addEventListener("DOMContentLoaded", function () {
+  const mediaInput = document.getElementById("post-media");
+  const previewImg = document.getElementById("create-preview-img");
+
+  if (mediaInput && previewImg) {
+    mediaInput.addEventListener("change", function () {
+      const file = mediaInput.files[0];
+      if (file) {
+        previewImg.src = URL.createObjectURL(file);
+        previewImg.style.display = "block";
+        previewImg.onload = () => URL.revokeObjectURL(previewImg.src);
+      } else {
+        previewImg.src = "";
+        previewImg.style.display = "none";
+      }
+    });
+  }
+});
+
 function createPost() {
   const submitBtn = document.querySelector(".create-post-button");
 
   if (submitBtn) {
     submitBtn.disabled = true;
   }
+
+  // Show spinner
+  const spinner = document.getElementById("create-post-loading-spinner");
+  if (spinner) spinner.style.display = "flex";
 
   const captionEl = document.getElementById("post-caption");
   const caption = captionEl ? captionEl.value.trim() : "";
@@ -70,11 +100,9 @@ function createPost() {
       try {
         json = text ? JSON.parse(text) : null;
       } catch (err) {
-        // parsing failed — include raw response for debugging
         throw new Error(`Invalid JSON response: ${text}`);
       }
       if (!res.ok) {
-        // server returned error status — prefer server message if present
         throw new Error(
           json && json.message ? json.message : `Server error (${res.status})`
         );
@@ -95,5 +123,6 @@ function createPost() {
     })
     .finally(() => {
       if (submitBtn) submitBtn.disabled = false;
+      if (spinner) spinner.style.display = "none";
     });
 }
