@@ -2,16 +2,15 @@
 <?php require_once(__DIR__ . "/../../models/User.php"); ?>
 
 <div class="feed">
-    <?php component("createPost") ?>
+    <?php component("createPost", ["type" => "university"]) ?>
 
 
     <div class="global-feed">
         <?php
         $uniPostsModel = new UniversityPost();
         $uniPosts = $uniPostsModel->where([
-            ["user_id", '!=', $_SESSION['user_id']],
-            ["university_id", '=', $_SESSION['user_universityID']]
-        ]);
+            ["university_id", '=', $_SESSION['user_universityID']],
+        ], null, null, ['created_at' => 'DESC']);
 
         ?>
 

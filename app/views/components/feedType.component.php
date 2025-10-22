@@ -9,8 +9,9 @@ $feedTypes = [
 
 <div class="feed-type">
     <?php foreach ($feedTypes as $feedType): ?>
-        <div class="">
-            <span><?= htmlspecialchars($feedType['title']) ?></span>
-        </div>
+    <button type="button" class="feed-type-item feed-type-item-inactive"
+        data-feed="<?= htmlspecialchars($feedType['key']) ?>">
+        <?= htmlspecialchars($feedType['title']) ?>
+    </button>
     <?php endforeach; ?>
 </div>

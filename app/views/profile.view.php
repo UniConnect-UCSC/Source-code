@@ -6,7 +6,7 @@
     ?>
     <div class="profile-content">
         <?php component("profileBanner"); ?>
-        <?php component("createPost"); ?>
+
         <?php component("feedType"); ?>
         <?php component("profileFeed"); ?>
     </div>

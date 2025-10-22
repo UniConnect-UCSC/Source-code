@@ -12,12 +12,12 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "Marketplace",
-        "pageLink" => "/",
+        "pageLink" => "/marketplace",
         "icon" => "store"
     ],
     [
         "pageName" => "Rooms & Boardings",
-        "pageLink" => "/",
+        "pageLink" => "/rooms-and-boardings",
         "icon" => "bed"
     ],
     [
@@ -37,12 +37,12 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "Friend Requests",
-        "pageLink" => "/",
+        "pageLink" => "/friends",
         "icon" => "handshake"
     ],
-    [
-        "pageName" => "Groups",
-        "pageLink" => "/",
-        "icon" => "users"
-    ],
+    // [
+    //     "pageName" => "Groups",
+    //     "pageLink" => "/",
+    //     "icon" => "users"
+    // ],
 ];

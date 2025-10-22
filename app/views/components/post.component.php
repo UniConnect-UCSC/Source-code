@@ -11,17 +11,18 @@
                 $profilePic = $_SESSION['user_profilePicture'] ?? null;
                 ?>
                 <?php if ($profilePic): ?>
-                    <a href="/profile">
-                        <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-                    </a>
+                <a href="/profile">
+                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                </a>
                 <?php else: ?>
-                    <?php
+                <?php
                     $fNameInitial = strtoupper($userFName[0] ?? '');
                     $lNameInitial = strtoupper($userLName[0] ?? '');
                     ?>
-                    <a class="profile" href="/profile">
-                        <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-                    </a>
+                <a class="profile" href="/profile">
+                    <!-- //Is isAnonymous do not display initials -->
+                    <?= htmlspecialchars($isAnonymous ? 'An' : $fNameInitial) ?><?= htmlspecialchars($isAnonymous ? '' : $lNameInitial) ?>
+                </a>
                 <?php endif; ?>
             </div>
 
@@ -33,23 +34,21 @@
         </div>
 
         <div class="post-more-options">
-            <i data-lucide="more-horizontal" onclick="toggleOptionsMenu(this)"></i>
+            <i data-lucide="more-horizontal" class="more-options-icon" onclick="toggleOptionsMenu(this)"></i>
 
             <div class="post-more-options-menu" data-post-id="<?= htmlspecialchars($postId) ?>">
                 <!-- Optionally render if the post belongs to the user -->
                 <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $authorId): ?>
-                    <div>Edit Post</div>
-                    <div class="delete-post-btn" onclick="deletePost(this)">Delete Post</div>
+                <div>Edit Post</div>
+                <div class="delete-post-btn" onclick="deletePost(this, event)">Delete Post</div>
                 <?php endif; ?>
 
                 <div>Copy URL</div>
 
                 <!-- Optionally Render if post doesnt belong to user -->
                 <?php if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != $authorId): ?>
-                    <div>Report Post</div>
+                <div>Report Post</div>
                 <?php endif; ?>
-
-
             </div>
         </div>
     </div>
@@ -57,7 +56,7 @@
     <div class="post-caption"><?= htmlspecialchars($caption) ?>
     </div>
 
-    <div>
+    <div class="post-image">
         <img src="<?= htmlspecialchars($mediaUrl) ?>" alt="Post Media">
     </div>
 
