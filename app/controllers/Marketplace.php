@@ -149,23 +149,33 @@ class Marketplace extends Controller
                 'description' => $itemDescription,
                 'price' => $itemPrice,
                 'updated_at' => date('Y-m-d H:i:s'),
-                'status' => $itemStatus,
-                'category_id' => $itemCategoryID,
+                // 'status' => $itemStatus,
+                // 'category_id' => intval($itemCategoryID),
             ];
 
-            // $mediaUrl = null;
-            // if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
-            //     $tmpPath = $_FILES['media']['tmp_name'];
-            //     $uploadedUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
-            //     if ($uploadedUrl) {
-            //         $mediaUrl = $uploadedUrl;
-            //     } else {
-            //         // log but continue (or return error)
-            //         error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
-            //     }
-            // }
+            $mediaUrl = null;
+            if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
+                $tmpPath = $_FILES['media']['tmp_name'];
+                $uploadedUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_marketplace');
+                if ($uploadedUrl) {
+                    $mediaUrl = $uploadedUrl;
+                } else {
+                    // log but continue (or return error)
+                    error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
+                }
+            }
 
             $itemModel->update($itemId, $itemData);
+
+            $imageModel = new MarketplaceItemImage();
+            $existingImage = $imageModel->first(['marketplace_item_id' => $itemId]);
+
+            $imageData = [
+                'image_url' => $mediaUrl,
+            ];
+            if ($existingImage && $mediaUrl) {
+                $imageModel->update($existingImage->id, $imageData);
+            }
 
             header('Location: /marketplace/myItems');
             exit();
