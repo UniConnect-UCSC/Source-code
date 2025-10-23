@@ -13,7 +13,7 @@ class Boardings extends Controller
                 <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
                 <link rel="stylesheet" href="/assets/css/pages/boardings.css">
                 <link rel="stylesheet" href="/assets/css/components/feed.css">
-                <link rel="stylesheet" href="/assets/css/components/home.css">
+                <link rel="stylesheet" href="/assets/css/pages/home.css">
                 <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
                 '
         ]);
