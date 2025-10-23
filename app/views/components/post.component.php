@@ -43,9 +43,10 @@ if (!isset($postType)) {
             <i data-lucide="more-horizontal" class="more-options-icon" onclick="toggleOptionsMenu(this)"></i>
 
             <div class="post-more-options-menu" data-post-id="<?= htmlspecialchars($postId) ?>">
+
                 <!-- Optionally render if the post belongs to the user -->
                 <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $authorId): ?>
-                <div onclick="openEditPostModal('<?= htmlspecialchars($mediaUrl) ?>')">Edit Post</div>
+                <div onclick="openEditPostModal('<?= htmlspecialchars($mediaUrl ?? '') ?>')">Edit Post</div>
                 <div class="delete-post-btn" onclick="deletePost(this, event, '<?= htmlspecialchars($postType) ?>')">
                     Delete Post</div>
                 <?php endif; ?>
@@ -63,9 +64,11 @@ if (!isset($postType)) {
     <div class="post-caption"><?= htmlspecialchars($caption) ?>
     </div>
 
+    <?php if (isset($mediaUrl) && !empty($mediaUrl)): ?>
     <div class="post-image">
         <img src="<?= htmlspecialchars($mediaUrl) ?>" alt="Post Media">
     </div>
+    <?php endif; ?>
 
     <div class="post-interactions">
         <div><i data-lucide="thumbs-up"></i> 4</div>
@@ -124,16 +127,16 @@ if (!isset($postType)) {
 
                 <span class="post-anonymously">Post Anonymously</span>
             </div>
-
-            <div class="edit-post-image">
-                <img id="edit-preview-img" src="<?= htmlspecialchars($mediaUrl) ?>" alt="Post Media">
+            <div class="edit-post-image" <?= empty($mediaUrl) ? 'style="display:none;"' : '' ?>>
+                <img id="edit-preview-img" class="edit-preview-img" src="<?= htmlspecialchars($mediaUrl ?? '') ?>"
+                    alt="Post Media">
             </div>
 
             <div class="modal-actions">
 
                 <!-- media picker -->
                 <div class="edit-post-media-input">
-                    <input id="edit-media" type="file" accept="image/*,video/*" />
+                    <input id="edit-media" type="file" accept="image/*" />
                 </div>
 
                 <div class="post-options">

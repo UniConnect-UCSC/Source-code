@@ -32,9 +32,11 @@ $imageUrl = $image && isset($image->image_url) ? $image->image_url : null;
         onclick="event.stopPropagation(); toggleMyItemsOptions('<?= htmlspecialchars($id) ?>')">
         <i data-lucide="more-horizontal"></i>
     </div>
+
     <div class="my-items-options-dropdown" id="my-items-options-dropdown-<?= htmlspecialchars($id) ?>">
         <div class="edit-item-btn" data-item-id="<?= htmlspecialchars($id) ?>">Edit</div>
-        <div class="delete-item-btn" data-item-id="<?= htmlspecialchars($id) ?>">Delete</div>
+        <div class="delete-item-btn" data-item-id="<?= htmlspecialchars($id) ?>"
+            onclick="deleteMarketplaceItem(this, event)">Delete</div>
     </div>
     <?php endif; ?>
 </div>

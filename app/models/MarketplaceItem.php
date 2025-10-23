@@ -40,8 +40,4 @@ class MarketplaceItem
         // Use the Model trait's update method
         return $this->update($id, $data, $id_column);
     }
-    public function deleteItem($id)
-    {
-        return $this->delete($id);
-    }
 }

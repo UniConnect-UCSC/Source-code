@@ -9,7 +9,6 @@ class Marketplace extends Controller
 {
     public function index()
     {
-        $allitemsModel = new MarketplaceItem();
 
         $this->view('marketplace', [
             'title' => 'Marketplace | UniConnect',
@@ -175,11 +174,52 @@ class Marketplace extends Controller
             'statusOptions' => $statusOptions
         ]);
     }
-    public function deleteItem($itemId)
+    public function deleteItem()
     {
-        $itemModel = new MarketplaceItem();
-        $itemModel->deleteItem($itemId);
-        header('Location: /marketplace/myItems');
-        exit();
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+            exit;
+        }
+
+        $itemId = $_POST['delete_item_id'] ?? null;
+        if (!$itemId) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'No item ID provided']);
+            exit;
+        }
+
+        try {
+            $itemModel = new MarketplaceItem();
+
+            $item = $itemModel->first(['id' => $itemId]);
+            if (!$item) {
+                http_response_code(404);
+                echo json_encode(['success' => false, 'message' => 'Item not found']);
+                exit;
+            }
+
+            // delete related images if applicable
+            $imageModel = new MarketplaceItemImage();
+            if (method_exists($imageModel, 'delete')) {
+                $imageModel->delete($itemId, 'marketplace_item_id');
+            }
+
+            $result = $itemModel->delete($itemId, 'id');
+
+            if ($result) {
+                echo json_encode(['success' => true, 'message' => 'Item deleted']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Failed to delete item']);
+            }
+        } catch (Exception $e) {
+            error_log("Marketplace::deleteItem error: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        }
+        exit;
     }
 }

@@ -5,7 +5,7 @@
     <?php component("navPanel"); ?>
 
     <!-- Main Feed -->
-    <div class="feed">
+    <div class="boarding-feed">
         <div class="feed-header">
             <p style="font-size: 25px;">Rooms & Boardings</p>
         </div>
@@ -40,25 +40,25 @@
             ]
         ];
         if (!empty($savedListings)): ?>
-            <section class="feed-section">
-                <div class="feed-section-header">
-                    <h3><b>Saved Listings</b></h3>
+        <section class="feed-section">
+            <div class="feed-section-header">
+                <h3><b>Saved Listings</b></h3>
+            </div>
+            <div class="feed-grid">
+                <?php foreach ($savedListings as $s): ?>
+                <div class="feed-card">
+                    <img src="<?= $s['image'] ?>" alt="Boarding Image" class="feed-card-img saved">
+                    <div class="feed-card-body">
+                        <h4><?= $s["title"] ?></h4>
+                        <p class="price">Rs. <?= number_format($s["price"]) ?>/<?= $s["period"] ?></p>
+                        <p class="loc"><?= $s["location"] ?></p>
+                        <button class="view-btn">View Details</button>
+                        <p class="posted">Posted <?= $s["posted"] ?></p>
+                    </div>
                 </div>
-                <div class="feed-grid">
-                    <?php foreach ($savedListings as $s): ?>
-                        <div class="feed-card">
-                            <img src="<?= $s['image'] ?>" alt="Boarding Image" class="feed-card-img saved">
-                            <div class="feed-card-body">
-                                <h4><?= $s["title"] ?></h4>
-                                <p class="price">Rs. <?= number_format($s["price"]) ?>/<?= $s["period"] ?></p>
-                                <p class="loc"><?= $s["location"] ?></p>
-                                <button class="view-btn">View Details</button>
-                                <p class="posted">Posted <?= $s["posted"] ?></p>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </section>
+                <?php endforeach; ?>
+            </div>
+        </section>
         <?php endif; ?>
 
         <!-- Featured Listings -->
@@ -97,23 +97,23 @@
                 ];
 
                 foreach ($featured as $item): ?>
-                    <div class="feed-card">
-                        <img src="<?= $item['image'] ?>" alt="Boarding Image" class="feed-card-img featured">
-                        <div class="feed-card-body">
-                            <h4><?= $item["title"] ?></h4>
-                            <p class="price">Rs. <?= number_format($item["price"]) ?>/<?= $item["period"] ?></p>
-                            <p class="loc"><?= $item["location"] ?> • <?= $item["distance"] ?></p>
-                            <p class="uni"><?= $item["university"] ?></p>
-                            <div class="tags">
-                                <span><?= $item["type"] ?></span>
-                                <?php foreach (array_slice($item["amenities"], 0, 2) as $a): ?>
-                                    <span><?= $a ?></span>
-                                <?php endforeach; ?>
-                            </div>
-                            <button class="view-btn">View Details</button>
-                            <p class="posted">Posted <?= $item["posted"] ?></p>
+                <div class="feed-card">
+                    <img src="<?= $item['image'] ?>" alt="Boarding Image" class="feed-card-img featured">
+                    <div class="feed-card-body">
+                        <h4><?= $item["title"] ?></h4>
+                        <p class="price">Rs. <?= number_format($item["price"]) ?>/<?= $item["period"] ?></p>
+                        <p class="loc"><?= $item["location"] ?> • <?= $item["distance"] ?></p>
+                        <p class="uni"><?= $item["university"] ?></p>
+                        <div class="tags">
+                            <span><?= $item["type"] ?></span>
+                            <?php foreach (array_slice($item["amenities"], 0, 2) as $a): ?>
+                            <span><?= $a ?></span>
+                            <?php endforeach; ?>
                         </div>
+                        <button class="view-btn">View Details</button>
+                        <p class="posted">Posted <?= $item["posted"] ?></p>
                     </div>
+                </div>
                 <?php endforeach; ?>
             </div>
         </section>
@@ -154,30 +154,28 @@
                 ];
 
                 foreach ($recent as $r): ?>
-                    <div class="feed-card">
-                        <img src="<?= $r['image'] ?>" alt="Boarding Image" class="feed-card-img">
-                        <div class="feed-card-body">
-                            <h4><?= $r["title"] ?></h4>
-                            <p class="price">Rs. <?= number_format($r["price"]) ?>/<?= $r["period"] ?></p>
-                            <p class="loc"><?= $r["location"] ?> • <?= $r["distance"] ?></p>
-                            <p class="uni"><?= $r["university"] ?></p>
-                            <div class="tags">
-                                <span><?= $r["type"] ?></span>
-                                <?php foreach (array_slice($r["amenities"], 0, 2) as $a): ?>
-                                    <span><?= $a ?></span>
-                                <?php endforeach; ?>
-                            </div>
-                            <button class="view-btn">View Details</button>
-                            <p class="posted">Posted <?= $r["posted"] ?></p>
+                <div class="feed-card">
+                    <img src="<?= $r['image'] ?>" alt="Boarding Image" class="feed-card-img">
+                    <div class="feed-card-body">
+                        <h4><?= $r["title"] ?></h4>
+                        <p class="price">Rs. <?= number_format($r["price"]) ?>/<?= $r["period"] ?></p>
+                        <p class="loc"><?= $r["location"] ?> • <?= $r["distance"] ?></p>
+                        <p class="uni"><?= $r["university"] ?></p>
+                        <div class="tags">
+                            <span><?= $r["type"] ?></span>
+                            <?php foreach (array_slice($r["amenities"], 0, 2) as $a): ?>
+                            <span><?= $a ?></span>
+                            <?php endforeach; ?>
                         </div>
+                        <button class="view-btn">View Details</button>
+                        <p class="posted">Posted <?= $r["posted"] ?></p>
                     </div>
+                </div>
                 <?php endforeach; ?>
             </div>
             <button class="load-btn">Load More Listings</button>
         </section>
 
     </div>
-
- <?php component("widgetPanel"); ?>
 
 </div>

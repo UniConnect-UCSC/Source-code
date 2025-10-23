@@ -4,46 +4,55 @@
   padding: 1rem;
 }
 
-.feed {
+.boarding-feed {
+  margin-top: var(--spacing-20);
   flex: 1;
   background: #fff;
   border-radius: 12px;
   padding: 1rem 1.5rem;
   border: 1px solid #e5e7eb;
+
+  grid-column-start: 4;
+  grid-column-end: 13;
 }
 
-.post-btn{
-    display: inline-block;
-    background: linear-gradient(90deg,#0b74ff,#00c6ff);
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    box-shadow: 0 6px 20px rgba(11,116,255,0.18);
-    transition: transform .12s ease, box-shadow .12s ease, opacity .12s;
-    border: none;
-    cursor: pointer;
+.post-btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #0b74ff, #00c6ff);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(11, 116, 255, 0.18);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s;
+  border: none;
+  cursor: pointer;
 }
-.post-btn:hover{
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(11,116,255,0.22);
+.post-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(11, 116, 255, 0.22);
 }
-.post-btn:active{
-    transform: translateY(-1px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+.post-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
-.post-btn::before{
-    content: "+";
-    display: inline-block;
-    margin-right: 8px;
-    background: rgba(255,255,255,0.12);
-    padding: 3px 7px;
-    border-radius: 6px;
-    font-weight: 700;
+.post-btn::before {
+  content: "+";
+  display: inline-block;
+  margin-right: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-weight: 700;
 }
-@media (max-width:600px){
-    .post-btn{ width:100%; text-align:center; padding:14px; font-size:16px; }
+@media (max-width: 600px) {
+  .post-btn {
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    font-size: 16px;
+  }
 }
 
 .feed > .feed-section:first-of-type {
@@ -57,10 +66,9 @@
   margin-bottom: 1rem;
 }
 
-
 .feed > .feed-section:first-of-type .feed-grid {
   width: auto;
-  max-width: 420px; 
+  max-width: 420px;
 }
 
 .feed-header .post-btn {
@@ -84,12 +92,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: .75rem;
+  margin-bottom: 0.75rem;
 }
 
 .feed-section .feed-grid {
   width: 100%;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .feed-section.one-by-one .feed-grid {
@@ -113,7 +121,7 @@
 }
 
 .feed-card:hover {
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .feed-card-img {
@@ -126,42 +134,45 @@
 }
 
 .feed-card-body {
-  padding: .75rem .9rem;
+  padding: 0.75rem 0.9rem;
 }
 
 .feed-card-body h4 {
   font-size: 1rem;
   font-weight: 600;
-  margin-bottom: .25rem;
+  margin-bottom: 0.25rem;
 }
 
 .price {
   color: #8b5cf6;
   font-weight: 700;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
-.loc, .uni, .posted {
-  font-size: .85rem;
+.loc,
+.uni,
+.posted {
+  font-size: 0.85rem;
   color: #6b7280;
 }
 
 .tags span {
   background: #f3f4f6;
-  font-size: .75rem;
+  font-size: 0.75rem;
   border-radius: 6px;
   padding: 2px 6px;
   margin-right: 3px;
 }
 
-.view-btn, .load-btn {
+.view-btn,
+.load-btn {
   background: #8b5cf6;
   color: white;
-  padding: .4rem .8rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 6px;
-  font-size: .85rem;
+  font-size: 0.85rem;
   width: 100%;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   cursor: pointer;
 }
 
@@ -173,36 +184,36 @@
 }
 
 .feed-card-img.saved {
-    background: linear-gradient(to bottom right, #d1d5db,#9ca3af);
+  background: linear-gradient(to bottom right, #d1d5db, #9ca3af);
 }
 
 .post-listing-card h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #8b5cf6;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #8b5cf6;
 }
 
 .post-listing-card p {
-    font-size: .95rem;
-    color: #4b5563;
+  font-size: 0.95rem;
+  color: #4b5563;
 }
 
 .post-listing-card .post-btn {
-    background: #8b5cf6;
-    color: white;
-    padding: .5rem 1.25rem;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none;
+  background: #8b5cf6;
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .post-listing-card .post-btn:hover {
-    background: #8b5cf6;
+  background: #8b5cf6;
 }
 
 .feed-card-img {
   width: 100%;
-  height: 200px; 
-  object-fit: cover; 
+  height: 200px;
+  object-fit: cover;
   border-bottom: 1px solid #eee;
 }

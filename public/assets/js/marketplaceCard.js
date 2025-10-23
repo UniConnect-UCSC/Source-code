@@ -1,13 +1,6 @@
 function toggleMyItemsOptions(id) {
-  console.log("Toggling my items options for ID:", id);
   const itemOptions = document.getElementById(
     `my-items-options-dropdown-${id}`
-  );
-
-  console.log("Found element:", itemOptions);
-  console.log(
-    "Current opacity:",
-    itemOptions ? itemOptions.style.opacity : "not found"
   );
 
   if (!itemOptions) {
@@ -73,30 +66,41 @@ function closeMyItemsOptions(id) {
 }
 
 // Delete item function
-function deleteItem(btn, event) {
+function deleteMarketplaceItem(btn, event) {
   event.stopPropagation();
   const itemId = btn.getAttribute("data-item-id");
 
-  console.log("Attempting to delete item:", itemId);
-
   if (confirm("Are you sure you want to delete this item?")) {
-    console.log("Confirmed delete, sending request...");
+    const formData = new FormData();
+    formData.append("delete_item_id", itemId);
 
-    fetch(`/marketplace/deleteItem/${itemId}`, {
+    fetch("/marketplace/deleteItem", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      body: formData,
     })
-      .then((res) => {
-        console.log("Response status:", res.status);
-        if (!res.ok) throw new Error("Failed to delete item");
-        console.log("Item deleted successfully, reloading...");
-        window.location.reload();
+      .then(async (response) => {
+        const text = await response.text();
+        console.log("Raw response:", text);
+
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          console.error("Failed to parse JSON:", e);
+          console.error("Response text was:", text);
+          throw new Error("Invalid JSON response from server");
+        }
       })
-      .catch((err) => {
-        console.error("Delete error:", err);
-        alert("Error deleting item: " + err.message);
+      .then((data) => {
+        console.log("Parsed data:", data);
+        if (data.success) {
+          window.location.reload();
+        } else {
+          alert("Failed to delete: " + (data.message || "Unknown error"));
+        }
+      })
+      .catch((error) => {
+        console.error("Delete error:", error);
+        alert("An error occurred while deleting the item");
       });
   } else {
     console.log("Delete cancelled");
@@ -130,35 +134,4 @@ document.addEventListener("click", function (event) {
       dropdown.style.display = "none";
     });
   }
-});
-
-// Attach event listeners when DOM is loaded
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("Marketplace card JS loaded");
-
-  const deleteButtons = document.querySelectorAll(".delete-item-btn");
-  console.log("Found delete buttons:", deleteButtons.length);
-
-  deleteButtons.forEach((btn) => {
-    console.log(
-      "Attaching delete listener to button with ID:",
-      btn.getAttribute("data-item-id")
-    );
-    btn.addEventListener("click", function (e) {
-      console.log("Delete button clicked!");
-      deleteItem(this, e);
-    });
-  });
-
-  const editButtons = document.querySelectorAll(".edit-item-btn");
-  console.log("Found edit buttons:", editButtons.length);
-
-  editButtons.forEach((btn) => {
-    btn.addEventListener("click", function (e) {
-      e.stopPropagation();
-      const itemId = this.dataset.itemId;
-      console.log("Edit item:", itemId);
-      // TODO: Implement edit functionality
-    });
-  });
 });

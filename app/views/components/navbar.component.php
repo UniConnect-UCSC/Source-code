@@ -37,7 +37,8 @@
         $userEmail = $_SESSION['user_email'] ?? "";
         $user = $userModel->first(["email" => $userEmail]);
 
-        $profilePic = $user->profile_picture ?? null;
+        // $profilePic = $user->profile_picture ?? null;
+        $profilePic = null;
 
 
         $userEmail = $_SESSION['user_email'] ?? "";
