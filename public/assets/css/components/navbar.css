@@ -1,3 +1,4 @@
+@import url("notification.css");
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -7,7 +8,7 @@
   top: 0;
   width: 100%;
   background-color: var(--color-primary-white);
-  z-index: 10000;
+  z-index: 100;
 }
 
 .links__container {
@@ -28,6 +29,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: fit-content;
 
   border-radius: var(--rounded-full);
   background-color: var(--color-brand-600);
@@ -46,6 +48,7 @@
   position: relative;
   width: fit-content;
   cursor: pointer;
+  user-select: none;
 }
 
 .profile-image {

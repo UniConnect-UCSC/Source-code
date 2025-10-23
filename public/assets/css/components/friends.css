@@ -1,0 +1,46 @@
+.friends-container {
+  top: var(--spacing-24);
+  grid-column-start: 4;
+  grid-column-end: 9;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.friends-header {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  margin-bottom: var(--spacing-2);
+}
+
+.friend-card {
+  background-color: var(--color--primary-white);
+  border: 1px solid var(--color-primary-gray);
+  border-radius: var(--rounded-lg);
+  padding: var(--spacing-2) var(--spacing-2);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.friend-card:hover {
+  background-color: var(--color-brand-100);
+}
+
+.friend-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--rounded-full);
+  object-fit: cover;
+  margin-bottom: var(--spacing-2);
+}
+
+.friend-card h3 {
+  font-size: var(--text-lg);
+  font-weight: 500;
+}
+
+.friend-card p {
+  color: var(--color-secondary-gray);
+}

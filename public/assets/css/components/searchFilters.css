@@ -1,0 +1,22 @@
+.search-filter-container {
+  background-color: var(--color-primary-white);
+  /* width: fit-content; */
+  border-radius: var(--rounded-2xl);
+  padding: var(--spacing-3) var(--spacing-6);
+}
+
+.search-filter-title {
+  font-size: var(--text-2xl);
+}
+
+.search-filter {
+  display: flex;
+  gap: var(--spacing-8);
+  margin-top: var(--spacing-3);
+}
+
+.no-results-message {
+  text-align: center;
+  margin-top: var(--spacing-10);
+  font-size: var(--text-xl);
+}

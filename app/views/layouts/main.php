@@ -21,19 +21,29 @@
     <?= $head ?? '' ?>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/assets/js/ajax.js"></script>
+    <script src="/assets/js/infinityScroll.js"></script>
+
+
+</head>
+
+<body>
+    <?= $content ?>
 
     <script src="/assets/js/navbar.js"></script>
+    <script src="/assets/js/postOptions.js"></script>
+    <script src="/assets/js/createPost.js"></script>
+    <script src="/assets/js/notification.js"></script>
+    <script src="/assets/js/feedType.js"></script>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         if (window.lucide?.createIcons) lucide.createIcons();
     });
     </script>
-
-</head>
-
-<body>
-    <?= $content ?>
 </body>
+
+
+
 
 </html>

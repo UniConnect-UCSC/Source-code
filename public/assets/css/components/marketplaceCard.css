@@ -1,0 +1,127 @@
+.marketplace-item-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--rounded-none);
+  padding: 16px;
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.marketplace-item-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--rounded-none);
+  margin-bottom: var(--rounded-none);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.marketplace-item-image::before {
+  content: "📦";
+  font-size: 48px;
+  opacity: 0.7;
+}
+
+.marketplace-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.marketplace-item h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.marketplace-item-price {
+  color: #10b981;
+  font-size: 22px;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.marketplace-item-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.marketplace-item-status.available {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.marketplace-item-status.sold {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.marketplace-item-date {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 8px;
+}
+.marketplace-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.marketplace-item-footer-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.marketplace-item-footer form {
+  margin: 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.edit-btn {
+  background-color: #10b981;
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background-color: #059669;
+}
+
+.delete-btn {
+  background-color: #ef4444;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background-color: #dc2626;
+}
