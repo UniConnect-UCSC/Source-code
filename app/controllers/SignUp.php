@@ -45,7 +45,12 @@ class SignUp extends Controller
                 $university = $universityModel->first([
                     "email_domain" => $domain,
                 ]);
-                $universityId = $university ? $university->id : "";
+
+                if ($university) {
+                    $universityId = $university ? $university->id : "";
+                } else {
+                    $data['errors']['email'] = 'Please enter a valid university email address';
+                }
             }
 
             //Check if email already exists

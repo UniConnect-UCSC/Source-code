@@ -283,3 +283,144 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 });
+
+//Edit post
+function openEditMarketplaceItemModal(itemId) {
+  // Find the specific item card that contains this modal
+  const itemCard = document
+    .querySelector(`[data-item-id="${itemId}"]`)
+    .closest(".marketplace-item-card");
+  const modal = itemCard.querySelector(".edit-marketplace-item-modal");
+
+  if (!modal) {
+    console.error("Modal not found for item:", itemId);
+    return;
+  }
+
+  modal.style.zIndex = "1000";
+  modal.style.pointerEvents = "auto";
+  document.body.style.overflow = "hidden";
+
+  gsap.to(modal, {
+    opacity: 1,
+    duration: 0.2,
+  });
+}
+
+function closeEditMarketplaceItemModal() {
+  // Close all modals
+  const modals = document.querySelectorAll(".edit-marketplace-item-modal");
+
+  modals.forEach((modal) => {
+    gsap.to(modal, {
+      opacity: 0,
+      duration: 0.2,
+      onComplete: () => {
+        modal.style.zIndex = "-1";
+        modal.style.pointerEvents = "none";
+        document.body.style.overflow = "auto";
+      },
+    });
+  });
+}
+
+function openEditItemImageSelector(itemId) {
+  const photosInput = document.getElementById(
+    `edit-sell-item-media-input-${itemId}`
+  );
+  if (photosInput) {
+    photosInput.click();
+  }
+}
+
+function editMarketplaceItem(itemId) {
+  const form = document.getElementById(`edit-sell-item-form-${itemId}`);
+  const spinner = document.getElementById("edit-sell-item-loading-spinner");
+
+  const title = form.querySelector('input[name="title"]').value.trim();
+  const description = form
+    .querySelector('textarea[name="description"]')
+    .value.trim();
+  const price = form.querySelector('input[name="price"]').value.trim();
+  const category = form.querySelector('select[name="category_id"]').value;
+  const status = form.querySelector('select[name="status"]').value;
+
+  if (!title || !description || !price || !category || !status) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  if (spinner) spinner.style.display = "flex";
+
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("description", description);
+  formData.append("price", price);
+  formData.append("category", category);
+  formData.append("status", status);
+  formData.append("item_id", itemId);
+
+  const photosInput = document.getElementById(
+    `edit-sell-item-media-input-${itemId}`
+  );
+  const file =
+    photosInput && photosInput.files && photosInput.files[0]
+      ? photosInput.files[0]
+      : null;
+
+  if (file) {
+    formData.append("media", file);
+  }
+
+  fetch(`/marketplace/editItem`, {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to update item");
+      return res.text();
+    })
+    .then(() => {
+      closeEditMarketplaceItemModal();
+      window.location.reload();
+    })
+    .catch((err) => {
+      alert("Error updating item: " + err.message);
+    })
+    .finally(() => {
+      if (spinner) spinner.style.display = "none";
+    });
+}
+
+// Image preview for edit modal
+document.addEventListener("DOMContentLoaded", function () {
+  // Delegate event listener for dynamically loaded edit modals
+  document.addEventListener("change", function (e) {
+    if (e.target.id && e.target.id.startsWith("edit-sell-item-media-input-")) {
+      const itemId = e.target.id.replace("edit-sell-item-media-input-", "");
+      const previewImg = document.getElementById(
+        `edit-sell-item-preview-img-${itemId}`
+      );
+
+      // Find the edit-post-image container for THIS specific item
+      const itemCard = document.querySelector(`[data-item-id="${itemId}"]`);
+      const editPostImage = itemCard
+        ? itemCard.querySelector(".edit-post-image")
+        : null;
+
+      if (previewImg) {
+        const file = e.target.files[0];
+        if (file) {
+          previewImg.src = URL.createObjectURL(file);
+          previewImg.style.display = "block";
+          if (editPostImage) {
+            editPostImage.style.display = "block";
+          }
+          previewImg.onload = () => URL.revokeObjectURL(previewImg.src);
+        }
+      } else {
+        console.error("Preview image not found for item:", itemId);
+      }
+    }
+  });
+});

@@ -32,6 +32,7 @@ $categories = $categoryModel->where([]);
                         "description"   => $item->description,
                         "price" => $item->price,
                         "categoryID" => $item->category_id,
+                        "categories" => $categories,
                         "status" => $item->status,
                         "created_at" => $item->created_at,
                     ]);

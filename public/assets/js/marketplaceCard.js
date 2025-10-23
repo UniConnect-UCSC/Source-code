@@ -65,6 +65,35 @@ function closeMyItemsOptions(id) {
   });
 }
 
+// Close dropdown when clicking outside
+document.addEventListener("click", function (event) {
+  const dropdowns = document.querySelectorAll(".my-items-options-dropdown");
+  const optionsButtons = document.querySelectorAll(".my-items-options");
+
+  let clickedInside = false;
+
+  optionsButtons.forEach((button) => {
+    if (button.contains(event.target)) {
+      clickedInside = true;
+    }
+  });
+
+  dropdowns.forEach((dropdown) => {
+    if (dropdown.contains(event.target)) {
+      clickedInside = true;
+    }
+  });
+
+  if (!clickedInside) {
+    dropdowns.forEach((dropdown) => {
+      dropdown.style.opacity = "0";
+      dropdown.style.zIndex = "-1";
+      dropdown.style.pointerEvents = "none";
+      dropdown.style.display = "none";
+    });
+  }
+});
+
 // Delete item function
 function deleteMarketplaceItem(btn, event) {
   event.stopPropagation();
@@ -106,32 +135,3 @@ function deleteMarketplaceItem(btn, event) {
     console.log("Delete cancelled");
   }
 }
-
-// Close dropdown when clicking outside
-document.addEventListener("click", function (event) {
-  const dropdowns = document.querySelectorAll(".my-items-options-dropdown");
-  const optionsButtons = document.querySelectorAll(".my-items-options");
-
-  let clickedInside = false;
-
-  optionsButtons.forEach((button) => {
-    if (button.contains(event.target)) {
-      clickedInside = true;
-    }
-  });
-
-  dropdowns.forEach((dropdown) => {
-    if (dropdown.contains(event.target)) {
-      clickedInside = true;
-    }
-  });
-
-  if (!clickedInside) {
-    dropdowns.forEach((dropdown) => {
-      dropdown.style.opacity = "0";
-      dropdown.style.zIndex = "-1";
-      dropdown.style.pointerEvents = "none";
-      dropdown.style.display = "none";
-    });
-  }
-});

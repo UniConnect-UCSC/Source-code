@@ -38,6 +38,7 @@ class Marketplace extends Controller
             <link rel="stylesheet" href="/assets/css/components/marketplaceItem.css">
             <link rel="stylesheet" href="/assets/css/components/myItems.css">
             <link rel="stylesheet" href="/assets/css/components/marketplaceCard.css">
+            <link rel="stylesheet" href="/assets/css/components/marketplaceFeed.css">
             ',
         ]);
     }
@@ -130,28 +131,42 @@ class Marketplace extends Controller
         }
     }
 
-    public function editItem($itemId)
+    public function editItem()
     {
-        $itemModel = new MarketplaceItem();
-        $item = $itemModel->getitemsById($itemId);
-        $statusOptions = $itemModel->getStatusOptions();
+        $itemId = $_POST['item_id'];
+        $itemTitle = $_POST['title'];
+        $itemDescription = $_POST['description'];
+        $itemPrice = $_POST['price'];
+        $itemCategoryID = $_POST['category_id'];
+        $itemStatus = $_POST['status'];
 
-        if (!$item) {
-            echo "Item not found";
-            header('Location: /marketplace');
-            exit();
-        }
+
+        $itemModel = new MarketplaceItem();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $itemData = [
-                'id' => $itemId,
-                'title' => $_POST['title'],
-                'description' => $_POST['description'],
-                'price' => $_POST['price'],
+                'title' => $itemTitle,
+                'description' => $itemDescription,
+                'price' => $itemPrice,
                 'updated_at' => date('Y-m-d H:i:s'),
-                'status' => $_POST['status']
+                'status' => $itemStatus,
+                'category_id' => $itemCategoryID,
             ];
-            $itemModel->updateItem($itemData);
+
+            // $mediaUrl = null;
+            // if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
+            //     $tmpPath = $_FILES['media']['tmp_name'];
+            //     $uploadedUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
+            //     if ($uploadedUrl) {
+            //         $mediaUrl = $uploadedUrl;
+            //     } else {
+            //         // log but continue (or return error)
+            //         error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
+            //     }
+            // }
+
+            $itemModel->update($itemId, $itemData);
+
             header('Location: /marketplace/myItems');
             exit();
         }
@@ -170,8 +185,6 @@ class Marketplace extends Controller
                 <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
                 <link rel="stylesheet" href="/assets/css/components/createPost.css">
             ',
-            'item' => $item,
-            'statusOptions' => $statusOptions
         ]);
     }
     public function deleteItem()
@@ -222,4 +235,6 @@ class Marketplace extends Controller
         }
         exit;
     }
+
+    // public function editItem() {}
 }
