@@ -1,7 +1,6 @@
 <?php
 require_once(__DIR__ . "/../models/MarketplaceItem.php");
 require_once(__DIR__ . "/../models/MarketplaceItemImage.php");
-require_once(__DIR__ . "/../models/ItemCategory.php");
 
 require_once __DIR__ . '/../core/functions.php';
 
@@ -137,8 +136,14 @@ class Marketplace extends Controller
         $itemTitle = $_POST['title'];
         $itemDescription = $_POST['description'];
         $itemPrice = $_POST['price'];
-        $itemCategoryID = $_POST['category_id'];
-        $itemStatus = $_POST['status'];
+        $itemCategoryID = intval($_POST['category_id']);
+        // $itemStatus = $_POST['status'];
+
+        $validStatuses = ['available', 'sold', 'reserved'];
+        $status = strtolower($_POST['status'] ?? 'available');
+        if (!in_array($status, $validStatuses)) {
+            throw new Exception('Invalid status value');
+        }
 
 
         $itemModel = new MarketplaceItem();
@@ -149,8 +154,8 @@ class Marketplace extends Controller
                 'description' => $itemDescription,
                 'price' => $itemPrice,
                 'updated_at' => date('Y-m-d H:i:s'),
-                // 'status' => $itemStatus,
-                // 'category_id' => intval($itemCategoryID),
+                'status' => $status,
+                // 'category_id' => $itemCategoryID,
             ];
 
             $mediaUrl = null;
@@ -180,22 +185,6 @@ class Marketplace extends Controller
             header('Location: /marketplace/myItems');
             exit();
         }
-
-        // Render the edit form on GET
-        $this->view('editItem', [
-            'title' => 'Edit Item - UniConnect',
-            'head' => '
-                <link rel="stylesheet" href="/assets/css/pages/marketplace.css">
-                <link rel="stylesheet" href="/assets/css/pages/home.css">
-                <link rel="stylesheet" href="/assets/css/components/feed.css">
-                <link rel="stylesheet" href="/assets/css/components/navbar.css">
-                <link rel="stylesheet" href="/assets/css/components/navPanel.css">
-                <link rel="stylesheet" href="/assets/css/components/marketplaceItem.css">
-                <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
-                <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
-                <link rel="stylesheet" href="/assets/css/components/createPost.css">
-            ',
-        ]);
     }
     public function deleteItem()
     {

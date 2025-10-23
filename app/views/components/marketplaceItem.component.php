@@ -19,8 +19,12 @@ $imageUrl = $image && isset($image->image_url) ? $image->image_url : null;
         <h3 class="marketplace-item-title"><?= htmlspecialchars($title) ?></h3>
         <p class="marketplace-item-price">LKR <?= htmlspecialchars($price) ?></p>
         <span class="marketplace-item-status <?= strtolower($status) ?>">
-            <?= htmlspecialchars($status ?? 'Available') ?>
+            <?= htmlspecialchars($status ?? 'available') ?>
         </span>
+
+        <p class="marketplace-item-description">
+            <?= nl2br(htmlspecialchars($description ?? '')) ?>
+        </p>
 
         <p class="marketplace-item-date">
             <?= htmlspecialchars(date("F j, Y", strtotime($created_at ?? ''))) ?>
@@ -44,7 +48,7 @@ $imageUrl = $image && isset($image->image_url) ? $image->image_url : null;
         </div>
     </div>
 
-    <!-- Move modal INSIDE the card -->
+    <!-- Edit Item Modal -->
     <div class="edit-marketplace-item-modal" onclick="closeEditMarketplaceItemModal()">
         <div class="edit-marketplace-item-content" onclick="event.stopPropagation();">
             <div class="sell-item-modal-header">
@@ -95,8 +99,6 @@ $imageUrl = $image && isset($image->image_url) ? $image->image_url : null;
                             <option value="Sold" <?= ($status ?? '') === 'Sold' ? 'selected' : '' ?>>Sold</option>
                             <option value="Reserved" <?= ($status ?? '') === 'Reserved' ? 'selected' : '' ?>>Reserved
                             </option>
-                            <option value="Not Available" <?= ($status ?? '') === 'Not Available' ? 'selected' : '' ?>>
-                                Not Available</option>
                         </select>
                         <div class="error-message" id="edit-sell-item-status-error"></div>
                     </div>
