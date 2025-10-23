@@ -132,7 +132,9 @@ class Kuppi extends Controller
             $date = $_POST['date'] ?? '';
             $time = $_POST['time'] ?? '';
             $platform = $_POST['platform'] ?? '';
-            $category_id = $_POST['category_id'] ?? '';
+            if (!empty($category_id)) {
+            $data['category_id'] = (int)$category_id;
+            }
             $kuppiDateTime = $date . ' ' . $time;
 
             $data = [
@@ -195,6 +197,7 @@ class Kuppi extends Controller
             <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
             <link rel="stylesheet" href="/assets/css/components/kuppiPost.css">
             <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
             ',
             'myKuppies' => $mykuppies
         ]);

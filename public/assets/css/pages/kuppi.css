@@ -13,13 +13,33 @@ body {
   gap: 24px;
   padding: var(--spacing-3);
 }
+.filter-select, .filter-btn {
+  margin-right: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #edeaff;
+  background: #f6f4ff;
+  color: #2d217c;
+  font-size: 1rem;
+}
+.filter-btn {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px var(--color-brand-50) solid;
+  background: var(--color-brand-200);
+}
+.filter-btn:hover {
+  background: #d6d6ff;
+}
 
 .kuppi-feed-header .feed-title {
   font-family: var(--font-sans);
   text-align: center;
   width: 100%;
   margin-bottom: 0.5em;
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 800;
   color: var(--color-brand-900);
   letter-spacing: 0.5px;
@@ -65,12 +85,12 @@ body {
   align-items: center;
   cursor: pointer;
   font-family: var(--font-sans);
-  border: solid var(--color-brand-600, #6c63ff) 1px;
+  border: solid var(--color-brand-50, #ffffff) 1px;
   font-size: 13px;
   color: var(--color-brand-600, #6c63ff);
   transition: 300ms;
   border-radius: 30px;
-  background: linear-gradient(145deg, var(--color-brand-100, #edeaff), var(--color-brand-50, #f6f4ff));
+  background:  var(--color-brand-100, #edeaff);
   box-shadow: 0 2px 12px var(--color-brand-100, #edeaff), 0 1px 4px var(--color-brand-600, #6c63ff);
 }
 
@@ -82,7 +102,7 @@ body {
 }
 
 .kuppi-feed-actions .btn:active {
-  box-shadow: 0 2px 8px var(--color-brand-600, #6c63ff);
+  box-shadow: 0 2px 8px var(--color-brand-200, #6c63ff);
   color: var(--color-brand-800, #2d217c);
   transition: 100ms;
 }

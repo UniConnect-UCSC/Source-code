@@ -2,7 +2,7 @@
 <script>
     const kuppiCategories = <?= json_encode($kuppiCategories) ?>;
 </script>
-<script src="/assets/js/kuppiModal.js"></script>
+<script src="/assets/js/kuppi.js"></script>
 <?php component("navbar"); ?>
 
 <div class="home-layout">
@@ -37,6 +37,7 @@
                  "category" => $kuppi->category,
                  "platform" => $kuppi->platform,
                  "image" => $kuppi->image_url,
+                 "context" => "main"
              ]);
              }
          }     

@@ -1,9 +1,15 @@
-
-<div class="kuppi-post">
+<div class="kuppi-post"
+    <?php if ($context === 'main'): ?>
+        onclick="openKuppiModal(this)"
+        style="cursor:pointer"
+    <?php endif; ?>
+>
 
     <div class="post-image">
         <?php if (!empty($image)): ?>
         <img src="/<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($topic ?? 'Kuppi') ?>" />
+        <?php else: ?>
+        <img src="/assets/images/ml-banner.jpg" alt="Default Kuppi Image" />
         <?php endif; ?>
     </div>
     <div class="post-content">
@@ -41,13 +47,7 @@
         isset($_SESSION['user_id']) && ((isset($host_id) || isset($requester_id))) &&
         ($_SESSION['user_id'] == $host_id || $_SESSION['user_id'] == $requester_id)
     ): ?>
-    <div class="post-actions">
-        <a href="/kuppi/edit_kuppi/<?= urlencode($id) ?>" class="btn edit-btn">Edit</a>
-        <a href="/kuppi/delete_kuppi/<?= urlencode($id) ?>" class="btn delete-btn"
-           onclick="return confirm('Are you sure you want to delete this kuppi?');">
-           Delete
-        </a>
-    </div>
+
     <?php endif; ?>
 
     <?php if (isset($requester_name)): ?>
@@ -56,4 +56,24 @@
     <?php if (isset($requester_university)): ?>
     <p class="post-requester-university"><?= htmlspecialchars($requester_university) ?></p>
     <?php endif; ?>
+
+
+    <?php if (($context === 'my_kuppis') || ($context === 'kuppi_requests')): ?>
+        <div class="kuppi-menu">
+            <button class="menu-btn" onclick="toggleKuppiMenu(this)">&#x22EE;</button>
+            <div class="menu-dropdown" style="display:none;">
+                <button type="button" onclick="openKuppiModal(this.closest('.kuppi-post-container'))">View</button>
+                <a href="javascript:void(0);" onclick="openEditKuppiModal(<?= htmlspecialchars(json_encode([
+    'id' => $id,
+    'topic' => $topic,
+    'category' => $category,
+    'date' => $date ?? '',
+    'time' => $time ?? '',
+    'platform' => $platform ?? '',
+]), ENT_QUOTES, 'UTF-8') ?>)">Edit</a>
+                <a href="/kuppi/delete_kuppi/<?= urlencode($id) ?>" onclick="return confirm('Are you sure you want to delete this kuppi?');">Delete</a>
+            </div>
+        </div>
+    <?php endif; ?>
+
 </div>

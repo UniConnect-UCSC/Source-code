@@ -2,10 +2,13 @@
 <div class="home-layout">
     <?php component("navPanel"); ?>
     <div class="feed">
+        <div class="kuppi-feed-header">
+            <h2 class="feed-title">Kuppi Requests</h2>
+        </div>
         <div class="kuppi-feed">
             <?php if (!empty($kuppiRequests)) { 
                 foreach ($kuppiRequests as $kuppi) { ?>
-                    <div class="kuppi-post"
+                    <div class="kuppi-post-container"
                          data-id="<?= htmlspecialchars($kuppi->id) ?>"
                          data-topic="<?= htmlspecialchars($kuppi->topic, ENT_QUOTES) ?>"
                          data-category="<?= htmlspecialchars($kuppi->category, ENT_QUOTES) ?>"
@@ -18,7 +21,8 @@
                             "category" => $kuppi->category,
                             "status" => $kuppi->status,
                             "requester_name" => $kuppi->requester_name,
-                            "university" => $kuppi->requester_university
+                            "university" => $kuppi->requester_university,
+                            "context" => "kuppi_requests"
                         ]); ?>
                     </div>
             <?php } 
@@ -39,4 +43,4 @@
 </div>
 
 <script>const kuppiCategories = <?= json_encode($kuppiCategories ?? []) ?>;</script>
-<script src="/assets/js/kuppiModal.js"></script>
+<script src="/assets/js/kuppi.js"></script>

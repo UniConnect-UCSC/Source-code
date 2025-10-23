@@ -1,4 +1,5 @@
 .kuppi-post {
+  position: relative;
   width: 100%; 
   max-width: 350px;
   background: var(--color-primary-100);
@@ -67,4 +68,92 @@
   padding: 6px 12px;
   border-radius: var(--rounded-full);
   align-self: flex-start;
+}
+
+.kuppi-menu {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+}
+
+.kuppi-menu .menu-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  box-shadow: 0 2px 8px rgba(60, 60, 100, 0.13);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #555;
+  transition: box-shadow 0.2s, background 0.2s;
+  margin: 0 auto;
+}
+
+.kuppi-menu .menu-btn:hover,
+.kuppi-menu .menu-btn:focus {
+  background: #e0e7ef;
+  box-shadow:
+    0 4px 16px rgba(60, 60, 100, 0.18),
+    0 0 0 8px #edeaff,
+    0 8px 32px rgba(44,44,84,0.13);
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #5f89f4;
+  padding: 2px;              /* Equal padding for a perfect circle */
+  border-radius: 50%;
+  transition: box-shadow 0.2s, background 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-btn:hover,
+.menu-btn:focus {
+  box-shadow: 0 0 0 10px #edeaff; /* Larger, more circular glow */
+  background: #f6f4ff;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 32px;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(44,44,84,0.07);
+  min-width: 120px;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
+  width: 100%; /* Make dropdown fill the card width */
+  left: 0;     /* Ensure it stretches from left to right */
+  right: 0;
+}
+
+.menu-dropdown button,
+.menu-dropdown a {
+  background: none;
+  border: none;
+  color: #2d217c;
+  padding: 8px 16px;
+  text-align: left;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.menu-dropdown button:hover,
+.menu-dropdown a:hover {
+  background: #edeaff;
 }
