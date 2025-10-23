@@ -98,7 +98,7 @@ function eventCardRenderer($data){
 
     // Date
     const dateDiv = document.createElement('div');
-    dateDiv.className = 'event-date';
+    dateDiv.className = 'event-card-date';
     dateDiv.textContent = formatDate(timestamp);
     content.appendChild(dateDiv);
 

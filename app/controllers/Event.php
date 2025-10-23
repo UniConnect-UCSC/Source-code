@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . "/../models/Event.php");
 require_once __DIR__ . '/../core/functions.php';
+require_once(__DIR__ . "/../models/University.php");
 
 class Event extends Controller
 {
@@ -12,9 +13,17 @@ class Event extends Controller
 
     private function getEventData($limit, $offset, $categories = [])
     {
+
         error_log("Fetching event data with offset: " . $offset);
         $eventModel = new EventModel();
-        return $eventModel->getEvents($limit, $offset);
+        $response = $eventModel->getEvents($limit, $offset);
+        $universityModel = new University();
+        foreach ($response as $event) {
+            error_log("fetching university id: " . $event->university_id);
+            $event->university_name = $universityModel->getUniversityName($event->university_id);
+            error_log("Event ID " . $event->id . " belongs to university: " . $event->university_name);
+        }
+        return $response;
     }
 
     private function checkIfUniRep($userId){
@@ -252,7 +261,7 @@ class Event extends Controller
                 <link rel="stylesheet" href="/assets/css/components/navbar.css"> 
                 <link rel="stylesheet" href="/assets/css/components/navPanel.css">
                 <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
-                <!--<link rel="stylesheet" href="/assets/css/components/eventsWidget.css">-->
+                <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
                 <link rel="stylesheet" href="/assets/css/pages/home.css">
                 ',
 
