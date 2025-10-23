@@ -61,7 +61,6 @@
   z-index: 10;
 
   /* animation properties */
-  opacity: 0;
   transform: translateY(-8px);
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease;
