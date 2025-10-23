@@ -38,13 +38,13 @@ trait Model
             $sql = "SELECT * FROM {$this->table} WHERE ";
 
             // Build the WHERE clause
-            foreach ($conditions as $condition){
+            foreach ($conditions as $condition) {
 
                 if (is_array($condition) && count($condition) == 3 && in_array($condition[1], $operators)) {
                     $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
 
                     $data[$condition[0]] = $condition[2];
-                }else{
+                } else {
 
                     // Handle invalid condition format
                     return false;
@@ -54,21 +54,19 @@ trait Model
             // Handle the trailing AND in the previous loop
             $sql .= "TRUE ";
 
-            $sql .= $limit ? "LIMIT $limit" : "";
-            $sql .= $offset ? "OFFSET $offset" : "";
-
-
             // Build the ORDER BY clause
             foreach ($orderBy as $field => $direction) {
-                if(!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
+                if (!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
                     return false; // Invalid direction
                 }
 
-                $sql .= " ORDER BY $field $direction";
+                $sql .= " ORDER BY $field $direction ";
             }
+            
+            $sql .= $limit ? "LIMIT $limit" : "";
+            $sql .= $offset ? "OFFSET $offset" : "";
 
             return $this->query($sql, $data);
-
         } catch (PDOException $e) {
             die("WHERE query failed: " . $e->getMessage());
         }
@@ -132,6 +130,37 @@ trait Model
             return $this->query($sql, ['id' => $id]);
         } catch (PDOException $e) {
             die("DELETE failed: " . $e->getMessage());
+        }
+    }
+
+    public function join($joinTable, $joinCondition, $type = 'INNER', $conditions = [], $limit = null, $offset = null, $orderBy = [])
+    {
+        try {
+            $sql = "SELECT * FROM {$this->table} 
+                {$type} JOIN {$joinTable} ON {$joinCondition}";
+
+
+            $data = [];
+            if (!empty($conditions)) {
+                $sql .= " WHERE ";
+                foreach ($conditions as $condition) {
+                    $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
+                    $data[$condition[0]] = $condition[2];
+                }
+                $sql = rtrim($sql, "AND ");
+            }
+
+
+            foreach ($orderBy as $field => $direction) {
+                $sql .= " ORDER BY $field $direction";
+            }
+
+            if ($limit) $sql .= " LIMIT $limit";
+            if ($offset) $sql .= " OFFSET $offset";
+
+            return $this->query($sql, $data);
+        } catch (PDOException $e) {
+            die("JOIN query failed: " . $e->getMessage());
         }
     }
 }
