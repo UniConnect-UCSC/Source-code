@@ -1,38 +1,40 @@
+<?php
+require_once(__DIR__ . "/../../models/MarketplaceItemImage.php");
+
+$imageModel = new MarketplaceItemImage();
+$image = $imageModel->first(['marketplace_item_id' => $id]);
+$imageUrl = $image && isset($image->image_url) ? $image->image_url : null;
+?>
 
 <div class="marketplace-item-card">
     <div class="marketplace-item-image">
-        <?php if (!empty($image)): ?>
-            <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($title ?? '') ?>" />
+        <?php if (!empty($imageUrl)): ?>
+        <img src="<?= htmlspecialchars($imageUrl) ?>" alt="<?= htmlspecialchars($title ?? '') ?>" />
+        <?php else: ?>
+        <div class="marketplace-item-no-image">No Image Available</div>
         <?php endif; ?>
     </div>
+
     <div class="marketplace-item-details">
-        <h3 class="marketplace-item-title"><?= htmlspecialchars($title ?? 'No Title') ?></h3>
-        <p class="marketplace-item-price">Rs. <?= htmlspecialchars($price ?? 'N/A') ?></p>
-        <span class="marketplace-item-status <?= strtolower($status ?? 'available') ?>">
+        <h3 class="marketplace-item-title"><?= htmlspecialchars($title) ?></h3>
+        <p class="marketplace-item-price">LKR <?= htmlspecialchars($price) ?></p>
+        <span class="marketplace-item-status <?= strtolower($status) ?>">
             <?= htmlspecialchars($status ?? 'Available') ?>
         </span>
+
         <p class="marketplace-item-date">
-            <?php if (!empty($created_at)): ?>
-                <?= date('M d, Y', strtotime($created_at)) ?>
-            <?php else: ?>
-                N/A
-            <?php endif; ?>
+            <?= htmlspecialchars(date("F j, Y", strtotime($created_at ?? ''))) ?>
         </p>
     </div>
-    <div class="marketplace-item-footer">
-        <?php if (!empty($editUrl) || !empty($deleteUrl)): ?>
-            <div class="marketplace-item-footer-actions">
-                <?php if (!empty($editUrl)): ?>
-                    <a href="<?= htmlspecialchars($editUrl) ?>" class="btn edit-btn">Edit</a>
-                <?php endif; ?>
-                <?php if (!empty($deleteUrl)): ?>
-                    <form action="<?= htmlspecialchars($deleteUrl) ?>" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                        <button type="submit" class="btn delete-btn">Delete</button>
-                    </form>
-                <?php endif; ?>
-            </div>
-        <?php else: ?>
-            <a href="/marketplace/item/<?= urlencode($id ?? '') ?>" class="marketplace-item-action">View Details</a>
-        <?php endif; ?>
-    </div>    
+
+    <?php if (isset($myItems) && $myItems): ?>
+    <div class="my-items-options"
+        onclick="event.stopPropagation(); toggleMyItemsOptions('<?= htmlspecialchars($id) ?>')">
+        <i data-lucide="more-horizontal"></i>
+    </div>
+    <div class="my-items-options-dropdown" id="my-items-options-dropdown-<?= htmlspecialchars($id) ?>">
+        <div class="edit-item-btn" data-item-id="<?= htmlspecialchars($id) ?>">Edit</div>
+        <div class="delete-item-btn" data-item-id="<?= htmlspecialchars($id) ?>">Delete</div>
+    </div>
+    <?php endif; ?>
 </div>

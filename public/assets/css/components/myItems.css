@@ -1,0 +1,16 @@
+.my-items-container {
+  grid-column-start: 4;
+  grid-column-end: 13;
+}
+
+.my-items-container h2 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  margin-bottom: var(--spacing-4);
+}
+
+.my-items-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-4);
+}
