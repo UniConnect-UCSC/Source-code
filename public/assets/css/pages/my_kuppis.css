@@ -1,0 +1,66 @@
+.feed, .kuppi-feed {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+.kuppi-post {
+  flex: 1 1 340px;
+  max-width: 420px;
+  min-width: 320px;
+  margin-bottom: 0;
+  box-sizing: border-box;
+}
+.filter-btn {
+  border: 2px solid #6c63ff;
+  background: #fff;
+  color: #2d217c;
+  border-radius: 12px;
+  padding: 8px 22px;
+  font-size: 1.05rem;
+  box-shadow: 0 2px 8px #edeaff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+}
+.filter-btn:hover, .filter-btn:focus {
+  box-shadow: 0 4px 16px #d6d6ff;
+  background: #f6f4ff;
+  border-color: #2d217c;
+}
+.filter-btn .material-icons {
+  font-size: 1.4rem;
+  color: #6c63ff;
+  margin-right: 6px;
+}
+.filter-dropdown {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px #edeaff;
+  padding: 16px 14px;
+  min-width: 170px;
+  margin-top: 8px;
+  border: 1px solid #edeaff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.filter-select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #6c63ff;
+  background: #f6f4ff;
+  color: #2d217c;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: border-color 0.2s;
+}
+.filter-select:focus {
+  border-color: #2d217c;
+  outline: none;
+}

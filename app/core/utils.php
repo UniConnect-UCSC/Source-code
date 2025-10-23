@@ -27,7 +27,7 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "Kuppi",
-        "pageLink" => "/",
+        "pageLink" => "/kuppi",
         "icon" => "graduation-cap"
     ],
     [

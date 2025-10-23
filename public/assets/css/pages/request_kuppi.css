@@ -1,0 +1,105 @@
+.request-kuppi-container {
+    display: flex;
+    gap: 32px;
+    padding: 48px 0;
+    background: var(--color-secondary-white);
+    min-height: 100vh;
+    justify-content: center;
+}
+
+.request-kuppi-form {
+    background: var(--color-primary-white);
+    border-radius: var(--rounded-xl);
+    box-shadow: var(--shadow-md);
+    padding: 36px 32px;
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.request-kuppi-form h2 {
+    text-align: center;
+    margin-bottom: 28px;
+    font-size: 1.5rem;
+    color: var(--color-brand-900);
+    font-weight: 600;
+}
+
+.request-kuppi-form label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: var(--color-secondary-gray);
+    font-size: 1rem;
+}
+
+.request-kuppi-form input,
+.request-kuppi-form select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 18px;
+    border: 1px solid var(--color-primary-gray);
+    border-radius: var(--rounded-md);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.request-kuppi-form input:focus,
+.request-kuppi-form select:focus {
+    border-color: var(--color-brand-600);
+    outline: none;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.request-kuppi-form button[type="submit"] {
+    background: var(--color-brand-600);
+    color: var(--color-primary-white);
+    border: none;
+    padding: 10px 0;
+    width: 100%;
+    border-radius: var(--rounded-lg);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.request-kuppi-form button[type="submit"]:hover {
+    background: var(--color-brand-700);
+}
+
+.widget-panel {
+    min-width: 220px;
+    background: var(--color-primary-white);
+    border-radius: var(--rounded-xl);
+    box-shadow: var(--shadow);
+    padding: 24px 20px;
+    height: fit-content;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .request-kuppi-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        padding: 24px 0;
+    }
+    .widget-panel {
+        min-width: 0;
+        width: 100%;
+        margin-top: 24px;
+    }
+    .request-kuppi-form {
+        max-width: 100%;
+    }
+}
