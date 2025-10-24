@@ -1,9 +1,5 @@
-<div class="kuppi-post"
-    <?php if ($context === 'main'): ?>
-        onclick="openKuppiModal(this)"
-        style="cursor:pointer"
-    <?php endif; ?>
->
+<div class="kuppi-post" <?php if ($context === 'main'): ?> onclick="openKuppiModal(this)" style="cursor:pointer"
+    <?php endif; ?>>
 
     <div class="post-image">
         <?php if (!empty($image)): ?>
@@ -14,27 +10,27 @@
     </div>
     <div class="post-content">
         <?php if (!empty($topic)): ?>
-            <h3 class="post-topic"><?= htmlspecialchars($topic) ?></h3>
+        <h3 class="post-topic"><?= htmlspecialchars($topic) ?></h3>
         <?php endif; ?>
-        <?php if (isset($university)): ?>
+        <!-- <?php if (isset($university)): ?>
             <p class="post-university"><?= htmlspecialchars($university ?? 'Unknown University') ?></p>
         <?php else: ?>
             <p class="post-university">Unknown University</p>
-        <?php endif; ?>
+        <?php endif; ?> -->
         <?php if (isset($category)): ?>
-            <p class="post-category"><?= htmlspecialchars($category) ?></p>
+        <p class="post-category"><?= htmlspecialchars($category) ?></p>
         <?php endif; ?>
         <?php if (isset($date) || isset($time)): ?>
-            <p class="post-datetime">
-                <?= htmlspecialchars($date ?? '') ?>
-                <?php if (!empty($date) && !empty($time)): ?>
-                    | 
-                <?php endif; ?>
-                <?= htmlspecialchars($time ?? '') ?>
-            </p>
+        <p class="post-datetime">
+            <?= htmlspecialchars($date ?? '') ?>
+            <?php if (!empty($date) && !empty($time)): ?>
+            |
+            <?php endif; ?>
+            <?= htmlspecialchars($time ?? '') ?>
+        </p>
         <?php endif; ?>
         <?php if (isset($platform)): ?>
-            <p class="post-platform">Platform: <?= htmlspecialchars($platform) ?></p>
+        <p class="post-platform">Platform: <?= htmlspecialchars($platform) ?></p>
         <?php endif; ?>
     </div>
     <?php if (isset($status)): ?>
@@ -59,21 +55,22 @@
 
 
     <?php if (($context === 'my_kuppis') || ($context === 'kuppi_requests')): ?>
-        <div class="kuppi-menu">
-            <button class="menu-btn" onclick="toggleKuppiMenu(this)">&#x22EE;</button>
-            <div class="menu-dropdown" style="display:none;">
-                <button type="button" onclick="openKuppiModal(this.closest('.kuppi-post-container'))">View</button>
-                <a href="javascript:void(0);" onclick="openEditKuppiModal(<?= htmlspecialchars(json_encode([
-    'id' => $id,
-    'topic' => $topic,
-    'category' => $category,
-    'date' => $date ?? '',
-    'time' => $time ?? '',
-    'platform' => $platform ?? '',
-]), ENT_QUOTES, 'UTF-8') ?>)">Edit</a>
-                <a href="/kuppi/delete_kuppi/<?= urlencode($id) ?>" onclick="return confirm('Are you sure you want to delete this kuppi?');">Delete</a>
-            </div>
+    <div class="kuppi-menu">
+        <button class="menu-btn" onclick="toggleKuppiMenu(this)">&#x22EE;</button>
+        <div class="menu-dropdown" style="display:none;">
+            <button type="button" onclick="openKuppiModal(this.closest('.kuppi-post-container'))">View</button>
+            <a href="javascript:void(0);" onclick="openEditKuppiModal(<?= htmlspecialchars(json_encode([
+                                                                                'id' => $id,
+                                                                                'topic' => $topic,
+                                                                                'category' => $category,
+                                                                                'date' => $date ?? '',
+                                                                                'time' => $time ?? '',
+                                                                                'platform' => $platform ?? '',
+                                                                            ]), ENT_QUOTES, 'UTF-8') ?>)">Edit</a>
+            <a href="/kuppi/delete_kuppi/<?= urlencode($id) ?>"
+                onclick="return confirm('Are you sure you want to delete this kuppi?');">Delete</a>
         </div>
+    </div>
     <?php endif; ?>
 
 </div>
