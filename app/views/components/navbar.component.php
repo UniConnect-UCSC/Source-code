@@ -30,6 +30,10 @@
         <!-- Notifications -->
         <?php component('notification'); ?>
 
+        <a href="/calendar">
+            <i data-lucide="calendar"></i>
+        </a>
+
         <!-- User Icon -->
         <?php
         $userModel = new User();
@@ -81,6 +85,7 @@
                         <?= htmlspecialchars($userFName) ?> <?= htmlspecialchars($userLName) ?>
                     </span>
                 </a>
+
                 <a class="user__logout" href="/logout">
                     <i data-lucide="log-out"></i>
                     <span>Logout</span>
