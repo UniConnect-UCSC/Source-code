@@ -5,12 +5,11 @@
     <?php component("navPanel"); ?>
 
     <div class="feed">
-        <!-- Page Title -->
         <header>
-            <h1>Study Materials</h1>
-            <p class="subtitle">Browse, filter, and manage study resources shared across the community</p>
+            <h1>Manage Study Materials</h1>
+            <p class="subtitle">View, edit, and delete your uploaded materials</p>
         </header>
-        <!-- Controls: Search, Categories, and Management Buttons -->
+
         <section class="sm-card">
             <div class="sm-card-body">
                 <div class="controls">
@@ -18,10 +17,10 @@
                         <div class="search-container">
                             <button class="search-btn" id="smSearchToggleBtn">🔍</button>
                             <div class="search-input-wrapper" id="smSearchInputWrapper">
-                                <input type="text" class="search-input" id="sm-search-input" placeholder="Search study materials...">
+                                <input type="text" class="search-input" id="sm-search-input" placeholder="Search my materials...">
                             </div>
                         </div>
-                        
+                        <button class="btn btn-primary" id="sm-add-btn">Create Study Material</button>
                     </div>
 
                     <div class="categories-wrapper" id="categoryWrapper">
@@ -38,91 +37,43 @@
                             <button class="category-btn" data-category="mobile">Mobile</button>
                         </div>
                     </div>
-
-                    <div class='rep-btn-wrapper'>
-                        <button class="btn btn-primary" id="sm-add-btn">Create Study Material</button>
-                        <a class="btn btn-primary" href="/studymaterial/manage">Manage Study Materials</a>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Feed: All Study Materials -->
         <section class="sm-card">
             <div class="sm-card-header">
-                <h3>All study materials</h3>
-                <div class="sm-card-header-right">
-                    <label for="sm-sort-select" class="sm-sort-label">Sort by</label>
-                    <select id="sm-sort-select" class="sm-sort-select">
-                        <option value="recent" selected>Recent</option>
-                        <option value="popular">Popular</option>
-                        <option value="title">Title A–Z</option>
-                    </select>
-                </div>
+                <h3>My materials</h3>
             </div>
             <div class="sm-card-body">
-                <div class="sm-grid" id="sm-grid">
-                    <!-- Card 1 -->
-                    <article class="sm-material-card" data-type="document" data-topic="ai-ml" data-views="1200" data-ts="2025-09-22T10:00:00Z">
-                        <div class="sm-material-icon doc">PDF</div>
-                        <div class="sm-material-content">
-                            <h4 class="sm-material-title">Intro to Machine Learning</h4>
-                            <div class="sm-item-meta">UCSC • Document • 1.2K views</div>
-                            <div class="sm-item-meta-2">
-                                <small class="topic-pill" data-topic="ai-ml">AI/ML</small>
-                            </div>
-                            <div class="sm-item-tags">
-                                <span class="tag">ML</span>
-                                <span class="tag">Basics</span>
+                <ul class="sm-list" id="sm-manage-list">
+                    <li class="sm-item" data-id="m1">
+                        <div class="sm-item-main">
+                            <div class="sm-item-icon doc">PDF</div>
+                            <div class="sm-item-info">
+                                <h4 class="sm-item-title">Intro to Machine Learning</h4>
+                                <div class="sm-item-meta">Document • Uploaded Sep 22, 2025</div>
                             </div>
                         </div>
-                    </article>
-                    <!-- Card 2 -->
-                    <article class="sm-material-card" data-type="video" data-topic="dsa" data-views="980" data-ts="2025-09-12T13:00:00Z">
-                        <div class="sm-material-icon vid">VID</div>
-                        <div class="sm-material-content">
-                            <h4 class="sm-material-title">Gradient Descent Explained</h4>
-                            <div class="sm-item-meta">UCSC • Video • 980 views</div>
-                            <div class="sm-item-meta-2">
-                                <small class="topic-pill" data-topic="dsa">DSA</small>
-                            </div>
-                            <div class="sm-item-tags">
-                                <span class="tag">Optimization</span>
-                                <span class="tag">Math</span>
+                        <div class="sm-item-actions">
+                            <button class="btn btn-ghost" data-edit="m1">Edit</button>
+                            <button class="btn btn-danger" data-delete="m1">Delete</button>
+                        </div>
+                    </li>
+                    <li class="sm-item" data-id="m2">
+                        <div class="sm-item-main">
+                            <div class="sm-item-icon vid">VID</div>
+                            <div class="sm-item-info">
+                                <h4 class="sm-item-title">Linear Regression Deep Dive</h4>
+                                <div class="sm-item-meta">Video • Uploaded Sep 12, 2025</div>
                             </div>
                         </div>
-                    </article>
-                    <!-- Card 3 -->
-                    <article class="sm-material-card" data-type="link" data-topic="sql" data-views="2400" data-ts="2025-08-18T09:00:00Z">
-                        <div class="sm-material-icon lnk">URL</div>
-                        <div class="sm-material-content">
-                            <h4 class="sm-material-title">SQL Cheat Sheet</h4>
-                            <div class="sm-item-meta">External Link • 2.4K views</div>
-                            <div class="sm-item-meta-2">
-                                <small class="topic-pill" data-topic="sql">SQL</small>
-                            </div>
-                            <div class="sm-item-tags">
-                                <span class="tag">Reference</span>
-                                <span class="tag">Quick Guide</span>
-                            </div>
+                        <div class="sm-item-actions">
+                            <button class="btn btn-ghost" data-edit="m2">Edit</button>
+                            <button class="btn btn-danger" data-delete="m2">Delete</button>
                         </div>
-                    </article>
-                    <!-- Card 4 -->
-                    <article class="sm-material-card" data-type="document" data-topic="databases" data-views="520" data-ts="2025-07-03T08:00:00Z">
-                        <div class="sm-material-icon doc">PDF</div>
-                        <div class="sm-material-content">
-                            <h4 class="sm-material-title">Past Paper 2022 - Algorithms</h4>
-                            <div class="sm-item-meta">UCSC • Document • 520 views</div>
-                            <div class="sm-item-meta-2">
-                                <small class="topic-pill" data-topic="databases">Databases</small>
-                            </div>
-                            <div class="sm-item-tags">
-                                <span class="tag">Past Paper</span>
-                                <span class="tag">Algorithms</span>
-                            </div>
-                        </div>
-                    </article>
-                </div>
+                    </li>
+                </ul>
             </div>
         </section>
     </div>
@@ -131,7 +82,7 @@
 
 </div>
 
-<!-- Add Material Modal -->
+<!-- Reuse Add/Edit/Delete Modals from main page for consistency -->
 <div class="sm-modal" id="sm-add-modal" aria-hidden="true">
     <div class="sm-modal-backdrop" data-close-modal></div>
     <div class="sm-modal-content" role="dialog" aria-modal="true" aria-labelledby="sm-add-title">
@@ -213,51 +164,6 @@
     </div>
 </div>
 
-<!-- Manage My Materials Modal -->
-<div class="sm-modal" id="sm-manage-modal" aria-hidden="true">
-    <div class="sm-modal-backdrop" data-close-modal></div>
-    <div class="sm-modal-content" role="dialog" aria-modal="true" aria-labelledby="sm-manage-title">
-        <div class="sm-modal-header">
-            <h3 id="sm-manage-title">My study materials</h3>
-            <button class="sm-modal-close" data-close-modal>&times;</button>
-        </div>
-        <div class="sm-modal-body">
-            <ul class="sm-list" id="sm-manage-list">
-                <li class="sm-item" data-id="m1">
-                    <div class="sm-item-main">
-                        <div class="sm-item-icon doc">PDF</div>
-                        <div class="sm-item-info">
-                            <h4 class="sm-item-title">Intro to Machine Learning</h4>
-                            <div class="sm-item-meta">Document • Uploaded Sep 22, 2025</div>
-                        </div>
-                    </div>
-                    <div class="sm-item-actions">
-                        <button class="btn btn-ghost" data-edit="m1">Edit</button>
-                        <button class="btn btn-danger" data-delete="m1">Delete</button>
-                    </div>
-                </li>
-                <li class="sm-item" data-id="m2">
-                    <div class="sm-item-main">
-                        <div class="sm-item-icon vid">VID</div>
-                        <div class="sm-item-info">
-                            <h4 class="sm-item-title">Linear Regression Deep Dive</h4>
-                            <div class="sm-item-meta">Video • Uploaded Sep 12, 2025</div>
-                        </div>
-                    </div>
-                    <div class="sm-item-actions">
-                        <button class="btn btn-ghost" data-edit="m2">Edit</button>
-                        <button class="btn btn-danger" data-delete="m2">Delete</button>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="sm-modal-footer">
-            <button class="btn btn-secondary" data-close-modal>Close</button>
-        </div>
-    </div>
-</div>
-
-<!-- Edit Modal -->
 <div class="sm-modal" id="sm-edit-modal" aria-hidden="true">
     <div class="sm-modal-backdrop" data-close-modal></div>
     <div class="sm-modal-content" role="dialog" aria-modal="true" aria-labelledby="sm-edit-title">
@@ -287,9 +193,8 @@
             <button class="btn btn-primary" id="sm-edit-save">Save changes</button>
         </div>
     </div>
-    </div>
+</div>
 
-<!-- Delete Modal -->
 <div class="sm-modal" id="sm-delete-modal" aria-hidden="true">
     <div class="sm-modal-backdrop" data-close-modal></div>
     <div class="sm-modal-content" role="dialog" aria-modal="true" aria-labelledby="sm-delete-title">
@@ -307,5 +212,4 @@
     </div>
 </div>
 
-<!-- Page script -->
 <script src="/assets/js/pages/studyMaterial.js"></script>
