@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . "/../models/MarketplaceItem.php");
 require_once(__DIR__ . "/../models/MarketplaceItemImage.php");
+require_once(__DIR__ . "/../models/ItemCategory.php");
 
 require_once __DIR__ . '/../core/functions.php';
 
@@ -8,6 +9,7 @@ class Marketplace extends Controller
 {
     public function index()
     {
+        $allitemsModel = new MarketplaceItem();
 
         $this->view('marketplace', [
             'title' => 'Marketplace | UniConnect',
@@ -37,7 +39,6 @@ class Marketplace extends Controller
             <link rel="stylesheet" href="/assets/css/components/marketplaceItem.css">
             <link rel="stylesheet" href="/assets/css/components/myItems.css">
             <link rel="stylesheet" href="/assets/css/components/marketplaceCard.css">
-            <link rel="stylesheet" href="/assets/css/components/marketplaceFeed.css">
             ',
         ]);
     }
