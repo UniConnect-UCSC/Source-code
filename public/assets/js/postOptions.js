@@ -20,8 +20,10 @@ document.addEventListener("click", (e) => {
 function deletePost(btn, event, postType) {
   event.stopPropagation();
   console.log(postType);
+
   const menu = btn.closest(".post-more-options-menu");
   const postId = menu.getAttribute("data-post-id");
+
   if (confirm("Are you sure you want to delete this post? ")) {
     const formData = new FormData();
     formData.append("delete_post_id", postId);
@@ -37,10 +39,20 @@ function deletePost(btn, event, postType) {
 
 function openEditPostModal(postImageUrl) {
   const modal = document.querySelector(".edit-post-modal");
-
   const previewImg = document.getElementById("edit-preview-img");
-  if (previewImg && postImageUrl) {
-    previewImg.src = postImageUrl;
+  const editPostImage = document.querySelector(".edit-post-image");
+
+  // Handle image display based on whether post has an image
+  if (previewImg && editPostImage) {
+    if (postImageUrl && postImageUrl !== "" && postImageUrl !== "null") {
+      previewImg.src = postImageUrl;
+      previewImg.style.display = "block";
+      editPostImage.style.display = "block";
+    } else {
+      previewImg.src = "";
+      previewImg.style.display = "none";
+      editPostImage.style.display = "none";
+    }
   }
 
   modal.style.zIndex = "1000";
@@ -122,12 +134,17 @@ function editPost(postId, postType) {
 document.addEventListener("DOMContentLoaded", function () {
   const mediaInput = document.getElementById("edit-media");
   const previewImg = document.getElementById("edit-preview-img");
+  const editPostImage = document.querySelector(".edit-post-image");
 
   if (mediaInput && previewImg) {
     mediaInput.addEventListener("change", function () {
       const file = mediaInput.files[0];
       if (file) {
         previewImg.src = URL.createObjectURL(file);
+        previewImg.style.display = "block";
+        if (editPostImage) {
+          editPostImage.style.display = "block";
+        }
         previewImg.onload = () => URL.revokeObjectURL(previewImg.src);
       }
     });

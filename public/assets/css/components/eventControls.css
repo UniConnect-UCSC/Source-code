@@ -1,0 +1,184 @@
+/* Event controls aligned with homepage design tokens */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+    margin-bottom: var(--spacing-12);
+}
+
+.controls-top {
+    display: flex;
+    gap: var(--spacing-3);
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    flex: 0 0 auto;
+}
+
+.search-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-brand-800);
+    font-size: var(--text-xl);
+    cursor: pointer;
+    padding: var(--spacing-2);
+    transition: color 0.2s ease, transform 0.12s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.search-btn:hover {
+    color: var(--color-brand-900);
+}
+
+.search-btn:active {
+    transform: translateY(1px);
+}
+
+.search-input-wrapper {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.search-input-wrapper.active {
+    width: 200px;
+}
+
+.search-input {
+    width: 100%;
+    padding: var(--spacing-2) var(--spacing-4);
+    border: 2px solid var(--color-primary-gray);
+    border-radius: var(--rounded-full);
+    background: var(--color-secondary-white);
+    color: #111827;
+    font-size: var(--text-base);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.search-input::placeholder {
+    color: var(--color-secondary-gray);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-brand-300);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    background: var(--color-primary-white);
+}
+
+.filter-buttons {
+    display: flex;
+    gap: var(--spacing-3);
+    align-items: center;
+    transition: margin-left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-left: 0;
+}
+
+.filter-buttons.shifted {
+    margin-right: -var(--spacing-1);
+}
+
+/* Scope control buttons to avoid overriding global .btn */
+.controls .btn {
+    padding: var(--spacing-2) var(--spacing-4);
+    border: 2px solid var(--color-primary-gray);
+    border-radius: var(--rounded-full);
+    font-size: var(--text-base);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.12s ease;
+    background: var(--color-primary-white);
+    color: #111827;
+    white-space: nowrap;
+}
+
+.controls .btn:hover {
+    border-color: var(--color-brand-300);
+    background: var(--color-brand-50);
+}
+
+.controls .btn:active {
+    transform: translateY(1px);
+}
+
+.controls .btn.active {
+    background: var(--color-brand-100);
+    color: var(--color-brand-800);
+    border-color: var(--color-brand-200);
+}
+
+.controls .btn-primary {
+    background: var(--color-brand-600);
+    color: var(--color-primary-white);
+    border: none;
+    margin-left: auto;
+}
+
+.controls .btn-primary:hover {
+    background: var(--color-brand-800);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.categories-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    overflow: hidden;
+    width: 70%;
+    max-width: 700px;
+}
+
+.categories-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    flex: 1;
+    padding-right: var(--spacing-4);
+}
+
+.categories-section::-webkit-scrollbar {
+    display: none;
+}
+
+
+.category-btn {
+    padding: var(--spacing-2) var(--spacing-4);
+    border: 2px solid var(--color-primary-gray);
+    border-radius: var(--rounded-full);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    background: var(--color-primary-white);
+    color: #374151;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.category-btn:hover {
+    border-color: var(--color-brand-300);
+    background: var(--color-brand-50);
+    color: var(--color-brand-900);
+}
+
+.category-btn.active {
+    background: var(--color-brand-100);
+    color: var(--color-brand-800);
+    border-color: var(--color-brand-200);
+}
+
+.rep-btn-wrapper {
+    display: block;
+}

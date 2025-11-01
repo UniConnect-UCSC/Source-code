@@ -1,8 +1,8 @@
 <?php
-require(__DIR__ . "/../../models/Event.php");
-require(__DIR__ . "/../../models/University.php");
+require_once(__DIR__ . "/../../models/Event.php");
+require_once(__DIR__ . "/../../models/University.php");
 
-$eventModel = new Event();
+$eventModel = new EventModel();
 $universityModel = new University();
 $latestEvents = $eventModel->findAll();
 
@@ -17,10 +17,10 @@ $latestEvents = $eventModel->findAll();
         $id = $event->id;
         $universityId = $event->university_id;
         $title = $event->title;
-        $eventDate = new DateTime($event->event_date);
+        $eventDate = new DateTime($event->event_timestamp);
         $eventDay = $eventDate->format('d');
         $eventMonth = $eventDate->format('M');
-        $location = $event->location;
+        $location = $event->held_at;
 
         $postedBy = $event->posted_by;
         $description = $event->description;
