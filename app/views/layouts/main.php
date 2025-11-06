@@ -35,6 +35,8 @@
     <script src="/assets/js/createPost.js"></script>
     <script src="/assets/js/notification.js"></script>
     <script src="/assets/js/feedType.js"></script>
+    <script src="/assets/js/marketplace.js"></script>
+    <script src="/assets/js/marketplaceCard.js"></script>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
