@@ -1,0 +1,94 @@
+/* View Events Modal styles */
+
+.view-events-modal {
+  max-width: 900px;
+}
+
+.rep-events {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.rep-events-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 2fr 1fr;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 2px solid var(--color-primary-gray);
+  border-radius: var(--rounded-lg);
+  background: var(--color-secondary-white);
+  color: #374151;
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
+.rep-events-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.rep-event-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 2fr 1fr;
+  gap: var(--spacing-3);
+  align-items: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 2px solid var(--color-primary-gray);
+  border-radius: var(--rounded-lg);
+  background: var(--color-primary-white);
+}
+
+.rep-event-cell.title,
+.rep-event-cell.location {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rep-event-cell.actions {
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: flex-end;
+}
+
+.icon-btn {
+  background: var(--color-secondary-white);
+  border: 2px solid var(--color-primary-gray);
+  border-radius: var(--rounded-full);
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #374151;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.12s ease;
+}
+
+.icon-btn:hover {
+  background: var(--color-brand-50);
+  border-color: var(--color-brand-300);
+}
+
+.icon-btn:active {
+  transform: translateY(1px);
+}
+
+.edit-btn i {
+  color: var(--color-brand-700);
+}
+
+.delete-btn i {
+  color: #b91c1c; /* red-700 */
+}
+
+.rep-events-empty {
+  display:none;
+  padding: var(--spacing-6);
+  text-align: center;
+  color: var(--color-secondary-gray);
+}

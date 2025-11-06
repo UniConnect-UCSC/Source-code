@@ -6,7 +6,12 @@ $image = $imageModel->first(['marketplace_item_id' => $id]);
 $imageUrl = $image && isset($image->image_url) ? $image->image_url : null;
 ?>
 
-<div class="marketplace-item-card">
+$imageModel = new MarketplaceItemImage();
+$image = $imageModel->first(['marketplace_item_id' => $id]);
+$imageUrl = $image && isset($image->image_url) ? $image->image_url : null;
+?>
+
+<div class="marketplace-item-card" data-item-id="<?= htmlspecialchars($id) ?>">
     <div class="marketplace-item-image">
         <?php if (!empty($imageUrl)): ?>
         <img src="<?= htmlspecialchars($imageUrl) ?>" alt="<?= htmlspecialchars($title ?? '') ?>" />

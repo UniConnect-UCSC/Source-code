@@ -1,0 +1,159 @@
+.kuppi-post {
+  position: relative;
+  width: 100%; 
+  max-width: 350px;
+  background: var(--color-primary-100);
+  border-radius: var(--rounded none);
+  padding:10px;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s ease;
+}
+
+.kuppi-post:hover {
+  transform: scale(1.02);
+}
+
+.post-image img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--rounded none);
+}
+
+
+.post-content {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--spacing-3);
+}
+
+.post-topic {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: var(--color-brand-900);
+}
+
+.post-university {
+  font-size: 15px;
+  color: var(--color-secondary-gray);
+  margin-bottom: 4px;
+}
+
+.post-datetime {
+  font-size: 12px;
+  color: var(--color-secondary-gray);
+  margin-bottom: 12px;
+}
+
+.post-status {
+  display: inline-block;
+  padding: 2px 5px;
+  border-radius: var(--spacing-1);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  background: var(--color-brand-100);
+  color: var(--color-brand-600);
+  margin-bottom: var(--spacing-1);
+  letter-spacing: 0.5px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-platform {
+  display: inline-block;
+  background: var(--color-primary-gray);
+  color: var(--color-brand-900);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: var(--rounded-full);
+  align-self: flex-start;
+}
+
+.kuppi-menu {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+}
+
+.kuppi-menu .menu-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  box-shadow: 0 2px 8px rgba(60, 60, 100, 0.13);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #555;
+  transition: box-shadow 0.2s, background 0.2s;
+  margin: 0 auto;
+}
+
+.kuppi-menu .menu-btn:hover,
+.kuppi-menu .menu-btn:focus {
+  background: #e0e7ef;
+  box-shadow:
+    0 4px 16px rgba(60, 60, 100, 0.18),
+    0 0 0 8px #edeaff,
+    0 8px 32px rgba(44,44,84,0.13);
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #5f89f4;
+  padding: 2px;              /* Equal padding for a perfect circle */
+  border-radius: 50%;
+  transition: box-shadow 0.2s, background 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-btn:hover,
+.menu-btn:focus {
+  box-shadow: 0 0 0 10px #edeaff; /* Larger, more circular glow */
+  background: #f6f4ff;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 32px;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(44,44,84,0.07);
+  min-width: 120px;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
+  width: 100%; /* Make dropdown fill the card width */
+  left: 0;     /* Ensure it stretches from left to right */
+  right: 0;
+}
+
+.menu-dropdown button,
+.menu-dropdown a {
+  background: none;
+  border: none;
+  color: #2d217c;
+  padding: 8px 16px;
+  text-align: left;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.menu-dropdown button:hover,
+.menu-dropdown a:hover {
+  background: #edeaff;
+}

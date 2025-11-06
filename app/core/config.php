@@ -9,10 +9,10 @@ if ($_SERVER['SERVER_NAME'] == 'uniconnect.local') {
     define('ROOT', 'https://www.yourwebsite.com');
 }
 
-define('DBHOST', getenv('DB_HOST'));
-define('DBPORT', getenv('DB_PORT'));
-define('DBNAME', getenv('DB_NAME'));
-define('DBUSER', getenv('DB_USER'));
-define('DBPASSWORD', getenv('DB_PASSWORD'));
+define('DBHOST', getenv('DB_HOST') ?: 'db');
+define('DBPORT', getenv('DB_PORT') ?: 5432);
+define('DBNAME', getenv('DB_NAME') ?: 'uniconnect');
+define('DBUSER', getenv('DB_USER') ?: 'postgres');
+define('DBPASSWORD', getenv('DB_PASSWORD') ?: 'admin');
 
 define('DEBUG', true);

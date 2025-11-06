@@ -17,7 +17,7 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "Rooms & Boardings",
-        "pageLink" => "/rooms-and-boardings",
+        "pageLink" => "/boardings",
         "icon" => "bed"
     ],
     [
@@ -27,12 +27,12 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "Kuppi",
-        "pageLink" => "/",
+        "pageLink" => "/kuppi",
         "icon" => "graduation-cap"
     ],
     [
         "pageName" => "Events",
-        "pageLink" => "/",
+        "pageLink" => "/event",
         "icon" => "calendar"
     ],
     [

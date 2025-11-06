@@ -1,0 +1,102 @@
+.simple-calendar {
+	width: 100%;
+	background: var(--color-primary-white);
+	border-radius: var(--rounded-lg);
+	box-shadow: var(--shadow-sm);
+}
+
+.simple-calendar-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: var(--spacing-4) var(--spacing-6);
+	border-bottom: 1px solid var(--color-secondary-gray-200, #e5e7eb);
+}
+
+.simple-calendar-header button {
+	background: var(--color-brand-600, #2563eb);
+	color: white;
+	border: none;
+	border-radius: var(--rounded-md);
+	padding: 6px 10px;
+	cursor: pointer;
+}
+
+.simple-calendar-header button:hover {
+	background: var(--color-brand-700, #1d4ed8);
+}
+
+.simple-calendar-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.simple-calendar-table thead th {
+	font-weight: 600;
+	color: var(--color-secondary-gray-600, #4b5563);
+	text-align: center;
+	padding: var(--spacing-3) 0;
+}
+
+.simple-calendar-table tbody td {
+	width: calc(100% / 7);
+	height: 100px;
+	vertical-align: top;
+	border: 1px solid var(--color-secondary-gray-100, #f3f4f6);
+	padding: var(--spacing-2);
+}
+
+.calendar-day {
+	position: relative;
+}
+
+.calendar-day .day-header {
+	font-weight: 600;
+	font-size: var(--text-sm, 0.9rem);
+	color: var(--color-secondary-gray-700, #374151);
+}
+
+.calendar-day.today {
+	background: rgba(37, 99, 235, 0.08);
+}
+
+.calendar-day.bookmarked {
+	box-shadow: inset 0 0 0 2px var(--color-brand-400, #60a5fa);
+	border-radius: var(--rounded-md);
+}
+
+.day-items {
+	margin-top: var(--spacing-2);
+	display: flex;
+	gap: var(--spacing-2);
+	flex-wrap: wrap;
+}
+
+.tag {
+	font-size: 0.75rem;
+	padding: 2px 6px;
+	border-radius: 999px;
+	background: var(--color-secondary-gray-100, #f3f4f6);
+	color: var(--color-secondary-gray-700, #374151);
+}
+
+.tag--event { background: #e0f2fe; color: #0369a1; }
+.tag--kuppi { background: #ecfccb; color: #3f6212; }
+
+/* Rows for concrete items */
+.item {
+	width: 100%;
+	font-size: 0.8rem;
+	padding: 2px 6px;
+	border-radius: var(--rounded-sm);
+	background: var(--color-secondary-gray-50, #fafafa);
+	color: var(--color-secondary-gray-800, #1f2937);
+}
+
+.item--event { border-left: 3px solid #0284c7; background: #f0f9ff; }
+.item--kuppi { border-left: 3px solid #65a30d; background: #f7fee7; }
+.item--more { color: var(--color-secondary-gray-600, #4b5563); background: transparent; }
+
+.calendar-day--empty {
+	background: var(--color-secondary-gray-50, #fafafa);
+}

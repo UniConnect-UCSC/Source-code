@@ -30,6 +30,10 @@
         <!-- Notifications -->
         <?php component('notification'); ?>
 
+        <a href="/calendar">
+            <i data-lucide="calendar"></i>
+        </a>
+
         <!-- User Icon -->
         <?php
         $userModel = new User();
@@ -37,7 +41,8 @@
         $userEmail = $_SESSION['user_email'] ?? "";
         $user = $userModel->first(["email" => $userEmail]);
 
-        $profilePic = $user->profile_picture ?? null;
+        // $profilePic = $user->profile_picture ?? null;
+        $profilePic = null;
 
 
         $userEmail = $_SESSION['user_email'] ?? "";
@@ -80,6 +85,7 @@
                         <?= htmlspecialchars($userFName) ?> <?= htmlspecialchars($userLName) ?>
                     </span>
                 </a>
+
                 <a class="user__logout" href="/logout">
                     <i data-lucide="log-out"></i>
                     <span>Logout</span>
