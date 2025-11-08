@@ -22,7 +22,6 @@
 
 
         <!-- Search Bar -->
-<<<<<<< HEAD
         <form class="search-wrapper" action="/search" method="GET" role="search">
             <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
             <input name="q" placeholder="Search Uniconnect" class="search" aria-label="Search" />
@@ -34,17 +33,6 @@
         <a href="/calendar">
             <i data-lucide="calendar"></i>
         </a>
-=======
-        <div class="search-wrapper">
-            <i data-lucide="search" class="search-icon"></i>
-            <input placeholder="Search Uniconnect" class="search">
-        </div>
-
-        <!-- Notifications -->
-        <div class="bell__container">
-            <i data-lucide="bell"></i>
-        </div>
->>>>>>> main
 
         <!-- User Icon -->
         <?php
@@ -53,7 +41,6 @@
         $userEmail = $_SESSION['user_email'] ?? "";
         $user = $userModel->first(["email" => $userEmail]);
 
-<<<<<<< HEAD
         // $profilePic = $user->profile_picture ?? null;
         $profilePic = null;
 
@@ -107,23 +94,5 @@
 
         </div>
 
-=======
-        $profilePic = $user->profile_picture ?? null;
-        ?>
-
-        <?php if ($profilePic): ?>
-        <a href="/profile">
-            <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-        </a>
-        <?php else: ?>
-        <?php
-            $fNameInitial = strtoupper($user->f_name[0] ?? '');
-            $lNameInitial = strtoupper($user->l_name[0] ?? '');
-            ?>
-        <a class="profile" href="/profile">
-            <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-        </a>
-        <?php endif; ?>
->>>>>>> main
     </div>
 </nav>

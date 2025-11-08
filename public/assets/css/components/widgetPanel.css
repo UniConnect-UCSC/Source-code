@@ -1,27 +1,12 @@
 .widget-panel {
   height: fit-content;
-<<<<<<< HEAD
-
-=======
->>>>>>> main
   position: sticky;
   top: var(--spacing-24);
   grid-column-start: 10;
   grid-column-end: 13;
-<<<<<<< HEAD
   background-color: var(--color-primary-white);
 
   border-radius: var(--rounded-xl);
-=======
-
-  grid-column-start: 10;
-  grid-column-end: 13;
-
-  background-color: var(--color-primary-white);
-
-  border-radius: var(--rounded-xl);
-  /* margin: var(--spacing-6) var(--spacing-4); */
->>>>>>> main
 }
 
 .widget-panel {
@@ -32,10 +17,6 @@
   grid-column-end: 13;
 
   border-radius: var(--rounded-xl);
-<<<<<<< HEAD
 
   margin-top: var(--spacing-20);
-=======
-  /* margin: var(--spacing-6) var(--spacing-4); */
->>>>>>> main
 }

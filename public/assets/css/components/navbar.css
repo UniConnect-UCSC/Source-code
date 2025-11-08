@@ -8,10 +8,7 @@
   top: 0;
   width: 100%;
   background-color: var(--color-primary-white);
-<<<<<<< HEAD
   z-index: 100;
-=======
->>>>>>> main
 }
 
 .links__container {
@@ -20,19 +17,12 @@
   font-weight: 400;
 }
 
-<<<<<<< HEAD
 .navigation__container {
-=======
-.profile__container {
->>>>>>> main
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-6);
-<<<<<<< HEAD
   position: relative;
-=======
->>>>>>> main
 }
 
 .profile {
@@ -68,7 +58,6 @@
   border-radius: var(--rounded-full);
 }
 
-<<<<<<< HEAD
 .profile__content {
   position: absolute;
   background-color: var(--color-primary-white);
@@ -81,8 +70,6 @@
   box-shadow: var(--shadow-md);
 }
 
-=======
->>>>>>> main
 .bell__container {
   height: fit-content;
   display: flex;
@@ -112,7 +99,6 @@
   border-radius: var(--rounded-full);
   width: 300px;
 }
-<<<<<<< HEAD
 
 .chevron-down {
   position: absolute;
@@ -157,5 +143,3 @@
   background-color: var(--color-primary-red);
   color: var(--color-primary-white);
 }
-=======
->>>>>>> main

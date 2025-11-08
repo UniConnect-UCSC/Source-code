@@ -10,12 +10,9 @@ if (!is_dir($sessionPath)) mkdir($sessionPath, 0777, true);
 session_save_path($sessionPath);
 session_start();
 
-<<<<<<< HEAD
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-=======
->>>>>>> main
 require '../app/core/init.php';
 handleAuth();
 

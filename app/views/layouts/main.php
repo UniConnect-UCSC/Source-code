@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="/assets/css/reset.css">
     <link rel="stylesheet" href="/assets/css/typography.css">
     <link rel="stylesheet" href="/assets/css/index.css">
-<<<<<<< HEAD
 
 
 
@@ -25,13 +24,6 @@
     <script src="/assets/js/ajax.js"></script>
     <script src="/assets/js/infinityScroll.js"></script>
 
-=======
-
-    <!-- Page-specific head content -->
-    <?= $head ?? '' ?>
-
-    <script src="https://unpkg.com/lucide@latest"></script>
->>>>>>> main
 
 </head>
 
