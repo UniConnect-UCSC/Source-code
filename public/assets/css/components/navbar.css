@@ -1,3 +1,4 @@
+@import url("notification.css");
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -7,6 +8,7 @@
   top: 0;
   width: 100%;
   background-color: var(--color-primary-white);
+  z-index: 100;
 }
 
 .links__container {
@@ -15,17 +17,19 @@
   font-weight: 400;
 }
 
-.profile__container {
+.navigation__container {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-6);
+  position: relative;
 }
 
 .profile {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: fit-content;
 
   border-radius: var(--rounded-full);
   background-color: var(--color-brand-600);
@@ -40,11 +44,30 @@
   background-color: var(--color-brand-800);
 }
 
+.profile__container {
+  position: relative;
+  width: fit-content;
+  cursor: pointer;
+  user-select: none;
+}
+
 .profile-image {
   width: 50px;
   aspect-ratio: 1/1;
   object-fit: cover;
   border-radius: var(--rounded-full);
+}
+
+.profile__content {
+  position: absolute;
+  background-color: var(--color-primary-white);
+  margin: 0 var(--spacing-10);
+  margin-top: var(--spacing-3);
+  padding: var(--spacing-1) var(--spacing-3);
+  width: 300px;
+  right: -100%;
+  border-radius: var(--rounded-xl);
+  box-shadow: var(--shadow-md);
 }
 
 .bell__container {
@@ -75,4 +98,48 @@
   padding-left: var(--spacing-10);
   border-radius: var(--rounded-full);
   width: 300px;
+}
+
+.chevron-down {
+  position: absolute;
+  bottom: -8px;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  background-color: var(--color-brand-800);
+  color: var(--color-primary-white);
+  z-index: 2;
+}
+
+.user__profile {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--rounded-xl);
+  font-weight: 500;
+}
+
+.user__profile:hover {
+  background-color: var(--color-brand-100);
+}
+
+.user__logout {
+  margin-top: var(--spacing-2);
+  color: var(--color-primary-red);
+  display: flex;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-4);
+  border-radius: var(--rounded-xl);
+  font-weight: 500;
+  border-top: 2px black;
+}
+
+.user__logout:hover {
+  background-color: var(--color-primary-red);
+  color: var(--color-primary-white);
 }

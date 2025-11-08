@@ -1,0 +1,122 @@
+.marketplace-item-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--rounded-lg);
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+
+.marketplace-item-details {
+  padding: var(--spacing-3);
+}
+
+.marketplace-item-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--rounded-lg);
+  margin-bottom: var(--rounded-none);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.marketplace-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.marketplace-item h3 {
+  margin: var(--scaping-2) var(--spacing-2);
+  font-size: 18px;
+  font-weight: 500;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.marketplace-item-price {
+  color: var(--color-brand-600);
+  font-weight: 600;
+  font-size: var(--text-2xl);
+  margin: 8px 0;
+}
+
+.marketplace-item-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.marketplace-item-status.available {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.marketplace-item-status.sold {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.marketplace-item-date {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.my-items-options {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1/1;
+  border-radius: var(--rounded-full);
+  top: var(--spacing-4);
+  right: var(--spacing-2);
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+}
+
+.my-items-options-dropdown {
+  position: absolute;
+  top: var(--spacing-12);
+  right: var(--spacing-2);
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--rounded-md);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: black;
+  width: 150px;
+  padding: var(--spacing-2) var(--spacing-2);
+  background-color: var(--color-primary-white);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid var(--color-primary-gray);
+
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.my-items-options-dropdown div {
+  padding: var(--spacing-2) var(--spacing-4);
+  cursor: pointer;
+  border-radius: var(--rounded-lg);
+  user-select: none;
+  border-bottom: 1px solid var(--color-primary-gray);
+}
+
+.my-items-options-dropdown div:hover {
+  background-color: var(--color-brand-100);
+}

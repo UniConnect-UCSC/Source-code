@@ -15,6 +15,13 @@
 
   --color-primary-gray: #e1e5e9;
   --color-secondary-gray: #6b7280;
+  --color-secondary-gray-opacity-50: rgba(107, 114, 128, 0.5);
+
+  --color-primary-white: #ffffff;
+  --color-secondary-white: #f5f5f5;
+
+  --color-primary-red: #e62727;
+  --color-secondary-red: #f9b5b5;
 
   --color-primary-white: #ffffff;
   --color-secondary-white: #f5f5f5;

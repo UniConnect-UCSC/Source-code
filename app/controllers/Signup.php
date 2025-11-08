@@ -45,7 +45,12 @@ class SignUp extends Controller
                 $university = $universityModel->first([
                     "email_domain" => $domain,
                 ]);
-                $universityId = $university ? $university->id : "";
+
+                if ($university) {
+                    $universityId = $university ? $university->id : "";
+                } else {
+                    $data['errors']['email'] = 'Please enter a valid university email address';
+                }
             }
 
             //Check if email already exists
@@ -76,6 +81,7 @@ class SignUp extends Controller
                     $_SESSION['user_fName'] = $user->f_name;
                     $_SESSION['user_lName'] = $user->l_name;
                     $_SESSION['user_universityID'] = $user->university;
+                    $_SESSION['user_profilePicture'] = $user->profile_picture;
 
                     // Ensure session is saved before redirect
                     session_write_close();

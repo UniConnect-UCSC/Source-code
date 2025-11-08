@@ -1,0 +1,290 @@
+body {
+  margin:0;
+}
+
+
+.kuppi-feed-header {
+  margin-bottom: 0;
+  width: 100%;
+  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: var(--spacing-3);
+}
+.filter-select, .filter-btn {
+  margin-right: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #edeaff;
+  background: #f6f4ff;
+  color: #2d217c;
+  font-size: 1rem;
+}
+.filter-btn {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px var(--color-brand-50) solid;
+  background: var(--color-brand-200);
+}
+.filter-btn:hover {
+  background: #d6d6ff;
+}
+
+.kuppi-feed-header .feed-title {
+  font-family: var(--font-sans);
+  text-align: center;
+  width: 100%;
+  margin-bottom: 0.5em;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-brand-900);
+  letter-spacing: 0.5px;
+}
+
+.kuppi-feed {
+  grid-column: 2 / 3; 
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: var(--spacing-5);
+
+}
+
+.feed-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color-brand-900);
+  letter-spacing: 0.5px;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  margin-bottom: 0.5em;
+}
+
+.kuppi-feed-actions {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  margin-top: 0;
+  justify-content: flex-end; /* right align */
+  width: 100%;
+  padding: var(--spacing-3);
+}
+
+
+
+.kuppi-feed-actions .btn {
+  height: 50px;
+  margin: 5px;
+  padding: 6px 16px;
+  width: 130px;
+  background: var(--color-brand-100, #edeaff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  border: solid var(--color-brand-50, #ffffff) 1px;
+  font-size: 13px;
+  color: var(--color-brand-600, #6c63ff);
+  transition: 300ms;
+  border-radius: 30px;
+  background:  var(--color-brand-100, #edeaff);
+  box-shadow: 0 2px 12px var(--color-brand-100, #edeaff), 0 1px 4px var(--color-brand-600, #6c63ff);
+}
+
+.kuppi-feed-actions .btn:hover {
+  box-shadow: 0 4px 24px var(--color-brand-100, #edeaff), 0 2px 8px var(--color-brand-600, #6c63ff);
+  color: var(--color-brand-800, #2d217c);
+  background: linear-gradient(145deg, var(--color-brand-50, #f6f4ff), var(--color-brand-100, #edeaff));
+  transition: 200ms;
+}
+
+.kuppi-feed-actions .btn:active {
+  box-shadow: 0 2px 8px var(--color-brand-200, #6c63ff);
+  color: var(--color-brand-800, #2d217c);
+  transition: 100ms;
+}
+@media (max-width: 1024px) {
+  .kuppi-feed {
+    grid-template-columns: repeat(2, 1fr); /* 2 per row on medium screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .kuppi-feed {
+    grid-template-columns: 1fr; /* 1 per row on small screens */
+  }
+}
+
+/* Add to your kuppi.css */
+.kuppi-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kuppi-modal-content {
+    background: #fff;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    padding: 32px 24px 24px 24px;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    animation: modalIn 0.2s;
+}
+
+@keyframes modalIn {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.kuppi-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #888;
+    cursor: pointer;
+}
+
+/* Host Kuppi Modal Styles */
+.kuppi-modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.kuppi-modal-content .form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.kuppi-modal-content label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+.kuppi-modal-content input,
+.kuppi-modal-content select,
+.kuppi-modal-content textarea {
+  background: var(--color-brand-50);
+  border: 1px solid var(--color-brand-200);
+  border-radius: 6px;
+  font-size: 1rem;
+  padding: 8px 12px;
+  transition: border-color 0.2s;
+  color: var(--color-brand-900);
+}
+
+.kuppi-modal-content input:focus,
+.kuppi-modal-content select:focus,
+.kuppi-modal-content textarea:focus {
+  border-color: var(--color-brand-400);
+  outline: none;
+}
+
+.kuppi-modal-content button[type="submit"] {
+  background: var(--color-brand-600, #6c63ff);
+  color: #fff;
+  font-weight: 600;
+  padding: 6px 24px;           /* Smaller height and width */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 18px;
+  transition: background 0.2s;
+  font-size: 0.95rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;          /* Center horizontally */
+}
+
+.kuppi-modal-content button[type="submit"]:hover {
+  background: var(--color-brand-400, #857cff);
+}
+
+.kuppi-modal-content h2 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--color-brand-600, #6c63ff);
+  text-align: center;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  background: linear-gradient(90deg, var(--color-brand-400, #857cff) 0%, var(--color-brand-600, #6c63ff) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Placeholder color for inputs and textareas */
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-brand-400);
+  opacity: 1; /* Ensure full color visibility */
+}
+
+/* Custom dropdown styles for platform and category */
+.kuppi-modal-content select#platform,
+.kuppi-modal-content select#category {
+  background: var(--color-brand-50);
+  border: 1px solid var(--color-brand-200);
+  border-radius: 6px;
+  font-size: 1rem;
+  padding: 8px 12px;
+  color: var(--color-brand-900);
+  appearance: none;
+  transition: border-color 0.2s;
+  box-shadow: none;
+}
+
+/* Remove default blue highlight on option (works in Chrome/Edge) */
+.kuppi-modal-content select#platform option,
+.kuppi-modal-content select#category option {
+  background: var(--color-brand-50);
+  color: var(--color-brand-900);
+  border-bottom: 1px solid var(--color-brand-200);
+  font-size: 1rem;
+  padding: 10px 0;
+}
+
+/* Remove blue highlight on selection (Webkit browsers only) */
+.kuppi-modal-content select#platform:focus option:checked,
+.kuppi-modal-content select#category:focus option:checked {
+  background: var(--color-brand-100);
+  color: var(--color-brand-900);
+}
+
+/* Add a simple dropdown arrow for better UX */
+.kuppi-modal-content select#platform,
+.kuppi-modal-content select#category {
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%236c63ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px 18px;
+}
+
+/* Optional: Add more spacing between options (not supported in all browsers) */
+.kuppi-modal-content select#platform option,
+.kuppi-modal-content select#category option {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* Optional: Remove outline for a cleaner look */
+.kuppi-modal-content select#platform:focus,
+.kuppi-modal-content select#category:focus {
+  outline: none;
+  border-color: var(--color-brand-400);
+}

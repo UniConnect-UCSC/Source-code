@@ -7,6 +7,7 @@ require 'config.php';
 require 'utils.php';
 require 'functions.php';
 require 'Database.php';
+require 'mediaStorageService.php';
 require 'Model.php';
 require 'Controller.php';
 require 'App.php';

@@ -7,17 +7,17 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "University Feed",
-        "pageLink" => "/",
+        "pageLink" => "/universityfeed",
         "icon" => "university"
     ],
     [
         "pageName" => "Marketplace",
-        "pageLink" => "/",
+        "pageLink" => "/marketplace",
         "icon" => "store"
     ],
     [
         "pageName" => "Rooms & Boardings",
-        "pageLink" => "/",
+        "pageLink" => "/boardings",
         "icon" => "bed"
     ],
     [
@@ -27,22 +27,22 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "Kuppi",
-        "pageLink" => "/",
+        "pageLink" => "/kuppi",
         "icon" => "graduation-cap"
     ],
     [
         "pageName" => "Events",
-        "pageLink" => "/",
+        "pageLink" => "/event",
         "icon" => "calendar"
     ],
     [
         "pageName" => "Friend Requests",
-        "pageLink" => "/",
+        "pageLink" => "/friends",
         "icon" => "handshake"
     ],
-    [
-        "pageName" => "Groups",
-        "pageLink" => "/",
-        "icon" => "users"
-    ],
+    // [
+    //     "pageName" => "Groups",
+    //     "pageLink" => "/",
+    //     "icon" => "users"
+    // ],
 ];

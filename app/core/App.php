@@ -7,14 +7,16 @@ class App
     private function splitURL()
     {
         $URL = $_GET['url'] ?? "home";
-        $URL = explode("/", trim($URL, "/"));
-        return $URL;
+        $URL = trim($URL, "/");
+        $URL = filter_var($URL, FILTER_SANITIZE_URL);
+        if ($URL === '') return ["home"];
+        return explode("/", $URL);
     }
 
     public function loadController()
     {
         $URL = $this->splitURL();
-        $filename = "../app/controllers/" . ucfirst($URL[0]) . ".php";
+        $filename = __DIR__ . "/../controllers/" . ucfirst($URL[0]) . ".php";
 
         /** Select Controller **/
         if (file_exists($filename)) {
@@ -22,26 +24,45 @@ class App
             $this->controller = ucfirst($URL[0]);
             unset($URL[0]);
         } else {
-            $filename = "../app/controllers/_404.php";
-            require $filename;
-
+            require __DIR__ . "/../controllers/_404.php";
             $this->controller = "_404";
         }
 
         $controller = new $this->controller;
 
+        // reindex remaining segments
+        $URL = array_values($URL);
+
         /** Select Method **/
-        if (!empty($URL[1])) {
-            if (method_exists($controller, $URL[1])) {
-                $this->method = $URL[1];
-                unset($URL[1]);
+        if (!empty($URL[0])) {
+            // if method exists on controller, use it
+            if (method_exists($controller, $URL[0])) {
+                $this->method = $URL[0];
+                unset($URL[0]);
+                $URL = array_values($URL);
             } else {
-                // Fallback to a 404 controller
-                require "../app/controllers/_404.php";
-                $controller = new _404;
+                // treat UUIDs or slug-like identifiers as 'show' if controller has show()
+                $isUuid = preg_match(
+                    '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/',
+                    $URL[0]
+                );
+                $isSlug = preg_match('/^[a-zA-Z0-9-_]+$/', $URL[0]);
+
+                if (method_exists($controller, 'show') && ($isUuid || $isSlug)) {
+                    $this->method = 'show';
+                    // leave $URL as params (first item is identifier)
+                } else {
+                    // fallback to 404 controller
+                    require __DIR__ . "/../controllers/_404.php";
+                    $controller = new _404;
+                    $this->method = 'index';
+                    $URL = [];
+                }
             }
         }
 
-        call_user_func_array([$controller, $this->method], $URL);
+        $params = $URL ? array_values($URL) : [];
+
+        call_user_func_array([$controller, $this->method], $params);
     }
 }
