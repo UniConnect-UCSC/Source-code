@@ -104,8 +104,11 @@ class Home extends Controller
             <link rel="stylesheet" href="/assets/css/components/feed.css">
             <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
             <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
+<<<<<<< HEAD
             <link rel="stylesheet" href="/assets/css/components/createPost.css">
             <link rel="stylesheet" href="/assets/css/components/post.css">
+=======
+>>>>>>> main
             '
         ]);
     }

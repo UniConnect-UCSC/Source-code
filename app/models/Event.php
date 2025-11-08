@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 class EventModel
 {
     use Model;
@@ -75,4 +76,10 @@ class EventModel
         return $this->delete($eventId, 'id');
     }
 
+=======
+class Event
+{
+    use Model;
+    protected $table = 'events';
+>>>>>>> main
 }

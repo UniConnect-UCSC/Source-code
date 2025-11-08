@@ -14,6 +14,7 @@ trait Model
         $this->connect();
     }
 
+<<<<<<< HEAD
     public function findAll($limit = null, $offset = null)
     {
         $limit = $limit ? $limit : $this->limit;
@@ -66,6 +67,21 @@ trait Model
             $sql .= $limit ? "LIMIT $limit" : "";
             $sql .= $offset ? "OFFSET $offset" : "";
 
+=======
+    public function findAll($limit = null)
+    {
+        $limit = $limit ? $limit : $this->limit;
+        $sql = "SELECT * from $this->table limit $limit offset $this->offset";
+        return $this->query($sql);
+    }
+
+    public function where($data)
+    {
+        try {
+            $keys = array_keys($data);
+            $conditions = implode(" AND ", array_map(fn($key) => "$key = :$key", $keys));
+            $sql = "SELECT * FROM {$this->table} WHERE $conditions";
+>>>>>>> main
             return $this->query($sql, $data);
         } catch (PDOException $e) {
             die("WHERE query failed: " . $e->getMessage());

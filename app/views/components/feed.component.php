@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php require_once(__DIR__ . "/../../models/GlobalPost.php"); ?>
 <?php require_once(__DIR__ . "/../../models/User.php"); ?>
 
@@ -29,4 +30,8 @@
             ?>
         <?php endforeach; ?>
     </div>
+=======
+<div class="feed">Feeds
+
+>>>>>>> main
 </div>

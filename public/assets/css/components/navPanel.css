@@ -7,6 +7,10 @@
   background-color: var(--color-primary-white);
 
   border-radius: var(--rounded-xl);
+<<<<<<< HEAD
+=======
+  /* margin: var(--spacing-6) var(--spacing-2); */
+>>>>>>> main
   padding: var(--spacing-3) var(--spacing-2);
 }
 

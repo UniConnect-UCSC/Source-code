@@ -2,6 +2,7 @@
   grid-column-start: 4;
   grid-column-end: 10;
   min-height: 200vh;
+<<<<<<< HEAD
   margin-top: var(--spacing-20);
   border-radius: var(--rounded-xl);
   padding: var(--spacing-4);
@@ -12,4 +13,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
+=======
+
+  background-color: var(--color-primary-white);
+  margin: var(--spacing-20) 0;
+
+  border-radius: var(--rounded-xl);
+>>>>>>> main
 }

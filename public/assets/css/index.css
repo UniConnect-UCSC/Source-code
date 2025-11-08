@@ -8,6 +8,7 @@ body {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE/Edge */
 }
+<<<<<<< HEAD
 
 /* The switch - the box around the slider */
 .switch {
@@ -100,3 +101,5 @@ input:checked + .slider:before {
     transform: rotate(360deg);
   }
 }
+=======
+>>>>>>> main
