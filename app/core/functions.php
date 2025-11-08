@@ -1,20 +1,10 @@
 <?php
 
-use Cloudinary\Api\Upload\UploadApi;
-
 function uploadImageToCloudinary($filePath, $locationFolder): ?string
 {
-    $uploadApi = new UploadApi();
-    try {
-        $response = $uploadApi->upload($filePath, [
-            'folder' => $locationFolder,
-            'resource_type' => 'auto',
-        ]);
-        return $response['secure_url'] ?? null;
-    } catch (Exception $e) {
-        error_log("Cloudinary upload error: " . $e->getMessage());
-        return null;
-    }
+
+    $mediaStorageService = new CloudinaryMediaStorageService();
+    return $mediaStorageService->uploadMedia($filePath, $locationFolder);
 }
 
 
