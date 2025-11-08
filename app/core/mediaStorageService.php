@@ -12,7 +12,7 @@ class CloudinaryMediaStorageService implements MediaStorageService {
     private $uploadApi;
 
     public function __construct() {
-        $config = new Configuration($_ENV['CLOUDINARY_URL']);
+        $config = new Configuration(CLOUDINARY_URL);
         $this->uploadApi = new UploadApi($config);
     }
 

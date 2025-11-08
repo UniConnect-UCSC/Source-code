@@ -1,18 +1,17 @@
 <?php
 
-require(__DIR__ . "/loadENV.php");
-loadEnv(__DIR__ . "/../../.env.local");
+use Dotenv\Dotenv;
 
-if ($_SERVER['SERVER_NAME'] == 'uniconnect.local') {
-    define('ROOT', 'http://uniconnect.local');
-} else {
-    define('ROOT', 'https://www.yourwebsite.com');
-}
+//Load .env file
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
 
-define('DBHOST', getenv('DB_HOST') ?: 'db');
-define('DBPORT', getenv('DB_PORT') ?: 5432);
-define('DBNAME', getenv('DB_NAME') ?: 'uniconnect');
-define('DBUSER', getenv('DB_USER') ?: 'postgres');
-define('DBPASSWORD', getenv('DB_PASSWORD') ?: 'admin');
+define('DBHOST', $_ENV['DB_HOST'] ?: 'localhost');
+define('DBPORT', $_ENV['DB_PORT'] ?: 5432);
+define('DBNAME', $_ENV['DB_NAME'] ?: 'uniconnect');
+define('DBUSER', $_ENV['DB_USER'] ?: 'postgres');
+define('DBPASSWORD', $_ENV['DB_PASSWORD'] ?: '');
+define('CLOUDINARY_URL', $_ENV['CLOUDINARY_URL'] ?: '');
+
 
 define('DEBUG', true);
