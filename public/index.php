@@ -14,16 +14,10 @@ session_start();
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
-use Cloudinary\Configuration\Configuration;
-use Cloudinary\Cloudinary;
 
 //Load .env file
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
-
-//Config Cloudinary
-$config = new Configuration($_ENV['CLOUDINARY_URL']);
-$cloudinary = new Cloudinary($config);
 
 require '../app/core/init.php';
 handleAuth();
