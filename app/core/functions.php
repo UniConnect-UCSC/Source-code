@@ -1,10 +1,27 @@
 <?php
 
-function uploadImageToCloudinary($filePath, $locationFolder): ?string
+// $file should be passed the $_FILE['name'] associative array
+function uploadImageToCloudinary($file, $locationFolder): ?string
 {
+    if(empty($file)){
+        error_log("No file uploaded by user " . ($_SESSION['user_id']));
+        return null;
+    }
+
+    if($file['error'] !== UPLOAD_ERR_OK){
+        error_log("File upload to server failed: " . $file['error'] . 'by user ' . $_SESSION['user_id']);
+        return null;
+    }
 
     $mediaStorageService = new CloudinaryMediaStorageService();
-    return $mediaStorageService->uploadMedia($filePath, $locationFolder);
+    $uploadedUrl = $mediaStorageService->uploadMedia($file['tmp_name'], $locationFolder);
+
+    if(!$uploadedUrl){
+        error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
+        return null;
+    }
+
+    return $uploadedUrl;
 }
 
 

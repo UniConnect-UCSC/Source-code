@@ -52,30 +52,11 @@ class Marketplace extends Controller
                 $itemModel = new MarketplaceItem();
                 $imageModel = new MarketplaceItemImage();
 
-                $mediaURL = null;
-
                 // Handle media upload to Cloudinary
-                if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
-                    $tmpPath = $_FILES['media']['tmp_name'];
+                $mediaURL = uploadImageToCloudinary($tmpPath, 'uniconnect_marketplace');
 
-                    // Check if function exists
-                    if (!function_exists('uploadImageToCloudinary')) {
-                        throw new Exception('Image upload function not available');
-                    }
-
-                    $uploadedUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_marketplace');
-
-                    if ($uploadedUrl) {
-                        $mediaURL = $uploadedUrl;
-                    } else {
-                        error_log('Cloudinary upload failed for user ' . $_SESSION['user_id']);
-                        throw new Exception('Image upload failed');
-                    }
-                } else {
-                    if (!empty($_FILES['media'])) {
-                        error_log('File upload error code: ' . $_FILES['media']['error']);
-                    }
-                    throw new Exception('No image uploaded or upload error occurred');
+                if(!$mediaURL){
+                    throw new Exception('Failed to upload file');
                 }
 
                 // Create item data array
@@ -159,17 +140,7 @@ class Marketplace extends Controller
                 // 'category_id' => $itemCategoryID,
             ];
 
-            $mediaUrl = null;
-            if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
-                $tmpPath = $_FILES['media']['tmp_name'];
-                $uploadedUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_marketplace');
-                if ($uploadedUrl) {
-                    $mediaUrl = $uploadedUrl;
-                } else {
-                    // log but continue (or return error)
-                    error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
-                }
-            }
+            $mediaUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_marketplace');
 
             $itemModel->update($itemId, $itemData);
 
