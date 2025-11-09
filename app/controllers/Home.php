@@ -13,19 +13,9 @@ class Home extends Controller
 
             $caption = $_POST['caption'] ?? '';
             $isAnonymous = (isset($_POST['isAnonymous']) && ($_POST['isAnonymous'] === '1' || $_POST['isAnonymous'] === 'true')) ? 1 : 0;
-            $mediaURL = null;
 
             // handle media upload
-            if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
-                $tmpPath = $_FILES['media']['tmp_name'];
-                $uploadedUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
-                if ($uploadedUrl) {
-                    $mediaURL = $uploadedUrl;
-                } else {
-                    // log but continue (or return error)
-                    error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
-                }
-            }
+            $mediaURL = uploadImageToCloudinary($_FILES['media'], 'uniconnect_post');
 
             try {
                 $postModel = new GlobalPost();
@@ -66,17 +56,8 @@ class Home extends Controller
             $isAnonymous = isset($_POST['is_anonymous']) ? (int)$_POST['is_anonymous'] : 0;
 
             // Handle file upload if present
-            $mediaUrl = null;
-            if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
-                $tmpPath = $_FILES['media']['tmp_name'];
-                $uploadedUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
-                if ($uploadedUrl) {
-                    $mediaUrl = $uploadedUrl;
-                } else {
-                    // log but continue (or return error)
-                    error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
-                }
-            }
+            $mediaUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
+
 
             $updateData = [
                 'caption' => $caption,

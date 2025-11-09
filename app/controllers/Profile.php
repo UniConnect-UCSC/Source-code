@@ -16,17 +16,7 @@ class Profile extends Controller
             $isAnonymous = isset($_POST['is_anonymous']) ? (int)$_POST['is_anonymous'] : 0;
 
             // Handle file upload if present
-            $mediaUrl = null;
-            if (!empty($_FILES['media']) && $_FILES['media']['error'] === UPLOAD_ERR_OK) {
-                $tmpPath = $_FILES['media']['tmp_name'];
-                $uploadedUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
-                if ($uploadedUrl) {
-                    $mediaUrl = $uploadedUrl;
-                } else {
-                    // log but continue (or return error)
-                    error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
-                }
-            }
+            $mediaUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
 
             $updateData = [
                 'caption' => $caption,
