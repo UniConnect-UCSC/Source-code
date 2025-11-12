@@ -101,3 +101,37 @@ function timeAgo($datetime)
         return "$days days ago";
     }
 }
+
+function parseRequestData(){
+
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? $_SERVER['HTTP_CONTENT_TYPE'] ?? '';
+    $parts = explode(';', $contentType);
+    $baseType = isset($parts[0]) ? strtolower(trim($parts[0])) : '';
+
+    error_log("Parsing request data of type: " . $baseType);
+
+    $data = [];
+
+    switch($baseType){
+        case 'application/json':
+            $rawData = file_get_contents('php://input');
+            $data = json_decode($rawData, true);
+            break;
+
+        case 'application/x-www-form-urlencoded':
+            $data = $_POST;
+            break;
+
+        case 'multipart/form-data':
+            $data = $_POST;
+            $data["FILES"] = $_FILES;
+            break;
+
+        default:
+            //Not set
+    }
+
+    error_log("Parsed request data: " . print_r($data, true));
+
+    return $data;
+}
