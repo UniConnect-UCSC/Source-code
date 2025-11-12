@@ -44,6 +44,11 @@ class Ajax {
   }
 
   static #buildBody(method, data) {
+
+    if (data instanceof FormData) {
+      return data;
+    }
+
     if (method === "POST") {
       return JSON.stringify(data);
     }
