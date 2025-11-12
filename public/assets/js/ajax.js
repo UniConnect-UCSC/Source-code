@@ -63,7 +63,7 @@ class Ajax {
     timeout = 0,
     credentials
   ) {
-    const finalHeaders = this.#buildHeader(method, passedHeaders); // Overrides defaults if provided
+    const finalHeaders = this.#buildHeader(passedHeaders); // Overrides defaults if provided
     const finalTimeout =
       typeof timeout === "number" && timeout > 0
         ? timeout
@@ -130,8 +130,12 @@ class Ajax {
   }
 
   // Convenience methods
-  static post(urlPath, data) {
-    return this.request("POST", urlPath, data);
+  static jsonPost(urlPath, data) {
+    return this.request("POST", urlPath, data, { "Content-Type": "application/json" });
+  }
+
+  static formDataPost(urlPath, formData){
+    return this.request("POST", urlPath, formData);
   }
 }
 
