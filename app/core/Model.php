@@ -32,7 +32,7 @@ trait Model
     public function where($conditions, $limit = null, $offset = null, $orderBy = [])
     {
         try {
-            $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE'];
+            $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE', 'NOT IN', 'IN'];
             $data = [];
 
             $sql = "SELECT * FROM {$this->table} WHERE ";
