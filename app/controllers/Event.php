@@ -6,11 +6,6 @@ require_once(__DIR__ . "/../models/University.php");
 
 class Event extends Controller
 {
-    private function parseAjaxData(){
-        $json = file_get_contents('php://input');
-        return json_decode($json, true);
-    }
-
     private function getEventData($limit, $offset, $categories = [])
     {
 
@@ -81,7 +76,7 @@ class Event extends Controller
     public function deleteEvent(){
 
         header('Content-Type: application/json');
-        $data = $this->parseAjaxData();
+        $data = parseRequestData();
 
         if($_SERVER['REQUEST_METHOD'] !== 'POST'){
             http_response_code(405);
@@ -129,7 +124,7 @@ class Event extends Controller
             return;
         }
 
-        $data = $this->parseAjaxData();
+        $data = parseRequestData();
 
         $eventModel = new EventModel();
 
@@ -172,42 +167,37 @@ class Event extends Controller
     }
     
     public function createNewEvent(){
+        header('Content-Type: application/json');
 
-        $data = $this->parseAjaxData();
-
-        $error = [];
+        $data = parseRequestData();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $error['method_invalid']++;
-            echo json_encode($error); 
+            echo json_encode(['error' => 'Invalid request method']); 
             return;
         }
 
         // Validation of user
-        if (!isset($_SESSION['user_id']) || !$this->checkIfUniRep($_SESSION['user_id'])) {
-            $error['unauthorized_access']++;
-            echo json_encode($error);
+        if (!isset($_SESSION['user_id']) || !$this->checkIfUniRep($_SESSION['user_id'])){
+            echo json_encode(['error' => 'Unauthorized access']);
             return;
         }
 
-        //Fetching required data for submission
-        //In the future make the db handle it through a join
-        $universityId = $this->getUniRepUniversity($_SESSION['user_id']);
+        $mediaUrl = uploadImageToCloudinary($data['FILES']['event_image'] ?? null, 'uniconnect_events');
         
         // Data from view to model conversion
         $eventData = [
-            'university_id' => $universityId,
+            'university_id' => $_SESSION['user_universityID'],
             'posted_by' => $_SESSION['user_id'],
             'title' => trim($data['title']),
             'description' => trim($data['description']),
             'event_timestamp' => trim($data['event_timestamp']),
-            'held_at' => trim($data['held_at'])
+            'held_at' => trim($data['held_at']),
+            'media_url' => $mediaUrl
         ];
 
         $eventModel = new EventModel();
         $result = $eventModel->createEvent($eventData);
 
-        header('Content-Type: application/json');
         if ($result) {
             echo json_encode(["status" => "success"]);
         } else {
@@ -220,7 +210,8 @@ class Event extends Controller
     public function scrollable(){
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $data = $this->parseAjaxData();
+            $data = parseRequestData();
+            error_log("data received for scrollable: " . print_r($data, true));
 
             header('Content-Type: application/json');
 

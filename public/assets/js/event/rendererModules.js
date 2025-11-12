@@ -6,6 +6,7 @@ function eventCardRenderer($data){
     const heldAt = $data.held_at || $data.location || '';
     const timestamp = $data.event_timestamp || $data.date || '';
     const id = $data.id || $data.event_id || '';
+    const mediaUrl = $data.media_url || '';
     const participantsCount = Number(
         $data.participants_count ?? $data.attendees_count ?? $data.attendees ?? $data.participants ?? 0
     );
@@ -33,10 +34,16 @@ function eventCardRenderer($data){
     const card = document.createElement('div');
     card.className = 'event-card';
 
-    // Image placeholder
-    const image = document.createElement('div');
-    image.className = 'event-image';
-    card.appendChild(image);
+    const imageDiv = document.createElement('div');
+    imageDiv.className = 'event-image-div';
+    if (mediaUrl) {
+        const imgTag = document.createElement('img');
+        imgTag.src = mediaUrl;
+        imgTag.alt = title || 'Event image';
+        imgTag.className = 'event-image'; 
+        imageDiv.appendChild(imgTag);
+    }
+    card.appendChild(imageDiv);
 
     // Content wrapper
     const content = document.createElement('div');

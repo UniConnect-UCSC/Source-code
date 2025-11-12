@@ -19,39 +19,29 @@ formEventModal.addEventListener('click', (e) => {
 eventForm.addEventListener('submit', async (e) => {
     e.preventDefault();
  
-    const newEvent = {
-        title: document.getElementById('eventTitle').value,
-        event_timestamp: document.getElementById('eventDate').value,
-        held_at: document.getElementById('eventHeldAt').value,
-        description: document.getElementById('eventDescription').value,
-        image: document.getElementById('eventImage').value,
-        categories: (() => {
-            try {
-                const raw = document.getElementById('eventCategories');
-                return raw ? JSON.parse(raw.value || '[]') : [];
-            } catch (_) { return []; }
-        })()
-    };
+    const formData = new FormData(eventForm);
 
     var url = '';
-    if(eventForm.getAttribute('type') === 'update'){
-        newEvent.event_id = eventForm.getAttribute('data-id');
+    if (eventForm.getAttribute('type') === 'update') {
+        formData.append('event_id', eventForm.getAttribute('data-id'));
         url = '/event/updateEvent';
-
-    }else if(eventForm.getAttribute('type') === 'create'){
+    } else if (eventForm.getAttribute('type') === 'create') {
         url = '/event/createNewEvent';
     }
 
-    $response = await Ajax.post(url, newEvent);
+    // Send FormData (do not set Content-Type, browser will handle it)
 
-    if($response['status'] === 'success'){
+    console.log('Form data being sent:', ...formData.entries());
+
+    const $response = await Ajax.formDataPost(url, formData);
+
+    if ($response['status'] === 'success') {
         console.log('Event successfully created/updated');
     } else {
-        // Optionally show an error message
         console.error('Error creating event:', $response);
     }
 
-    eventForm.reset(); //clear form
+    eventForm.reset();
     formEventModal.classList.remove('active');
 });
 

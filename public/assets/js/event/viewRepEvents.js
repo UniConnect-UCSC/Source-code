@@ -45,7 +45,7 @@ repEventListDiv.addEventListener('click', function(e) {
         const eventId = row.getAttribute('data-id');
 
         if (confirm('Are you sure you want to delete this event?')) {
-            Ajax.post('/event/deleteEvent', { event_id: eventId })
+            Ajax.jsonPost('/event/deleteEvent', { event_id: eventId })
         }
 
         repEventScroll.resetScroll(); // Clear list on close

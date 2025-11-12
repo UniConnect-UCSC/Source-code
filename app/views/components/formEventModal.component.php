@@ -7,23 +7,23 @@
     <form id="eventForm">
         <div class="form-group">
             <label for="eventTitle">Event Title</label>
-            <input type="text" id="eventTitle" required placeholder="Enter event title" >
+            <input type="text" id="eventTitle" name="title" required placeholder="Enter event title" >
         </div>
         <div class="form-group">
             <label for="eventDate">Date & Time</label>
-            <input type="datetime-local" id="eventDate" required>
+            <input type="datetime-local" id="eventDate" name="event_timestamp" required>
         </div>
         <div class="form-group">
             <label for="eventHeldAt">Location</label>
-            <input type="text" id="eventHeldAt" required placeholder="Enter event location">
+            <input type="text" id="eventHeldAt" name="held_at" required placeholder="Enter event location">
         </div>
         <div class="form-group">
             <label for="eventDescription">Description</label>
-            <textarea id="eventDescription" required placeholder="Describe your event"></textarea>
+            <textarea id="eventDescription" name="description" required placeholder="Describe your event"></textarea>
         </div>
         <div class="form-group">
             <label for="eventImage">Event Image (optional)</label>
-            <input type="file" id="eventImage" accept="image/*">
+            <input type="file" id="eventImage" name="event_image" accept="image/*">
             <div id="eventImagePreviewWrapper" class="image-preview-wrapper" style="display:none; margin-top: var(--spacing-2);">
                 <img id="eventImagePreview" alt="Event image preview" class="image-preview" />
                 <button type="button" id="clearEventImageBtn" class="btn btn-secondary small" style="margin-top: var(--spacing-2);">Remove image</button>
@@ -32,10 +32,10 @@
         <div class="form-group">
             <label for="categoryInput">Categories</label>
             <div class="category-picker" id="categoryPicker">
-                <div class="tag-list" id="selectedCategories" aria-live="polite"></div>
-                <input type="text" id="categoryInput" class="category-input" placeholder="Search categories..." autocomplete="off" aria-expanded="false" aria-controls="categorySuggestions" />
-                <div id="categorySuggestions" class="suggestions-list" role="listbox" aria-label="Category suggestions"></div>
-                <input type="hidden" id="eventCategories" value="[]" />
+                <div class="tag-list" id="selectedCategories"></div>
+                <input type="text" id="categoryInput" class="category-input" placeholder="Search categories..." />
+                <div id="categorySuggestions" class="suggestions-list" ></div>
+                <input type="hidden" id="eventCategories" name="eventCategories" value="[]" />
             </div>
             <small class="hint">Choose one or more. Type to search, click to add.</small>
         </div>
