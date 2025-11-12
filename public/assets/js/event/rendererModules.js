@@ -219,3 +219,26 @@ function categoryRenderer($data){
 
     return categoryBtn;
 }
+
+function categorySuggestionRenderer($data){
+    if(!$data["id"] || !$data["name"]){
+        return null;
+    }
+
+    const id = $data["id"];
+    const name = $data["name"].charAt(0).toUpperCase() + $data["name"].slice(1);
+
+    const tempSuggestion = {
+        id: id,
+        name: name
+    }
+
+    const suggestionDiv = document.createElement('div');
+    suggestionDiv.className = 'suggestion-item';
+    suggestionDiv.textContent = name;
+    suggestionDiv.addEventListener('click', () => {
+        addCategory(tempSuggestion);
+    });
+
+    return suggestionDiv;
+}

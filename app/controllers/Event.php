@@ -9,20 +9,18 @@ class Event extends Controller
     private function getEventData($limit, $offset, $categories = [])
     {
 
-        error_log("Fetching event data with offset: " . $offset);
         $eventModel = new EventModel();
         $response = $eventModel->getEvents($limit, $offset);
         $universityModel = new University();
+
         foreach ($response as $event) {
-            error_log("fetching university id: " . $event->university_id);
+
             $event->university_name = $universityModel->getUniversityName($event->university_id);
-            error_log("Event ID " . $event->id . " belongs to university: " . $event->university_name);
         }
         return $response;
     }
 
     private function checkIfUniRep($userId){
-        error_log("Checking if user $userId is a university representative");
         require_once(__DIR__ . "/../models/Representative.php");
         $repModel = new UniversityRepresentative();
         return $repModel->isRep($userId);
@@ -35,10 +33,10 @@ class Event extends Controller
         return $repDetails ? $repDetails->university_id : null;
     }
 
-    private function getEventCategories($limit, $offset){
+    private function getEventCategories($searchTerm, $excludeIds, $limit, $offset){
         require_once(__DIR__ . "/../models/eventCategory.php");
         $categoryModel = new EventCategoryModel();
-        return $categoryModel->getAllCategories($limit, $offset) ?? null;
+        return $categoryModel->getAllCategories($searchTerm, $excludeIds, $limit, $offset) ?? null;
     }
     
     private function uploadEventImage($file){
@@ -183,7 +181,7 @@ class Event extends Controller
         }
 
         $mediaUrl = uploadImageToCloudinary($data['FILES']['event_image'] ?? null, 'uniconnect_events');
-        
+
         // Data from view to model conversion
         $eventData = [
             'university_id' => $_SESSION['user_universityID'],
@@ -227,7 +225,7 @@ class Event extends Controller
                     break;
 
                 case 'getCategories':
-                    $response = $this->getEventCategories($data["limit"], $data['offset']) ?? [];
+                    $response = $this->getEventCategories($data['context']['searchTerm'] ?? '', $data['context']['excludeIds'] ?? [], $data["limit"], $data['offset']) ?? [];
                     echo json_encode($response);
                     break;
 

@@ -28,4 +28,13 @@ const categoryScroll = new InfinityScroll(
     50
 );
 
+const formCategorySuggestionScroll = new InfinityScroll(
+    'getCategories',
+    '/event/scrollable',
+    document.getElementById('categorySuggestions'),
+    categorySuggestionRenderer,
+    0,
+    5
+);
+
 categoryScroll.loadNextElements();

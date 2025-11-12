@@ -59,7 +59,6 @@
 
 
 <script src="/assets/js/event/rendererModules.js"></script>
-<script src="/assets/js/event/categoryPicker.js"></script>
 <script src="/assets/js/event/form.js"></script>
 <script src="/assets/js/event/scrollable.js"></script>
 <script src="/assets/js/event/viewRepEvents.js"></script>
