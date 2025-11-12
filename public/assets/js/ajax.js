@@ -37,12 +37,10 @@ class Ajax {
     }
   }
 
-  static #buildHeader(method, passedHeaders) {
-    const tempHeader = { ...Ajax.defaults.headers, ...passedHeaders };
-    if (method === "POST") {
-      tempHeader["Content-Type"] = "application/json";
-    }
-    return tempHeader;
+  static #buildHeader(passedHeaders) {
+
+    // passed headers override defaults
+    return { ...Ajax.defaults.headers, ...passedHeaders };
   }
 
   static #buildBody(method, data) {
