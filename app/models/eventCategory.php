@@ -10,7 +10,7 @@ class EventCategoryModel{
         ];
 
         if(!empty($excludeIds)){
-            $conditions[] = ['id', 'NOT IN', "(".implode(',', $excludeIds).")"];
+            $conditions[] = ['id', 'NOT IN', $excludeIds];
         }
 
         return $this->where(
