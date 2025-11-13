@@ -7,7 +7,6 @@
 <div class="home-layout">
 
 <?php component("navPanel"); ?>
-<?php component("formEventModal"); ?>
 
 <div class="feed">
     <header>

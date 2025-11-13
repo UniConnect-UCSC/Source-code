@@ -88,45 +88,6 @@ const selectedList = JSON.parse(selectedElement.value);
 var noMoreSuggestions = false;
 var isLoading = false;
 
-
-const dummyCategories = [
-    {id: 1, name: 'Music'},
-    {id: 2, name: 'Art'},
-    {id: 3, name: 'Sports'},
-    {id: 4, name: 'Technology'},
-    {id: 5, name: 'Education'},
-    {id: 6, name: 'Health'},
-    {id: 7, name: 'Business'},
-    {id: 8, name: 'Travel'},
-    {id: 9, name: 'Food'},
-    {id: 10, name: 'Gaming'},
-];
-
-
-
-//Return would be [{id=>5, name=>music},{},{}]
-function findSuggestions(value){
-
-    const valLower = value.toLowerCase();
-    const filtered = dummyCategories.filter(cat => 
-        cat.name.toLowerCase().includes(valLower) &&
-        !selectedList.some(sel => sel.id === cat.id)
-    );
-
-    return filtered;
-}
-
-function renderSuggestions(suggestions){
-
-    suggestionsDiv.innerHTML = '';
-    suggestions.forEach(suggestion => {
-        const div = categorySuggestionRenderer(suggestion);
-        suggestionsDiv.appendChild(div);
-    });
-
-    suggestionsWrapper.classList.add('show');
-}
-
 function renderTags(){
     
     const tagContainer = document.getElementById('selectedCategories');
