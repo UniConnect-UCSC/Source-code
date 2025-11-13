@@ -50,7 +50,7 @@ class InfinityScroll{
         if(context){data['context'] = context;}
 
         try {
-            const response = await Ajax.post(this.fetchUrl, data);
+            const response = await Ajax.jsonPost(this.fetchUrl, data);
 
             if(!Array.isArray(response) || response.length === 0){
                 throw new Error('No more data to load');

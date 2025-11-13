@@ -23,7 +23,8 @@ trait Model
     }
 
     /**
-     * @param array $conditions Array of conditions in format [field ,operator, value]]
+     * @param array $conditions Array of conditions in format [field ,operator, value]] 
+     * When passing array values for IN/NOT IN operators, use: normal array for value
      * @param int $limit [DEFAULT: queries EVERYTHING]
      * @param int $offset [DEFAULT: 0]
      * @param array $orderBy Array of fields to order by with direction [field => 'ASC|DESC']
@@ -32,23 +33,45 @@ trait Model
     public function where($conditions, $limit = null, $offset = null, $orderBy = [])
     {
         try {
-            $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE'];
+            $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE', 'NOT IN', 'IN'];
             $data = [];
 
             $sql = "SELECT * FROM {$this->table} WHERE ";
 
             // Build the WHERE clause
-            foreach ($conditions as $condition) {
+
+            foreach ($conditions as $index => $condition) {
 
                 if (is_array($condition) && count($condition) == 3 && in_array($condition[1], $operators)) {
-                    $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
 
-                    $data[$condition[0]] = $condition[2];
+                    switch ($condition[1]) {
+                        case 'NOT IN':
+                        case 'IN':
+
+                            $placeholder = [];
+
+                            foreach($condition[2] as $k => $v){
+                               $key = "in_{$index}_{$k}";
+                               $data[$key] = $v;
+                               $placeholder[] = ":$key";
+                            }
+
+                            $sql .= "{$condition[0]} {$condition[1]} (". implode(', ', $placeholder) . ") AND ";
+
+                            break;
+                        
+                        default:
+                            $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
+                            $data[$condition[0]] = $condition[2];
+                            break;
+                    }
+
                 } else {
 
                     // Handle invalid condition format
                     return false;
                 }
+            
             }
 
             // Handle the trailing AND in the previous loop
@@ -63,8 +86,8 @@ trait Model
                 $sql .= " ORDER BY $field $direction ";
             }
             
-            $sql .= $limit ? "LIMIT $limit" : "";
-            $sql .= $offset ? "OFFSET $offset" : "";
+            $sql .= $limit ? " LIMIT $limit " : "";
+            $sql .= $offset ? " OFFSET $offset " : "";
 
             return $this->query($sql, $data);
         } catch (PDOException $e) {
