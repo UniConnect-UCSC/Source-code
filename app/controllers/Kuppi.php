@@ -8,20 +8,22 @@ class Kuppi extends Controller
 {
     public function index(){
         $usermodel = new User();
-        $kuppi = new KuppiModel();
-        $Kuppis = $kuppi->getKuppi();
+        $kuppimodel = new KuppiModel();
+        $Kuppis = $kuppimodel->getKuppi();
         $KuppiCategorymodel = new KuppiCategoryModel();
         $KuppiCategories = $KuppiCategorymodel->getAllKuppiCategories();
         $universitymodel = new University();
-  error_log('user_universityID: ' . print_r($_SESSION['user_universityID'], true));
-       foreach ($Kuppis as $kuppi) {
-            $host_name = $usermodel->getUserNameById($kuppi->host_id);
-            $kuppi->host_name = $host_name;
-            $university_id = $kuppi->university_id;
-            $kuppi->university = $universitymodel->getUniversityName($university_id);
-            $categoryObj = $KuppiCategorymodel->getKuppiCategoryById($kuppi->category_id);
-            $kuppi->category = $categoryObj ? $categoryObj->category_name : '';
-        }
+        error_log('kuppiCategories: ' . print_r($KuppiCategories, true));   
+        if(is_array($Kuppis)){
+            foreach ($Kuppis as $kuppi) {
+                $host_name = $usermodel->getUserNameById($kuppi->host_id);
+                $kuppi->host_name = $host_name;
+                $university_id = $kuppi->university_id;
+                $kuppi->university = $universitymodel->getUniversityName($university_id);
+                $categoryObj = $KuppiCategorymodel->getKuppiCategoryById($kuppi->category_id);
+                $kuppi->category = $categoryObj ? $categoryObj->category_name : '';
+            }
+        } 
 
  //changes to be made : university id to university name
 
@@ -75,7 +77,6 @@ class Kuppi extends Controller
             
                 // Add other necessary fields like university_id, image_url, etc.
             ];
-            error_log('user_universityID: ' . print_r($_SESSION['user_universityID'], true));
 
             // Insert the new Kuppi session into the database
             $insertedId = $kuppiModel->insert($data);
@@ -180,11 +181,13 @@ class Kuppi extends Controller
         $mykuppies = $kuppi->getMyKuppies($_SESSION['user_id']);
         $kuppiCategoryModel = new KuppiCategoryModel();
         $universitymodel = new University();
-        foreach ($mykuppies as $kuppi) {
-            $categoryObj = $kuppiCategoryModel->getKuppiCategoryById($kuppi->category_id);
-            $kuppi->category = $categoryObj ? $categoryObj->category_name : '';
-            $university_id = $kuppi->university_id;
-            $kuppi->university = $universitymodel->getUniversityName($university_id);
+        if(is_array($mykuppies)){
+            foreach ($mykuppies as $kuppi) {
+                $categoryObj = $kuppiCategoryModel->getKuppiCategoryById($kuppi->category_id);
+                $kuppi->category = $categoryObj ? $categoryObj->category_name : '';
+                $university_id = $kuppi->university_id;
+                $kuppi->university = $universitymodel->getUniversityName($university_id);
+            }
         }
         $this->view('my_kuppis', [
             'title' => 'My Kuppis',
@@ -208,12 +211,14 @@ class Kuppi extends Controller
         $kuppiRequests = $kuppiModel->getKuppiRequests();
         $KuppiCategorymodel = new KuppiCategoryModel();
         $KuppiCategories = $KuppiCategorymodel->getAllKuppiCategories();
+        if(is_array($kuppiRequests)){
+            foreach ($kuppiRequests as $kuppi) {
+                $kuppi->requester_name = (new User())->getUserNameById($kuppi->requester_id);
+                $categoryObj = $KuppiCategorymodel->getKuppiCategoryById($kuppi->category_id);
+                $kuppi->category = $categoryObj ? $categoryObj->category_name : '';
+                $kuppi->requester_university = $usermodel->getUserUniversityNameById($kuppi->requester_id);
+            }
 
-        foreach ($kuppiRequests as $kuppi) {
-            $kuppi->requester_name = (new User())->getUserNameById($kuppi->requester_id);
-            $categoryObj = $KuppiCategorymodel->getKuppiCategoryById($kuppi->category_id);
-            $kuppi->category = $categoryObj ? $categoryObj->category_name : '';
-            $kuppi->requester_university = $usermodel->getUserUniversityNameById($kuppi->requester_id);
         }
 
         $this->view('kuppi_requests', [
