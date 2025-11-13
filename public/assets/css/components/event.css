@@ -1,3 +1,7 @@
+.body-class:has(.modal.active){
+    overflow: hidden;
+}
+
 header {
     text-align: center;
     margin-bottom: var(--spacing-8);

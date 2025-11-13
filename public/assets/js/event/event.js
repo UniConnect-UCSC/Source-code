@@ -6,6 +6,9 @@ const searchInput = document.getElementById('searchInput');
 const filterButtons = document.querySelectorAll('#filterButtons .btn');
 const categoryWrapper = document.getElementById('categoryWrapper');
 
+// For hiding body scroll when modal is open
+document.body.classList.add('body-class');
+
 // Modal controls
 createEventBtn.addEventListener('click', () => {
     document.getElementById('modalHeaderName').innerText = "Create New Event";
