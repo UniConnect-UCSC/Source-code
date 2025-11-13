@@ -33,8 +33,6 @@ const formCategorySuggestionScroll = new InfinityScroll(
     '/event/scrollable',
     document.getElementById('categorySuggestions'),
     categorySuggestionRenderer,
-    0,
-    5
 );
 
 categoryScroll.loadNextElements();
