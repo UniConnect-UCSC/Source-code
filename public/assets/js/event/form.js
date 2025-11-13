@@ -82,7 +82,11 @@ if (clearBtn) clearBtn.addEventListener('click', clearImage);
 const categoryInput = document.getElementById('categoryInput');
 const selectedElement = document.getElementById('eventCategories');
 const suggestionsDiv = document.getElementById('categorySuggestions');
+const suggestionsWrapper = document.getElementById('categorySuggestionsWrapper');
+const loadingIndicator = document.getElementById('categoryLoadingIndicator');
 const selectedList = JSON.parse(selectedElement.value);
+var noMoreSuggestions = false;
+var isLoading = false;
 
 
 const dummyCategories = [
@@ -120,7 +124,7 @@ function renderSuggestions(suggestions){
         suggestionsDiv.appendChild(div);
     });
 
-    suggestionsDiv.classList.add('show');
+    suggestionsWrapper.classList.add('show');
 }
 
 function renderTags(){
@@ -171,7 +175,7 @@ function addCategory(selection){
 
     renderTags();
     updateHidden();
-    suggestionsDiv.classList.remove('show');
+    suggestionsWrapper.classList.remove('show');
     categoryInput.value = ''; 
 }
 
@@ -180,16 +184,17 @@ function filterAndRender(){
     const categoryInputValue = categoryInput.value;
 
     if(!categoryInputValue){
-        suggestionsDiv.classList.remove('show');
+        suggestionsWrapper.classList.remove('show');
         return;
     }
 
     formCategorySuggestionScroll.resetScroll();
+    noMoreSuggestions = false;
     formCategorySuggestionScroll.loadNextElements({
         'searchTerm': categoryInputValue,
         'excludeIds': selectedList.map(cat => cat.id)
     }).then(() => {
-        suggestionsDiv.classList.add('show');
+        suggestionsWrapper.classList.add('show');
     });
 
 }
@@ -207,5 +212,32 @@ categoryInput.addEventListener('keydown', (e) => {
             suggestions[0].click();
             return;
         } 
+    }
+});
+
+suggestionsWrapper.addEventListener('scroll', () => {
+    const { scrollTop, scrollHeight, clientHeight } = suggestionsWrapper;
+    const threshold = 20; //px
+
+    if (scrollTop + clientHeight >= scrollHeight - threshold && !noMoreSuggestions && !isLoading) {
+        
+        isLoading = true;
+
+        loadingIndicator.style.display = 'flex';
+
+        console.log( "loading indicator" + loadingIndicator.style.display);
+
+        formCategorySuggestionScroll.loadNextElements({
+            'searchTerm': categoryInput.value,
+            'excludeIds': selectedList.map(cat => cat.id)
+        }).then( result => {
+            if(!result){
+                console.log('No more suggestions to load');
+                noMoreSuggestions = true;
+            }
+            loadingIndicator.style.display = 'none';
+            console.log( "loading indicator" + loadingIndicator.style.display);
+            isLoading = false;
+        });
     }
 });

@@ -34,7 +34,20 @@
             <div class="category-picker" id="categoryPicker">
                 <div class="tag-list" id="selectedCategories"></div>
                 <input type="text" id="categoryInput" class="category-input" placeholder="Search categories..." />
-                <div id="categorySuggestions" class="suggestions-list" ></div>
+                <div>
+                    <div id="categorySuggestionsWrapper" class="suggestions-list">
+
+                        <div id="categorySuggestions">
+
+                        </div>
+
+                        <div id="categoryLoadingIndicator" class="loading-indicator">
+                            <div class="loading-spinner"></div>
+                            <span>Loading more</span>
+                        </div>
+                    </div>
+                        
+                </div>
                 <input type="hidden" id="eventCategories" name="eventCategories" value="[]" />
             </div>
             <small class="hint">Choose one or more. Type to search, click to add.</small>
