@@ -16,7 +16,7 @@ class UniversityFeed extends Controller
             $isAnonymous = (isset($_POST['isAnonymous']) && ($_POST['isAnonymous'] === '1' || $_POST['isAnonymous'] === 'true')) ? 1 : 0;
 
             // handle media upload
-            $mediaURL = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
+            $mediaURL = uploadImageToCloudinary($_FILES['media'] ?? null, 'uniconnect_posts');
 
             try {
                 $postModel = new UniversityPost();
@@ -52,7 +52,7 @@ class UniversityFeed extends Controller
             $isAnonymous = isset($_POST['is_anonymous']) ? (int)$_POST['is_anonymous'] : 0;
 
             // Handle file upload if present
-            $mediaUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
+            $mediaUrl = uploadImageToCloudinary($_FILES['media'] ?? null, 'uniconnect_posts');
 
 
             $updateData = [
