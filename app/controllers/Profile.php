@@ -16,7 +16,7 @@ class Profile extends Controller
             $isAnonymous = isset($_POST['is_anonymous']) ? (int)$_POST['is_anonymous'] : 0;
 
             // Handle file upload if present
-            $mediaUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
+            $mediaUrl = uploadImageToCloudinary($_FILES['media'] ?? null, 'uniconnect_posts');
 
             $updateData = [
                 'caption' => $caption,
