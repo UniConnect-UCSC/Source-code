@@ -15,16 +15,18 @@ class Home extends Controller
             $isAnonymous = (isset($_POST['isAnonymous']) && ($_POST['isAnonymous'] === '1' || $_POST['isAnonymous'] === 'true')) ? 1 : 0;
 
             // handle media upload
-            $mediaURL = uploadImageToCloudinary($_FILES['media'], 'uniconnect_post');
+            $mediaURL = uploadImageToCloudinary($_FILES['media'] ?? null, 'uniconnect_post');
 
             try {
                 $postModel = new GlobalPost();
-                $insertId = $postModel->insert([
+                $insertData = [
                     'user_id' => $_SESSION['user_id'],
                     'caption'   => $caption,
                     'is_anonymous' => $isAnonymous,
                     'media_url' => $mediaURL,
-                ]);
+                ];
+
+                $insertId = $postModel->insert(array_keys($insertData), [array_values($insertData)]);
 
                 echo json_encode([
                     'success' => true,
@@ -56,7 +58,7 @@ class Home extends Controller
             $isAnonymous = isset($_POST['is_anonymous']) ? (int)$_POST['is_anonymous'] : 0;
 
             // Handle file upload if present
-            $mediaUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
+            $mediaUrl = uploadImageToCloudinary($_FILES['media'] ?? null, 'uniconnect_posts');
 
 
             $updateData = [

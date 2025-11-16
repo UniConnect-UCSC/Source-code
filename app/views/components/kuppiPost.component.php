@@ -12,11 +12,11 @@
         <?php if (!empty($topic)): ?>
         <h3 class="post-topic"><?= htmlspecialchars($topic) ?></h3>
         <?php endif; ?>
-        <!-- <?php if (isset($university)): ?>
+        <?php if (isset($university)): ?>
             <p class="post-university"><?= htmlspecialchars($university ?? 'Unknown University') ?></p>
         <?php else: ?>
             <p class="post-university">Unknown University</p>
-        <?php endif; ?> -->
+        <?php endif; ?>
         <?php if (isset($category)): ?>
         <p class="post-category"><?= htmlspecialchars($category) ?></p>
         <?php endif; ?>

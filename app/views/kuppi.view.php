@@ -1,5 +1,7 @@
+
+// ...existing code...
 <script>
-const kuppiCategories = <?= json_encode($kuppiCategories) ?>;
+const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCategories ?? []))); ?>;
 </script>
 <script src="/assets/js/kuppi.js"></script>
 <?php component("navbar"); ?>

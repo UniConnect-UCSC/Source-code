@@ -53,7 +53,7 @@ class Marketplace extends Controller
                 $imageModel = new MarketplaceItemImage();
 
                 // Handle media upload to Cloudinary
-                $mediaURL = uploadImageToCloudinary($tmpPath, 'uniconnect_marketplace');
+                $mediaURL = uploadImageToCloudinary($_FILES['media'] ?? null, 'uniconnect_marketplace');
 
                 if(!$mediaURL){
                     throw new Exception('Failed to upload file');
@@ -83,7 +83,7 @@ class Marketplace extends Controller
                         'image_url' => $mediaURL,
                         'marketplace_item_id' => $itemId->id
                     ];
-                    $imageResult = $imageModel->insert($imageData);
+                    $imageResult = $imageModel->insert(array_keys($imageData), [array_values($imageData)]);
 
                     if (!$imageResult) {
                         error_log('Failed to insert image for item ' . $itemId->id);
@@ -140,7 +140,7 @@ class Marketplace extends Controller
                 // 'category_id' => $itemCategoryID,
             ];
 
-            $mediaUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_marketplace');
+            $mediaUrl = uploadImageToCloudinary($_FILES['media'] ?? null, 'uniconnect_marketplace');
 
             $itemModel->update($itemId, $itemData);
 
