@@ -19,12 +19,14 @@ class Home extends Controller
 
             try {
                 $postModel = new GlobalPost();
-                $insertId = $postModel->insert([
+                $insertData = [
                     'user_id' => $_SESSION['user_id'],
                     'caption'   => $caption,
                     'is_anonymous' => $isAnonymous,
                     'media_url' => $mediaURL,
-                ]);
+                ];
+
+                $insertId = $postModel->insert(array_keys($insertData), [array_values($insertData)]);
 
                 echo json_encode([
                     'success' => true,

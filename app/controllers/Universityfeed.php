@@ -20,13 +20,15 @@ class UniversityFeed extends Controller
 
             try {
                 $postModel = new UniversityPost();
-                $insertId = $postModel->insert([
+                $insertdata = [
                     'user_id' => $_SESSION['user_id'],
                     'caption'   => $caption,
                     'is_anonymous' => $isAnonymous,
                     'media_url' => $mediaURL,
                     'university_id' => $_SESSION['user_universityID'],
-                ]);
+                ];
+                
+                $insertId = $postModel->insert( array_keys($insertdata), [array_values($insertdata)]);
 
                 echo json_encode([
                     'success' => true,
