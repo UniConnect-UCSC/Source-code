@@ -83,7 +83,7 @@ class Marketplace extends Controller
                         'image_url' => $mediaURL,
                         'marketplace_item_id' => $itemId->id
                     ];
-                    $imageResult = $imageModel->insert($imageData);
+                    $imageResult = $imageModel->insert(array_keys($imageData), [array_values($imageData)]);
 
                     if (!$imageResult) {
                         error_log('Failed to insert image for item ' . $itemId->id);

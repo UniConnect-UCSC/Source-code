@@ -50,7 +50,7 @@ class EventModel
             return false;
         }
 
-        return $this->insert($data);
+        return $this->insert(array_keys($data), [array_values($data)]);
     }
 
     public function getUniUpcomingEvents($universityId , $limit, $offset){

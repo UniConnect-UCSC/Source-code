@@ -107,14 +107,30 @@ trait Model
         }
     }
 
-    public function insert($data)
+    /**
+     * Handles both single and multiple row inserts
+     * @param array $columns simple array with column names ["col1", "col2", ...]
+     * @param array $data a array of arrays with the column order maintained [[val1, val2, ...], [val1, val2, ...], ...]
+     */
+    public function insert($columns, $data = [])
     {
         try {
-            $keys = array_keys($data);
-            $columns = implode(", ", $keys);
-            $placeholders = implode(", ", array_map(fn($key) => ":$key", $keys));
-            $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
-            return $this->query($sql, $data);
+            $sql = "INSERT INTO {$this->table} (". implode(", ", $columns) .") VALUES ";
+
+            $passedData = [];            
+
+            foreach($data as $i => $row){
+                $placeholders = [];
+                foreach($row as $j => $value){
+                    $key = "{$columns[$j]}_{$i}";
+                    $placeholders[] = ":$key";
+                    $passedData[$key] = $value;
+                }
+                $sql .= "(". implode(", ", $placeholders) ."), ";
+            }
+            $sql = rtrim($sql, ", "); 
+
+            return $this->query($sql, $passedData);
         } catch (PDOException $e) {
             die("INSERT failed: " . $e->getMessage());
         }
