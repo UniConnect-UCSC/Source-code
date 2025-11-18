@@ -3,18 +3,8 @@ const closeModalBtn = document.getElementById('closeModalBtn');
 const eventForm = document.getElementById('eventForm');
 
 closeModalBtn.addEventListener('click', () => {
-    formEventModal.classList.remove('active');
-    eventForm.reset();
+    resetEventModal();
 });
-
-/*
-formEventModal.addEventListener('click', (e) => {
-    if (e.target === formEventModal) {
-        formEventModal.classList.remove('active');
-        eventForm.reset(); 
-    }
-});
-*/
 
 eventForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -41,8 +31,8 @@ eventForm.addEventListener('submit', async (e) => {
         console.error('Error creating event:', $response);
     }
 
-    eventForm.reset();
-    formEventModal.classList.remove('active');
+    // Close and fully reset modal state (clear image + empty categories)
+    resetEventModal();
 });
 
 // Image preview handling
@@ -52,12 +42,12 @@ const previewImg = document.getElementById('eventImagePreview');
 const clearBtn = document.getElementById('clearEventImageBtn');
 
 function clearImage(){
-if (!imgInput) return;
-imgInput.value = '';
-if (previewWrapper && previewImg) {
-    previewImg.removeAttribute('src');
-    previewWrapper.style.display = 'none';
-}
+    if (!imgInput) return;
+    imgInput.value = '';
+    if (previewWrapper && previewImg) {
+        previewImg.removeAttribute('src');
+        previewWrapper.style.display = 'none';
+    }
 }
 
 if (imgInput) {
@@ -84,7 +74,7 @@ const selectedElement = document.getElementById('eventCategories');
 const suggestionsDiv = document.getElementById('categorySuggestions');
 const suggestionsWrapper = document.getElementById('categorySuggestionsWrapper');
 const loadingIndicator = document.getElementById('categoryLoadingIndicator');
-const selectedList = JSON.parse(selectedElement.value);
+const selectedList = [];
 var noMoreSuggestions = false;
 var isLoading = false;
 
@@ -127,7 +117,7 @@ function removeCategory(selection){
 }
 
 function updateHidden(){
-    selectedElement.value = JSON.stringify(selectedList);
+    selectedElement.value = JSON.stringify(selectedList.map(cat => cat.id));
 }
 
 function addCategory(selection){
@@ -186,8 +176,6 @@ suggestionsWrapper.addEventListener('scroll', () => {
 
         loadingIndicator.style.display = 'flex';
 
-        console.log( "loading indicator" + loadingIndicator.style.display);
-
         formCategorySuggestionScroll.loadNextElements({
             'searchTerm': categoryInput.value,
             'excludeIds': selectedList.map(cat => cat.id)
@@ -197,8 +185,23 @@ suggestionsWrapper.addEventListener('scroll', () => {
                 noMoreSuggestions = true;
             }
             loadingIndicator.style.display = 'none';
-            console.log( "loading indicator" + loadingIndicator.style.display);
             isLoading = false;
         });
     }
 });
+
+function resetEventModal(){
+    eventForm.reset();
+    clearImage();
+
+    selectedList.length = 0;
+    renderTags();
+    updateHidden();
+
+    // Hide suggestions and clear input
+    categoryInput.value = '';
+    suggestionsWrapper.classList.remove('show');
+
+    // Close modal
+    formEventModal.classList.remove('active');
+}
