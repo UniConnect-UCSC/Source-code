@@ -28,17 +28,44 @@ trait Model
      * @param int $limit [DEFAULT: queries EVERYTHING]
      * @param int $offset [DEFAULT: 0]
      * @param array $orderBy Array of fields to order by with direction [field => 'ASC|DESC']
-     * Note: In this method only the condition inputs are prepared for execution
+     * @param array $join Array of join definitions in format [[ <join_table_name>, <join_condition>, <JOIN_TYPE>, <alias> ] , [] ,]
+     * DEFAULT join_condition is main_table.id = join_table.id
+     * DEFAULT JOIN_TYPE is INNER
+     * DEFAULT alias is none
+     * 
+     * Note(CONDITIONS): In this method only the condition inputs are prepared for execution
+     * Note(JOIN): make sure to add the aliases if join is used. the main table is aliased as 'm'
+     * NOTE(JOIN): if the joining tables have the same column name the result will have the last one overwriting previous ones
      */
-    public function where($conditions, $limit = null, $offset = null, $orderBy = [])
+    public function where($conditions, $limit = null, $offset = null, $orderBy = [], $join = [])
     {
         try {
             $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE', 'NOT IN', 'IN'];
+            $joinTypes = ['INNER', 'LEFT', 'RIGHT', 'FULL'];
+            $mainTableAlias = 'm';
+            $joined = false;
+
             $data = [];
 
-            $sql = "SELECT * FROM {$this->table} WHERE ";
+            $sql = "SELECT * FROM {$this->table} ";
+
+            // Handle JOINs
+            if (!empty($join)) {
+                $sql .= "AS {$mainTableAlias} ";
+                $joined = true;
+            }
+
+            foreach($join as $joinItem){
+                
+                $joinType = in_array($joinItem[2], $joinTypes) ? $joinItem[2] : 'INNER';
+                $alias = isset($joinItem[3]) ? " AS {$joinItem[3]} " : "";
+                $joinCondition = isset($joinItem[1]) ? $joinItem[1] : "{$this->table}.id = {$joinItem[0]}.id";
+
+                $sql .= "{$joinType} JOIN {$joinItem[0]}{$alias} ON {$joinCondition} ";
+            }
 
             // Build the WHERE clause
+            $sql .= "WHERE ";
 
             foreach ($conditions as $index => $condition) {
 
@@ -61,8 +88,18 @@ trait Model
                             break;
                         
                         default:
-                            $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
-                            $data[$condition[0]] = $condition[2];
+
+                            $affectedCol = $condition[0];
+
+                            if ($joined){
+                                $result = explode('.', $condition[0]);
+                                if (count($result) == 2){
+                                    $affectedCol = $result[0] . '_' . $result[1];
+                                }
+                            }
+
+                            $sql .= "{$condition[0]} {$condition[1]} :{$affectedCol} AND ";
+                            $data[$affectedCol] = $condition[2];
                             break;
                     }
 
