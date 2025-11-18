@@ -35,12 +35,15 @@ trait Model
      * 
      * Note(CONDITIONS): In this method only the condition inputs are prepared for execution
      * Note(JOIN): make sure to add the aliases if join is used. the main table is aliased as 'm'
+     * NOTE(JOIN): if the joining tables have the same column name the result will have the last one overwriting previous ones
      */
     public function where($conditions, $limit = null, $offset = null, $orderBy = [], $join = [])
     {
         try {
             $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE', 'NOT IN', 'IN'];
             $joinTypes = ['INNER', 'LEFT', 'RIGHT', 'FULL'];
+            $mainTableAlias = 'm';
+            $joined = false;
 
             $data = [];
 
@@ -48,7 +51,8 @@ trait Model
 
             // Handle JOINs
             if (!empty($join)) {
-                $sql .= "AS m ";
+                $sql .= "AS {$mainTableAlias} ";
+                $joined = true;
             }
 
             foreach($join as $joinItem){
@@ -84,8 +88,18 @@ trait Model
                             break;
                         
                         default:
-                            $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
-                            $data[$condition[0]] = $condition[2];
+
+                            $affectedCol = $condition[0];
+
+                            if ($joined){
+                                $result = explode('.', $condition[0]);
+                                if (count($result) == 2){
+                                    $affectedCol = $result[0] . '_' . $result[1];
+                                }
+                            }
+
+                            $sql .= "{$condition[0]} {$condition[1]} :{$affectedCol} AND ";
+                            $data[$affectedCol] = $condition[2];
                             break;
                     }
 
