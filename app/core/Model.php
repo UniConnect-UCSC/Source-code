@@ -276,8 +276,6 @@ trait Model
 
             $sql .= "TRUE ";
 
-            error_log("Delete SQL: " . $sql);
-
             return $this->query($sql, $data);
         } catch (PDOException $e) {
             die("DELETE failed: " . $e->getMessage());
