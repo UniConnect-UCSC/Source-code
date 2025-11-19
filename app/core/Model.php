@@ -77,7 +77,6 @@ trait Model
 
             // Handle JOINs
             if (!empty($join)) {
-                $sql .= "AS {$mainTableAlias} ";
                 $joined = true;
             }
 
