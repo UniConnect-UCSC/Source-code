@@ -8,6 +8,8 @@ trait Model
 
     private $limit = 10;
     private $offset = 0;
+    private $defaultIdColumn = 'id';
+    private $softDeleteColumn = 'deleted_at';
 
     public function __construct()
     {
@@ -29,6 +31,8 @@ trait Model
      * @param int $offset [DEFAULT: 0]
      * @param array $orderBy Array of fields to order by with direction [field => 'ASC|DESC']
      * @param array $join Array of join definitions in format [[ <join_table_name>, <join_condition>, <JOIN_TYPE>, <alias> ] , [] ,]
+     * @param array $selected Array of field and aliases(not required)  [[<Column_name>, <Alias>], [], ..] OR ["column_","",...]
+     * @param bool $showDeleted If true, includes soft-deleted records; if false, excludes them
      * DEFAULT join_condition is main_table.id = join_table.id
      * DEFAULT JOIN_TYPE is INNER
      * DEFAULT alias is none
@@ -37,29 +41,52 @@ trait Model
      * Note(JOIN): make sure to add the aliases if join is used. the main table is aliased as 'm'
      * NOTE(JOIN): if the joining tables have the same column name the result will have the last one overwriting previous ones
      */
-    public function where($conditions, $limit = null, $offset = null, $orderBy = [], $join = [])
+    public function where($conditions, $limit = null, $offset = null, $orderBy = [], $join = [], $selected = [], $showDeleted = true)
     {
         try {
-            $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE', 'NOT IN', 'IN'];
+            $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE', 'NOT IN', 'IN', 'IS'];
+            $allowedIsValues = ['NULL', 'NOT NULL', 'TRUE', 'FALSE'];
             $joinTypes = ['INNER', 'LEFT', 'RIGHT', 'FULL'];
             $mainTableAlias = 'm';
             $joined = false;
+            $softDeleteColumn = $this->softDeleteColumn;
 
             $data = [];
 
-            $sql = "SELECT * FROM {$this->table} ";
+            $sql = "SELECT "; 
+
+            //Handle selections
+            if(!empty($selected)){
+                foreach($selected as $column){
+                    
+                    if(is_array($column)){
+
+                        $sql .= "$column[0] AS $column[1], ";
+                    }else{
+
+                        $sql .=  "$column, ";
+                    }
+                }
+
+                $sql = rtrim($sql, ", ");
+                $sql .= " ";
+
+            }else{
+                $sql .= "* ";
+            }
+
+            $sql .= "FROM {$this->table} AS {$mainTableAlias} ";
 
             // Handle JOINs
             if (!empty($join)) {
-                $sql .= "AS {$mainTableAlias} ";
                 $joined = true;
             }
 
             foreach($join as $joinItem){
                 
                 $joinType = in_array($joinItem[2], $joinTypes) ? $joinItem[2] : 'INNER';
-                $alias = isset($joinItem[3]) ? " AS {$joinItem[3]} " : "";
-                $joinCondition = isset($joinItem[1]) ? $joinItem[1] : "{$this->table}.id = {$joinItem[0]}.id";
+                $alias = (isset($joinItem[3]) && !empty($joinItem[3])) ? " AS {$joinItem[3]} " : "";
+                $joinCondition = (isset($joinItem[1]) && !empty($joinItem[1])) ? $joinItem[1] : "{$this->table}.id = {$joinItem[0]}.id";
 
                 $sql .= "{$joinType} JOIN {$joinItem[0]}{$alias} ON {$joinCondition} ";
             }
@@ -67,11 +94,27 @@ trait Model
             // Build the WHERE clause
             $sql .= "WHERE ";
 
+            // Handle soft delete
+            if (!$showDeleted) {
+                $conditions[] = [$joined ? "{$mainTableAlias}.{$softDeleteColumn}" : $softDeleteColumn, 'IS', 'NULL'];
+            }
+
             foreach ($conditions as $index => $condition) {
 
                 if (is_array($condition) && count($condition) == 3 && in_array($condition[1], $operators)) {
 
                     switch ($condition[1]) {
+                        case 'IS':
+                            if(in_array($condition[2],$allowedIsValues)){
+                                $sql .= "$condition[0] $condition[1] $condition[2] AND ";
+
+                            }else{
+                                throw new Error("Invalid IS operator value {$condition[2]}");
+                            }
+                            
+                            break;
+
+
                         case 'NOT IN':
                         case 'IN':
 
@@ -199,11 +242,41 @@ trait Model
         }
     }
 
-    public function delete($id, $id_column = 'id')
+    /**
+     * @param mixed $data Can be either an id value or an array of conditions in format [field ,operator, value]]
+     * @param bool $softDelete If true, performs a soft delete by setting deleted_at timestamp; if false, performs a hard delete
+     * NOTE: Soft delete requires a 'deleted_at' column in the table
+     * NOTE: soft delete currently set to false by default to avoid breaking existing code. Change to true once usages are implemented properly
+     */
+    public function delete($conditionData, $softDelete = false)
     {
+        $softDeleteColumn = $this->softDeleteColumn;        
+        $defaultIdColumn = $this->defaultIdColumn;
+
+        // Convenience method to delete by id
+        if (!is_array($conditionData)){
+            $conditionData = [[$defaultIdColumn, '=', $conditionData]];
+        }
+
         try {
-            $sql = "DELETE FROM {$this->table} WHERE $id_column = :id";
-            return $this->query($sql, ['id' => $id]);
+            $sql = "";
+
+            if($softDelete){
+                $sql = "UPDATE {$this->table} SET deleted_at = NOW() WHERE ";
+            }else{
+                $sql = "DELETE FROM {$this->table} WHERE ";
+            }
+
+            $data = [];
+
+            foreach ($conditionData as $condition) {
+                $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
+                $data[$condition[0]] = $condition[2];
+            }
+
+            $sql .= "TRUE ";
+
+            return $this->query($sql, $data);
         } catch (PDOException $e) {
             die("DELETE failed: " . $e->getMessage());
         }
