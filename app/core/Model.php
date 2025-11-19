@@ -58,8 +58,8 @@ trait Model
             foreach($join as $joinItem){
                 
                 $joinType = in_array($joinItem[2], $joinTypes) ? $joinItem[2] : 'INNER';
-                $alias = isset($joinItem[3]) ? " AS {$joinItem[3]} " : "";
-                $joinCondition = isset($joinItem[1]) ? $joinItem[1] : "{$this->table}.id = {$joinItem[0]}.id";
+                $alias = (isset($joinItem[3]) && !empty($joinItem[3])) ? " AS {$joinItem[3]} " : "";
+                $joinCondition = (isset($joinItem[1]) && !empty($joinItem[1])) ? $joinItem[1] : "{$this->table}.id = {$joinItem[0]}.id";
 
                 $sql .= "{$joinType} JOIN {$joinItem[0]}{$alias} ON {$joinCondition} ";
             }
