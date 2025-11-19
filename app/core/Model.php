@@ -8,6 +8,8 @@ trait Model
 
     private $limit = 10;
     private $offset = 0;
+    private $defaultIdColumn = 'id';
+    private $softDeleteColumn = 'deleted_at';
 
     public function __construct()
     {
@@ -240,11 +242,43 @@ trait Model
         }
     }
 
-    public function delete($id, $id_column = 'id')
+    /**
+     * @param mixed $data Can be either an id value or an array of conditions in format [field ,operator, value]]
+     * @param bool $softDelete If true, performs a soft delete by setting deleted_at timestamp; if false, performs a hard delete
+     * NOTE: Soft delete requires a 'deleted_at' column in the table
+     * NOTE: soft delete currently set to false by default to avoid breaking existing code. Change to true once usages are implemented properly
+     */
+    public function delete($conditionData, $softDelete = false)
     {
+        $softDeleteColumn = $this->softDeleteColumn;        
+        $defaultIdColumn = $this->defaultIdColumn;
+
+        // Convenience method to delete by id
+        if (!is_array($conditionData)){
+            $conditionData = [[$defaultIdColumn, '=', $conditionData]];
+        }
+
         try {
-            $sql = "DELETE FROM {$this->table} WHERE $id_column = :id";
-            return $this->query($sql, ['id' => $id]);
+            $sql = "";
+
+            if($softDelete){
+                $sql = "UPDATE {$this->table} SET deleted_at = NOW() WHERE ";
+            }else{
+                $sql = "DELETE FROM {$this->table} WHERE ";
+            }
+
+            $data = [];
+
+            foreach ($conditionData as $condition) {
+                $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
+                $data[$condition[0]] = $condition[2];
+            }
+
+            $sql .= "TRUE ";
+
+            error_log("Delete SQL: " . $sql);
+
+            return $this->query($sql, $data);
         } catch (PDOException $e) {
             die("DELETE failed: " . $e->getMessage());
         }
