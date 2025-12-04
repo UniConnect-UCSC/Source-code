@@ -34,12 +34,38 @@ class EventModel
         return $this->where(['university_id' => $universityId]);
     }
 
-    public function getEvents($limit, $offset, $categories = []){
+    public function getUpcomingEvents($limit, $offset, $categories = []){
 
-        
+        $conditions = [
+            ['event_timestamp', '>=', date('Y-m-d H:i:s', time())]
+        ];
 
-        return $this->findAll(limit: $limit, offset: $offset);
+        $join = [];
+        $selected = [];
 
+        $join = [
+            ["universities", "m.university_id = u.id", "INNER", "u"],
+            ["favorite_events", ["m.id = f.event_id", ["f.user_id", "=", $_SESSION["user_id"]]], "LEFT", "f"]
+        ];
+
+        $selected = [
+            "m.*",
+            ["u.name", "university_name"],
+            ["CASE WHEN f.event_id IS NULL THEN 0 ELSE 1 END", "is_favorite"]
+        ];
+
+        $tempData = $this->where(
+            conditions: $conditions,
+            limit: $limit,
+            offset: $offset,
+            orderBy: ['event_timestamp' => 'ASC'],
+            join: $join,
+            selected: $selected,
+            showDeleted: false
+        );
+
+        error_log(print_r($tempData, true));
+        return $tempData;
     }
 
     public function createEvent($data){
@@ -72,7 +98,7 @@ class EventModel
     }
 
     public function deleteEvent($eventId){
-        return $this->delete($eventId, 'id');
+        return $this->delete($eventId, softDelete: true);
     }
 
 }

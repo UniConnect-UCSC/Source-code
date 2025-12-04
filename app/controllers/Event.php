@@ -10,13 +10,8 @@ class Event extends Controller
     {
 
         $eventModel = new EventModel();
-        $response = $eventModel->getEvents($limit, $offset);
+        $response = $eventModel->getUpcomingEvents($limit, $offset, $categories);
         $universityModel = new University();
-
-        foreach ($response as $event) {
-
-            $event->university_name = $universityModel->getUniversityName($event->university_id);
-        }
         return $response;
     }
 
