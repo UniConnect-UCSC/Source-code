@@ -36,6 +36,7 @@ trait Model
      * DEFAULT join_condition is main_table.id = join_table.id
      * DEFAULT JOIN_TYPE is INNER
      * DEFAULT alias is none
+     * Note(JOIN-Condition): can be either a string(Ex: "u.event_id = j.id") or an array of conditions in format ["u.event_id = j.id", [field ,operator, value]] (useful for parameterized join conditions)
      * 
      * Note(CONDITIONS): In this method only the condition inputs are prepared for execution
      * Note(JOIN): make sure to add the aliases if join is used. the main table is aliased as 'm'
@@ -67,8 +68,7 @@ trait Model
                         $sql .=  "$column, ";
                     }
                 }
-
-                $sql = rtrim($sql, ", ");
+                $sql = substr($sql, 0, -2);
                 $sql .= " ";
 
             }else{
@@ -82,13 +82,31 @@ trait Model
                 $joined = true;
             }
 
-            foreach($join as $joinItem){
+            foreach($join as $joinCount => $joinItem){
                 
                 $joinType = in_array($joinItem[2], $joinTypes) ? $joinItem[2] : 'INNER';
                 $alias = (isset($joinItem[3]) && !empty($joinItem[3])) ? " AS {$joinItem[3]} " : "";
                 $joinCondition = (isset($joinItem[1]) && !empty($joinItem[1])) ? $joinItem[1] : "{$this->table}.id = {$joinItem[0]}.id";
 
-                $sql .= "{$joinType} JOIN {$joinItem[0]}{$alias} ON {$joinCondition} ";
+                $sql .= "{$joinType} JOIN {$joinItem[0]}{$alias} ON ";
+
+                // ["m.university_id", "=", "u.id"]
+                if(is_array($joinCondition)){
+                    foreach($joinCondition as $joinCondCount => $cond){
+                        
+                        if(is_array($cond)){
+                            $key = "join_{$joinCount}_cond_{$joinCondCount}";
+                            $data[$key] = $cond[2];
+                            $sql .= "{$cond[0]} {$cond[1]} :{$key} AND ";
+                        }else{
+                            $sql .= "{$cond} AND ";
+                        }
+
+                    }
+                    $sql = substr($sql, 0, -4);
+                }else{
+                    $sql .= "{$joinCondition} ";
+                }
             }
 
             // Build the WHERE clause
