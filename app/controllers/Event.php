@@ -57,6 +57,20 @@ class Event extends Controller
         $mappingModel = new EventCategoryMappingModel();
         $mappingModel->mapEventToCategory($eventId, $categories);
     }
+
+    private function toggleEventFavorite($eventId, $userId, $currentStatus){
+        require_once(__DIR__ . "/../models/favoriteEvents.php");
+        $favoriteModel = new FavoriteEventsModel();
+
+        if($currentStatus){
+            $favoriteModel->removeFavorite($userId, $eventId);
+            return false;
+        }else{
+            $favoriteModel->addFavorite($userId, $eventId);
+            return true;
+        }
+    }
+
     
     public function getRepEvents($limit, $offset){
 
@@ -215,6 +229,29 @@ class Event extends Controller
         echo json_encode(["status" => "success"]);
     }
 
+    public function toggle(){
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $data = parseRequestData();
+            header('Content-Type: application/json');
+
+            error_log("Toggle request data: " . print_r($data, true));
+
+            switch($data['action']){
+                case 'favorite':
+                    $response = $this->toggleEventFavorite($data['event_id'], $_SESSION['user_id'], $data['current_status']);
+                    echo json_encode(['newStatus' => $response]);
+                    break;
+
+                case 'participate':
+
+                default:
+                    http_response_code(400);
+                    echo json_encode(['error' => 'Invalid action']);
+                    exit;
+            }
+            
+        }
+    }
 
     public function scrollable(){
 
