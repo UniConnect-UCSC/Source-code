@@ -52,6 +52,11 @@ class Event extends Controller
         }
     }
 
+    private function addCategoryMappings($eventId, $categories){
+        require_once(__DIR__ . "/../models/favoriteEvents.php");
+        $mappingModel = new EventCategoryMappingModel();
+        $mappingModel->mapEventToCategory($eventId, $categories);
+    }
     
     public function getRepEvents($limit, $offset){
 
@@ -168,6 +173,7 @@ class Event extends Controller
         header('Content-Type: application/json');
 
         $data = parseRequestData();
+        $data["eventCategories"] = json_decode($data['eventCategories'], true); // Decode JSON string to array
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             echo json_encode(['error' => 'Invalid request method']); 
@@ -194,16 +200,21 @@ class Event extends Controller
         ];
 
         $eventModel = new EventModel();
-        $result = $eventModel->createEvent($eventData);
+        $eventId = $eventModel->createEvent($eventData);
 
-        if ($result) {
-            echo json_encode(["status" => "success"]);
-        } else {
+        if (!$eventId) {
             http_response_code(500);
             echo json_encode($error);
+        } 
 
+        // Handle event categories
+        if (!empty($data["eventCategories"])){
+            $this->addCategoryMappings($eventId, $data["eventCategories"]);
         }
+
+        echo json_encode(["status" => "success"]);
     }
+
 
     public function scrollable(){
 
