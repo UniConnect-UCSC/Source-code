@@ -209,6 +209,7 @@ trait Model
      * Handles both single and multiple row inserts
      * @param array $columns simple array with column names ["col1", "col2", ...]
      * @param array $data a array of arrays with the column order maintained [[val1, val2, ...], [val1, val2, ...], ...]
+     * Can be sent as [val1, val2, ...] for single row inserts
      */
     public function insert($columns, $data = [])
     {
@@ -216,6 +217,10 @@ trait Model
             $sql = "INSERT INTO {$this->table} (". implode(", ", $columns) .") VALUES ";
 
             $passedData = [];            
+
+            if(!is_array($data[0])){
+                $data = [$data];
+            }
 
             foreach($data as $i => $row){
                 $placeholders = [];
