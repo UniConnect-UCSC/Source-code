@@ -66,6 +66,22 @@ class Event extends Controller
         }
     }
 
+    private function toggleEventParticipation($eventId, $userId, $currentStatus){
+        require_once(__DIR__ . "/../models/eventParticipation.php");
+        $participationModel = new EventParticipationModel();
+        $response = [];
+
+        if($currentStatus){
+            $response['participantCount'] = $participationModel->removeParticipation($userId, $eventId);
+            $response['newStatus'] = false;
+        }else{
+            $response['participantCount'] = $participationModel->addParticipation($userId, $eventId);
+            $response['newStatus'] = true;
+        }
+
+        return $response;
+    }
+
     
     public function getRepEvents($limit, $offset){
 
@@ -238,6 +254,9 @@ class Event extends Controller
                     break;
 
                 case 'participate':
+                    $response = $this->toggleEventParticipation($data['event_id'], $_SESSION['user_id'], $data['current_status']);
+                    echo json_encode(['newStatus' => $response['newStatus'], 'participantCount' => $response['participantCount']]);
+                    break;
 
                 default:
                     http_response_code(400);

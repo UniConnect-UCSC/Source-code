@@ -197,6 +197,13 @@ select:focus {
     color: var(--color-brand-700);
 }
 
+/* Participants pill button active state */
+.participants-btn.active {
+    background: var(--color-brand-50);
+    border-color: var(--color-brand-300);
+    color: var(--color-brand-700);
+}
+
 /* Participants pill button */
 .pill-btn {
     display: inline-flex;

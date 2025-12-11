@@ -8,7 +8,7 @@ function eventCardRenderer($data){
     const id = $data.id || $data.event_id || '';
     const mediaUrl = $data.media_url || '';
     const participantsCount = Number(
-        $data.participants_count ?? $data.attendees_count ?? $data.attendees ?? $data.participants ?? 0
+        $data.participant_count ?? $data.attendees_count ?? $data.attendees ?? $data.participants ?? 0
     );
     const isFavorite = Boolean($data.is_favorite ?? $data.favorite ?? false);
     const isParticipating = Boolean($data.is_participating ?? $data.participating ?? false);
@@ -124,7 +124,8 @@ function eventCardRenderer($data){
             bubbles: true,
             detail: {
                 eventId: id,
-                current: participantsBtn.classList.contains('active')
+                current: participantsBtn.classList.contains('active'),
+                element: participantsBtn
             }
         });
         participantsBtn.dispatchEvent(ev);

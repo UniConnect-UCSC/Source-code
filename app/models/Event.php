@@ -25,6 +25,18 @@ class EventModel
         return $this->first(['id' => $id]);
     }
 
+    public function getParticipantCount($eventId){
+        $event = $this->getEvent($eventId);
+        return $event ? $event->participant_count : null;
+    }
+
+    public function incrementParticipantCount($eventId, $incrementType = true) {
+        // Increment or decrement based on $incrementType 
+
+        $amount = $incrementType ? 1 : -1;
+        return $this->increment(id: $eventId, column: 'participant_count', amount: $amount);
+
+    }
     public function getEventUni($id){
         $event = $this->getEvent($id);
         return $event ? $event->university_id : null;
@@ -45,13 +57,15 @@ class EventModel
 
         $join = [
             ["universities", "m.university_id = u.id", "INNER", "u"],
-            ["favorite_events", ["m.id = f.event_id", ["f.user_id", "=", $_SESSION["user_id"]]], "LEFT", "f"]
+            ["favorite_events", ["m.id = f.event_id", ["f.user_id", "=", $_SESSION["user_id"]]], "LEFT", "f"],
+            ["event_participations", ["m.id = p.event_id", ["p.user_id", "=", $_SESSION["user_id"]]], "LEFT", "p"]
         ];
 
         $selected = [
             "m.*",
             ["u.name", "university_name"],
-            ["CASE WHEN f.event_id IS NULL THEN 0 ELSE 1 END", "is_favorite"]
+            ["CASE WHEN f.event_id IS NULL THEN 0 ELSE 1 END", "is_favorite"],
+            ["CASE WHEN p.event_id IS NULL THEN 0 ELSE 1 END", "is_participating"]
         ];
 
         $tempData = $this->where(
