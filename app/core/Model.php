@@ -260,6 +260,19 @@ trait Model
         }
     }
 
+    // For decrementing/incrementing numeric columns
+    // Use negative $amount for decrementing
+    public function increment($id, $column, $amount = 1, $id_column = 'id')
+    {
+        try {
+            $sql = "UPDATE {$this->table} SET $column = $column + :amount WHERE $id_column = :id";
+            $data = ['amount' => $amount, 'id' => $id];
+            return $this->query($sql, $data);
+        } catch (PDOException $e) {
+            die("INCREMENT failed: " . $e->getMessage());
+        }
+    }
+
     /**
      * @param mixed $data Can be either an id value or an array of conditions in format [field ,operator, value]]
      * @param bool $softDelete If true, performs a soft delete by setting deleted_at timestamp; if false, performs a hard delete
