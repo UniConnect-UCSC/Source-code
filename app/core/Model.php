@@ -209,6 +209,7 @@ trait Model
      * Handles both single and multiple row inserts
      * @param array $columns simple array with column names ["col1", "col2", ...]
      * @param array $data a array of arrays with the column order maintained [[val1, val2, ...], [val1, val2, ...], ...]
+     * Can be sent as [val1, val2, ...] for single row inserts
      */
     public function insert($columns, $data = [])
     {
@@ -216,6 +217,10 @@ trait Model
             $sql = "INSERT INTO {$this->table} (". implode(", ", $columns) .") VALUES ";
 
             $passedData = [];            
+
+            if(!is_array($data[0])){
+                $data = [$data];
+            }
 
             foreach($data as $i => $row){
                 $placeholders = [];
@@ -257,6 +262,19 @@ trait Model
             return $this->query($sql, $data);
         } catch (PDOException $e) {
             die("UPDATE failed: " . $e->getMessage());
+        }
+    }
+
+    // For decrementing/incrementing numeric columns
+    // Use negative $amount for decrementing
+    public function increment($id, $column, $amount = 1, $id_column = 'id')
+    {
+        try {
+            $sql = "UPDATE {$this->table} SET $column = $column + :amount WHERE $id_column = :id";
+            $data = ['amount' => $amount, 'id' => $id];
+            return $this->query($sql, $data);
+        } catch (PDOException $e) {
+            die("INCREMENT failed: " . $e->getMessage());
         }
     }
 
