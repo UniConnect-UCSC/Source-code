@@ -12,7 +12,7 @@ class inAppNotificationChannel implements NotificationChannelInterface {
     public function send(Notification $notification, RecipientInterface $recipient): void {
         
         // Save into notification table
-        if($notification->id === null) {
+        if(empty($notification->id)) {
             // Insert into notification table
             $inAppNotificationModel = new inAppNotificationModel();
             $notification->id = $inAppNotificationModel->addNewNotification($notification);

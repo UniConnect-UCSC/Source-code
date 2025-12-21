@@ -36,7 +36,9 @@ class NotificationWorker {
 
     public function registerChannel(string $channelName): void {
         $realClassName = $channelName . "Channel";
-        $this->channels[$channelName] = new $realClassName();
+        // error_log("Registering channel: {$realClassName}");
+        $channelInstance = new $realClassName();
+        $this->channels[$channelInstance->getChannelName()] = $channelInstance;
     }
 
     public function executeQueuedNotifications(): void {
