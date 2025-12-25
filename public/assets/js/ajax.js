@@ -137,7 +137,47 @@ class Ajax {
   static formDataPost(urlPath, formData){
     return this.request("POST", urlPath, formData);
   }
+
+  static fireAndForget(urlPath, data) {
+    var length = 0;
+    var selectedHeader = 0;
+    const allHeaders = [
+      'text/plain',
+      'application/json',
+      'multipart/form-data'
+    ]
+
+
+    switch(typeof data){
+      case 'number':
+      case 'boolean':
+          data = data.toString();
+
+      case 'string':
+          length = data.length;
+          selectedHeader = 0;
+          break;
+
+      case 'object':
+          data = JSON.stringify(data);
+          length = data.length;
+          selectedHeader = 1;
+          break;
+
+      default:
+        console.warn("Ajax.fireAndForget: Data is not a string, number, boolean, or object. No action taken.");
+        return;
+    }
+
+    if(length > 64000) {console.warn("Ajax.fireAndForget: Data size exceeds 64KB after conversion, request may be dropped.");}
+
+    const blobData = new Blob([data], { type: allHeaders[selectedHeader] });
+    navigator.sendBeacon(urlPath, blobData);
+  }
+
+
 }
+
 
 // Expose globally for easy use in views
 window.Ajax = Ajax;
