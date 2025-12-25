@@ -126,6 +126,11 @@ function parseRequestData(){
             $data = $_POST;
             $data["FILES"] = $_FILES;
             break;
+        
+        case 'text/plain':
+            $rawData = file_get_contents('php://input');
+            $data = $rawData;
+            break;
 
         default:
             //Not set
