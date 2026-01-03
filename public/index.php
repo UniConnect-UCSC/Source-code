@@ -18,7 +18,7 @@ require '../app/core/init.php';
 // Singleton Notification service
 $notificationService = new NotificationService();
 
-if ($_ENV['INSTANT_NOTIFICATION']) {
+if ($_ENV['INSTANT_NOTIFICATION'] == "true") {
     $notificationService->enableInstantNotifications();
     error_log("Instant notifications enabled");
 }
