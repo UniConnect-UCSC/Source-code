@@ -1,4 +1,5 @@
 const router = new window.NotificationRouter();
+const notificationContainer = document.getElementById('notificationsContainer');
 
 //router.register('like', LikeNotificationRenderer);
 
@@ -6,7 +7,7 @@ const router = new window.NotificationRouter();
 const newNotificationScroll = new InfinityScroll(
   'getNotifications',
   '/Notifications/scrollable',
-  document.getElementById('notificationsContainer'),
+  notificationContainer,
   router.render.bind(router),
   0,
   6
@@ -30,7 +31,9 @@ function openNotifications() {
     ".notifications-wrapper"
   );
 
-  newNotificationScroll.loadNextElements();
+  newNotificationScroll.loadNextElements().then(() => {
+    updateNotificationTimeAgo(notificationContainer);
+  });
 
   gsap.to(notificationsWrapper, {
     duration: 0.2,
@@ -58,6 +61,19 @@ function closeNotifications() {
       // prevent the hidden container from intercepting clicks
       notificationsWrapper.style.pointerEvents = "none";
     },
+  });
+}
+
+function updateNotificationTimeAgo(notificationContainer) {
+  const notificationItems = notificationContainer.querySelectorAll(".notification-item");
+  
+  notificationItems.forEach(item => {
+    const timestamp = item.getAttribute('data-timestamp');
+    const timeAgo = calculateTimeAgo(timestamp);
+    const timeElement = item.querySelector('.notification-time');
+    if (timeElement) {
+      timeElement.textContent = timeAgo;
+    }
   });
 }
 

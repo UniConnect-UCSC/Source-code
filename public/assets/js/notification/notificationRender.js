@@ -18,6 +18,7 @@ class NotificationRenderer {
         const div = document.createElement('div');
         div.className = `notification-item ${this.is_read ? 'read' : 'unread'}`;
         div.setAttribute('data-id', this.id);
+        div.setAttribute('data-timestamp', this.timestamp);
         return div;
     }
 
@@ -50,7 +51,7 @@ class NotificationRenderer {
         div.innerHTML = `
             <strong class="notification-title">${this.title}</strong>
             <p class="notification-message">${this.message}</p>
-            <span class="notification-time">${this.timeAgo}</span>
+            <span class="notification-time"></span>
         `;
         return div;
     }
