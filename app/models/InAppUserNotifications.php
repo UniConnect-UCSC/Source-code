@@ -4,7 +4,13 @@ class NotificationModel {
     use Model;
     protected $table = 'in_app_user_notifications';
 
-    public function getNextNotifications($limit, $offset) {
+    private function getNextNotifications($limit, $offset, $unreadOnly = false) {
+        $conditions = [
+            ['m.user_id', '=', $_SESSION['user_id']]
+        ];
+        if ($unreadOnly) {
+            $conditions[] = ['m.is_read', '=', 0];
+        }
 
         $selected = [
             "m.*",
@@ -25,13 +31,21 @@ class NotificationModel {
 
         error_log("Fetching notifications for user_id: " . $_SESSION['user_id'] . " with limit: $limit and offset: $offset");
         return $this->where(
-            conditions: [['m.user_id', '=', $_SESSION['user_id']]],
+            conditions: $conditions,
             limit: $limit,
             offset: $offset,
             orderBy: ['created_at' => 'DESC'],
             join: $join,
             selected: $selected
         );
+    }
+
+    public function getNextAllNotifications($limit, $offset) {
+        return $this->getNextNotifications($limit, $offset, false);
+    }
+    
+    public function getNextUnreadNotifications($limit, $offset) {
+        return $this->getNextNotifications($limit, $offset, true);
     }
 
     public function markAsRead($notificationId) {

@@ -2,6 +2,8 @@ const router = new window.NotificationRouter();
 const notificationContainer = document.getElementById('notificationsContainer');
 var isNotificationPanelOpen = false;
 var checkingNewNotifications = false;
+var isFiltering = false;
+var notificationFilter = 'all';
 const loadMoreThreshold = 20;
 
 //router.register('like', LikeNotificationRenderer);
@@ -17,7 +19,7 @@ const newNotificationScroll = new InfinityScroll(
 );
 
 async function refreshNotifications() {
-  await newNotificationScroll.refresh();
+  await newNotificationScroll.refresh(notificationFilter);
 
   updateNotificationTimeAgo(notificationContainer);
   updateNotificationCount();
@@ -29,7 +31,7 @@ async function refreshNotifications() {
 }
 
 async function loadMoreNotifications() {
-  const endNotReached = await newNotificationScroll.loadNextElements();
+  const endNotReached = await newNotificationScroll.loadNextElements(notificationFilter);
   updateNotificationTimeAgo(notificationContainer);
 
   return endNotReached;
@@ -133,6 +135,27 @@ function markAllAsRead() {
   Ajax.jsonPost('/notifications/markAllAsRead', {}).then(() => {
     // instead of a refresh we can just update the classes of all notification items to reduce server load
     refreshNotifications();
+  });
+}
+
+function filterNotifications(filter, parentElement) {
+  
+  if(isFiltering || notificationFilter === filter) {return;}
+  isFiltering = true;
+
+  notificationFilter = filter;
+
+  const filterButtons = parentElement.querySelectorAll('.notification-filter-btn');
+  filterButtons.forEach(btn => {
+    if (btn.getAttribute('data-filter') === filter) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  refreshNotifications().then(() => {
+    isFiltering = false;
   });
 }
 

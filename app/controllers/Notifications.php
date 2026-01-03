@@ -5,15 +5,21 @@ require_once __DIR__ . '/../models/InAppUserNotifications.php';
 
 class Notifications extends Controller
 {
-    private function getNextNotifications($limit, $offset) {
+    private function getNextNotifications($limit, $offset, $notificationFilter) {
         $notificationModel = new NotificationModel();
-        $data = $notificationModel->getNextNotifications($limit, $offset);
-        
-        // Handled on client side
-        //$data->metadata = json_decode($data->metadata, true);
+
+        switch($notificationFilter) {
+            case 'all':
+                $data = $notificationModel->getNextAllNotifications($limit, $offset);
+                break;
+            case 'unread':
+                $data = $notificationModel->getNextUnreadNotifications($limit, $offset);
+                break;
+            default:
+                throw new Exception("Invalid notification filter: $notificationFilter");
+        }
 
         return $data;
-
     }
 
     private function markAllNotificationAsRead($userId) {
@@ -45,7 +51,7 @@ class Notifications extends Controller
 
             switch($data['scrollIdentifier']) {
                 case 'getNotifications':
-                    $response = $this->getNextNotifications($data['limit'], $data['offset']);
+                    $response = $this->getNextNotifications($data['limit'], $data['offset'], $data['context']);
                     echo json_encode($response);
                     break;
                 default:
