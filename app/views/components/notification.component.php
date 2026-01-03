@@ -1,5 +1,6 @@
 <div class="notification-icon" onclick="toggleNotifications()">
     <i data-lucide="bell" class="notification-icon"></i>
+    <span class="notification-count hidden" id="notificationCount"></span>
 </div>
 
 <div class="notifications-wrapper">

@@ -31,6 +31,11 @@ class Notifications extends Controller
         return $notificationModel->hasNewNotifications($userId, $lastCheckTimestamp);
     }
 
+    private function getUnreadCount($userId) {
+        $notificationModel = new NotificationModel();
+        return $notificationModel->getUnreadCount($userId);
+    }
+
     public function scrollable() {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
         
@@ -99,4 +104,16 @@ class Notifications extends Controller
         }
     }
 
+    public function getUnreadNotificationCount() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        
+            header('Content-Type: application/json');
+
+            $unreadCount = $this->getUnreadCount($_SESSION['user_id']);
+
+            echo json_encode([
+                'unreadNotificationCount' => $unreadCount,
+            ]);
+        }
+    }
 }

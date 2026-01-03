@@ -4,6 +4,31 @@
   padding: 0;
 }
 
+.notification-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: var(--color-red-600, #dc2626);
+  color: var(--color-primary-white);
+  display: flex;
+  font-size: 0.625rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  line-height: 1;
+  border: 2px solid var(--color-primary-white);
+}
+
+.notification-count.hidden {
+  display: none;
+}
+
+
 .notifications-wrapper {
   opacity: 0;
   z-index: -20;

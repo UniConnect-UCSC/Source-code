@@ -18,12 +18,35 @@ const newNotificationScroll = new InfinityScroll(
 function refreshNotifications() {
   newNotificationScroll.refresh().then(() => {
     updateNotificationTimeAgo(notificationContainer);
+    updateNotificationCount();
   });
 }
 
 function loadMoreNotifications() {
   newNotificationScroll.loadNextElements().then(() => {
     updateNotificationTimeAgo(notificationContainer);
+  });
+}
+
+function updateNotificationCount() {
+  
+  Ajax.jsonPost('/notifications/getUnreadNotificationCount', {}).then((data) => {
+
+  const count = data.unreadNotificationCount;
+  const countBadge = document.getElementById('notificationCount');
+  
+  if (countBadge) {
+    if (count > 0) {
+      const displayCount = count > 99 ? '99+' : count.toString();
+      countBadge.textContent = displayCount;
+      countBadge.classList.remove('hidden');
+    } else {
+      countBadge.textContent = '';
+      countBadge.classList.add('hidden');
+    }
+  }
+
+
   });
 }
 
@@ -95,7 +118,7 @@ function updateNotificationTimeAgo(notificationContainer) {
 function markAllAsRead() {
   Ajax.jsonPost('/notifications/markAllAsRead', {}).then(() => {
     // instead of a refresh we can just update the classes of all notification items to reduce server load
-    newNotificationScroll.refresh();
+    refreshNotifications();
   });
 }
 

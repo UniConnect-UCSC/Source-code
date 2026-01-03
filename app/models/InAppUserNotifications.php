@@ -82,4 +82,21 @@ class NotificationModel {
             return $result[0]->new_notification_count > 0;
     }
 
+    public function getUnreadCount($userId) {
+        $conditions = [
+            ['user_id', '=', $userId],
+            ['is_read', '=', 0],
+        ];
+        
+        $selected = [
+            ["COUNT(*)", "unread_notification_count"]
+        ];
+
+        $result = $this->where(
+            conditions: $conditions,
+            selected: $selected
+        );
+
+        return (int)$result[0]->unread_notification_count;
+    }
 }
