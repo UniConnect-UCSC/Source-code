@@ -6,3 +6,4 @@
 
 # Backup database every day at 3 AM
 # 0 3 * * * /usr/bin/php {{SITE_DIR}}/scripts/backup_database.php
+#v2
