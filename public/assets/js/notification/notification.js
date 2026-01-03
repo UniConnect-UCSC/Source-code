@@ -12,7 +12,7 @@ const newNotificationScroll = new InfinityScroll(
   notificationContainer,
   router.render.bind(router),
   0,
-  5
+  10
 );
 
 function refreshNotifications() {
@@ -156,3 +156,10 @@ refreshNotifications();
 const pollInterval = setInterval(() => {
   checkForNewNotifications();
 }, 10000);
+
+// Load more on scroll to bottom
+notificationContainer.addEventListener('scroll', () => {
+  if (notificationContainer.scrollTop + notificationContainer.clientHeight >= notificationContainer.scrollHeight) {
+    loadMoreNotifications();
+  }
+});
