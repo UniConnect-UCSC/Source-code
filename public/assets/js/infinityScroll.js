@@ -30,9 +30,9 @@ class InfinityScroll{
         this.parentElement.innerHTML = '';
     }
 
-    async refresh() {
+    async refresh(context = null) {
         this.resetScroll();
-        return this.loadNextElements();
+        return this.loadNextElements(context);
     }
 
     async loadNextElements(context = null){
