@@ -2,6 +2,7 @@ const router = new window.NotificationRouter();
 const notificationContainer = document.getElementById('notificationsContainer');
 var isNotificationPanelOpen = false;
 var checkingNewNotifications = false;
+const loadMoreThreshold = 20;
 
 //router.register('like', LikeNotificationRenderer);
 
@@ -12,20 +13,33 @@ const newNotificationScroll = new InfinityScroll(
   notificationContainer,
   router.render.bind(router),
   0,
-  10
+  6
 );
 
-function refreshNotifications() {
-  newNotificationScroll.refresh().then(() => {
-    updateNotificationTimeAgo(notificationContainer);
-    updateNotificationCount();
-  });
+async function refreshNotifications() {
+  await newNotificationScroll.refresh();
+
+  updateNotificationTimeAgo(notificationContainer);
+  updateNotificationCount();
+
+  // If after refresh the container is not scrollable, try loading more notifications
+  while (!checkIfContainerIsScrollable()) {
+    if(!(await loadMoreNotifications())) {break;}
+  }
 }
 
-function loadMoreNotifications() {
-  newNotificationScroll.loadNextElements().then(() => {
-    updateNotificationTimeAgo(notificationContainer);
-  });
+async function loadMoreNotifications() {
+  const endNotReached = await newNotificationScroll.loadNextElements();
+  updateNotificationTimeAgo(notificationContainer);
+
+  return endNotReached;
+}
+
+function checkIfContainerIsScrollable() {
+  if (notificationContainer.scrollHeight <= notificationContainer.clientHeight) {
+    return false;
+  }
+  return true;
 }
 
 function updateNotificationCount() {
@@ -158,8 +172,8 @@ const pollInterval = setInterval(() => {
 }, 10000);
 
 // Load more on scroll to bottom
-notificationContainer.addEventListener('scroll', () => {
-  if (notificationContainer.scrollTop + notificationContainer.clientHeight >= notificationContainer.scrollHeight) {
+notificationContainer.addEventListener('scroll', () => {  
+  if (notificationContainer.scrollTop + notificationContainer.clientHeight >= notificationContainer.scrollHeight - loadMoreThreshold) {
     loadMoreNotifications();
   }
 });
