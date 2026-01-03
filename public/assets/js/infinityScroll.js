@@ -22,6 +22,23 @@ class InfinityScroll{
         this.loading = false;
         this.endReached = false;
         this.maxRefreshLimit = 100;
+        this.skeletonLoader = this.#defaultSkeletonLoader;
+    }
+
+    #defaultSkeletonLoader(){
+        const loader = document.createElement('div');
+        loader.className = 'infinity-scroll-loader';
+        
+        const spinner = document.createElement('div');
+        spinner.className = 'infinity-scroll-spinner';
+        
+        loader.appendChild(spinner);
+        
+        return loader;
+    }
+
+    setSkeletonLoader(loaderFunction) {
+        this.skeletonLoader = loaderFunction;
     }
 
     resetScroll() {
@@ -39,6 +56,10 @@ class InfinityScroll{
         if (this.loading || this.endReached) return;
         this.loading = true;
 
+        // Show skeleton loader
+        const skeletonLoader = this.skeletonLoader();
+        this.parentElement.appendChild(skeletonLoader);
+
         const data = {
             scrollIdentifier: this.scrollIdentifier,
             offset: this.offset,
@@ -49,6 +70,9 @@ class InfinityScroll{
 
         try {
             const response = await Ajax.jsonPost(this.fetchUrl, data);
+
+            // Remove skeleton loader
+            skeletonLoader.remove();
 
             if(!Array.isArray(response) || response.length === 0){
                 this.endReached = true;
@@ -74,6 +98,9 @@ class InfinityScroll{
 
         } catch(error){
             console.error('InfinityScroll.loadNextElements: Error fetching data', error);
+
+            // Remove skeleton loader on error
+            skeletonLoader.remove();
 
             this.loading = false;
             return false;
