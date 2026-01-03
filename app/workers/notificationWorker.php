@@ -45,17 +45,23 @@ class NotificationWorker {
 
         foreach($this->getLatestNotificationJobData() as $jobData){
 
-            $notification = $this->buildObjectFromClassName(Notification::class, $jobData['notificationData']);
-            $recipientProvider = $this->buildObjectFromClassName(
-                $jobData['recipientProviderData']['className'],
-                $jobData['recipientProviderData']['constructorInputs']
-            );
+            try{
+                $notification = $this->buildObjectFromClassName(Notification::class, $jobData['notificationData']);
+                $recipientProvider = $this->buildObjectFromClassName(
+                    $jobData['recipientProviderData']['className'],
+                    $jobData['recipientProviderData']['constructorInputs']
+                );
 
-            $this->notify(
+                $this->notify(
                 $notification,
                 $recipientProvider,
                 $jobData['channelNames']
             );
+            }catch(Exception $e){
+                error_log("Error processing notification job ID {$jobData['id']}: " . $e->getMessage());
+                $this->jobFailed($jobData['id']);
+                continue;
+            }
 
             $this->jobFinished($jobData['id']);
         }
@@ -143,13 +149,18 @@ class NotificationWorker {
                 }
 
             }else{
-                error_log("Notification channel {$channelName} not registered.");
+                // Warning: if a valid channel is executed before an invalid one, the valid one will still process
+                throw new Exception("Notification channel {$channelName} not registered.");
             }
         }
     }
 
     private function jobFinished(int $id){
         $this->update($id, ['status' => 'completed'], 'id');
+    }
+
+    private function jobFailed(int $id){
+        $this->update($id, ['status' => 'failed'], 'id');
     }
     
 }
