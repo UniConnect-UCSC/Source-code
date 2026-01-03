@@ -28,13 +28,9 @@ class InfinityScroll{
         this.parentElement.innerHTML = '';
     }
 
-    refresh() {
-        var tempLimit = this.limit;
-        this.limit = (this.offset < this.maxRefreshLimit) ? this.offset : this.maxRefreshLimit;
+    async refresh() {
         this.resetScroll();
-        this.loadNextElements();
-        this.limit = tempLimit;
-
+        return this.loadNextElements();
     }
 
     async loadNextElements(context = null){
