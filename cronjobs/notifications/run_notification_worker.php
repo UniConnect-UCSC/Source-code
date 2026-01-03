@@ -6,7 +6,7 @@ chdir(__DIR__);
 
 // Load the notification worker
 require_once __DIR__ . '/../../app/workers/notificationWorker.php';
-$logFileLocation = __DIR__ . '/../notification_worker.log';
+$logFileLocation = __DIR__ . '/../logs/notification_worker.log';
 
 // Log the start of the job
 $logMessage = "[" . date('Y-m-d H:i:s') . "] Starting notification worker\n";
