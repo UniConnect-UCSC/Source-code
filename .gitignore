@@ -48,3 +48,6 @@ xamppfiles/
 /storage/
 
 sql/
+
+#cronjobs logs
+/cronjobs/logs/*.log

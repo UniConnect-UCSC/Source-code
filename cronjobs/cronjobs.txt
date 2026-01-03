@@ -1,0 +1,9 @@
+# Run notification job worker every 1mins
+* * * * * /usr/bin/php {{SITE_DIR}}/cronjobs/notifications/run_notification_worker.php
+
+# Generate daily reports at midnight
+# 0 0 * * * /usr/bin/php {{SITE_DIR}}/scripts/generate_reports.php
+
+# Backup database every day at 3 AM
+# 0 3 * * * /usr/bin/php {{SITE_DIR}}/scripts/backup_database.php
+#v2

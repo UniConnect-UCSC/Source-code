@@ -11,3 +11,6 @@ require 'mediaStorageService.php';
 require 'Model.php';
 require 'Controller.php';
 require 'App.php';
+
+// Notification System
+require 'notifications.php';

@@ -34,7 +34,12 @@
     <script src="/assets/js/navbar.js"></script>
     <script src="/assets/js/postOptions.js"></script>
     <script src="/assets/js/createPost.js"></script>
-    <script src="/assets/js/notification.js"></script>
+
+    <!-- Notification related scripts -->
+    <script src="/assets/js/notification/convenienceFunctions.js"></script>
+    <script src="/assets/js/notification/notificationRender.js"></script>
+    <script src="/assets/js/notification/notification.js"></script>
+
     <script src="/assets/js/feedType.js"></script>
     <script src="/assets/js/marketplace.js"></script>
     <script src="/assets/js/marketplaceCard.js"></script>
