@@ -20,11 +20,13 @@ class InfinityScroll{
         this.offset = offset;
         this.limit = limit;
         this.loading = false;
+        this.endReached = false;
         this.maxRefreshLimit = 100;
     }
 
     resetScroll() {
         this.offset = 0;
+        this.endReached = false;
         this.parentElement.innerHTML = '';
     }
 
@@ -34,7 +36,7 @@ class InfinityScroll{
     }
 
     async loadNextElements(context = null){
-        if (this.loading) return;
+        if (this.loading || this.endReached) return;
         this.loading = true;
 
         const data = {
@@ -49,7 +51,15 @@ class InfinityScroll{
             const response = await Ajax.jsonPost(this.fetchUrl, data);
 
             if(!Array.isArray(response) || response.length === 0){
-                throw new Error('No more data to load');
+                this.endReached = true;
+                this.loading = false;
+                console.warn('InfinityScroll.loadNextElements: No data received or data is not an array');
+                return false;
+            }
+
+            if(response.length < this.limit){
+                this.endReached = true;
+                console.warn('InfinityScroll.loadNextElements: No more data to load, end reached');
             }
 
             response.forEach(item => {
