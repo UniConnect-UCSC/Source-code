@@ -63,4 +63,23 @@ class NotificationModel {
         // update successful-ness isn't being passed by the database/query method
         return true;
     }
+
+    public function hasNewNotifications($userId, $lastCheckTimestamp) {
+            $conditions = [
+                ['user_id', '=', $userId],
+                ['created_at', '>', $lastCheckTimestamp],
+            ];
+            
+            $selected = [
+                ["COUNT(*)", "new_notification_count"]
+            ];
+
+            $result = $this->where(
+                conditions: $conditions,
+                selected: $selected
+            );
+
+            return $result[0]->new_notification_count > 0;
+    }
+
 }

@@ -1,5 +1,7 @@
 const router = new window.NotificationRouter();
 const notificationContainer = document.getElementById('notificationsContainer');
+var isNotificationPanelOpen = false;
+var checkingNewNotifications = false;
 
 //router.register('like', LikeNotificationRenderer);
 
@@ -10,8 +12,20 @@ const newNotificationScroll = new InfinityScroll(
   notificationContainer,
   router.render.bind(router),
   0,
-  6
+  5
 );
+
+function refreshNotifications() {
+  newNotificationScroll.refresh().then(() => {
+    updateNotificationTimeAgo(notificationContainer);
+  });
+}
+
+function loadMoreNotifications() {
+  newNotificationScroll.loadNextElements().then(() => {
+    updateNotificationTimeAgo(notificationContainer);
+  });
+}
 
 function toggleNotifications() {
   const notificationsWrapper = document.querySelector(
@@ -31,9 +45,7 @@ function openNotifications() {
     ".notifications-wrapper"
   );
 
-  newNotificationScroll.loadNextElements().then(() => {
-    updateNotificationTimeAgo(notificationContainer);
-  });
+  isNotificationPanelOpen = true;
 
   gsap.to(notificationsWrapper, {
     duration: 0.2,
@@ -51,6 +63,8 @@ function closeNotifications() {
   const notificationsWrapper = document.querySelector(
     ".notifications-wrapper"
   );
+
+  isNotificationPanelOpen = false;
 
   gsap.to(notificationsWrapper, {
     duration: 0.2,
@@ -84,3 +98,38 @@ function markAllAsRead() {
     newNotificationScroll.refresh();
   });
 }
+
+function checkForNewNotifications(){
+
+  if(checkingNewNotifications || isNotificationPanelOpen){return} 
+  checkingNewNotifications = true;
+
+  const mostRecentNotification = notificationContainer.querySelector('*'); 
+
+  if(!mostRecentNotification) {
+    checkingNewNotifications = false;
+    return;
+  }
+
+  const data = {
+    lastCheckTimestamp: mostRecentNotification.getAttribute('data-timestamp')
+  };
+
+  Ajax.jsonPost('/notifications/checkNew', data).then((data) => {
+
+    if(data.hasNewNotifications){
+
+      console.log("new Notifications available. Refreshing Notifications")
+      refreshNotifications();
+    }
+  });
+
+  checkingNewNotifications = false;
+}
+
+// Init first notifications
+refreshNotifications();
+
+const pollInterval = setInterval(() => {
+  checkForNewNotifications();
+}, 10000);

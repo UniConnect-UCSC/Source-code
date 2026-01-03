@@ -26,6 +26,11 @@ class Notifications extends Controller
         return $notificationModel->markAsRead($notificationId);
     }
 
+    private function hasNewNotifications($userId, $lastCheckTimestamp) {
+        $notificationModel = new NotificationModel();
+        return $notificationModel->hasNewNotifications($userId, $lastCheckTimestamp);
+    }
+
     public function scrollable() {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
         
@@ -74,4 +79,24 @@ class Notifications extends Controller
              }
         }
     }
+
+    public function checkNew() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        
+            header('Content-Type: application/json');
+            $data = parseRequestData();
+
+            if(!isset($data['lastCheckTimestamp'])) {
+                echo json_encode(['error' => 'lastCheckTimestamp is required']);
+                return;
+            }
+
+            $hasNewNotification = $this->hasNewNotifications($_SESSION['user_id'], $data['lastCheckTimestamp']);
+
+            echo json_encode([
+                'hasNewNotifications' => $hasNewNotification,
+            ]);
+        }
+    }
+
 }
