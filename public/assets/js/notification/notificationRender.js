@@ -24,7 +24,12 @@ class NotificationRenderer {
 
     _addHref() {
         const a = document.createElement('a');
-        a.href = this.metadata.url || '#';
+
+        if(!this.metadata || !this.metadata.url){
+            a.href = '#';
+        }else{
+            a.href = this.metadata.url;
+        }
         
         a.addEventListener('click', (e) => {
             e.preventDefault(); 
