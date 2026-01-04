@@ -20,26 +20,45 @@ class InfinityScroll{
         this.offset = offset;
         this.limit = limit;
         this.loading = false;
+        this.endReached = false;
         this.maxRefreshLimit = 100;
+        this.skeletonLoader = this.#defaultSkeletonLoader;
+    }
+
+    #defaultSkeletonLoader(){
+        const loader = document.createElement('div');
+        loader.className = 'infinity-scroll-loader';
+        
+        const spinner = document.createElement('div');
+        spinner.className = 'infinity-scroll-spinner';
+        
+        loader.appendChild(spinner);
+        
+        return loader;
+    }
+
+    setSkeletonLoader(loaderFunction) {
+        this.skeletonLoader = loaderFunction;
     }
 
     resetScroll() {
         this.offset = 0;
+        this.endReached = false;
         this.parentElement.innerHTML = '';
     }
 
-    refresh() {
-        var tempLimit = this.limit;
-        this.limit = (this.offset < this.maxRefreshLimit) ? this.offset : this.maxRefreshLimit;
+    async refresh(context = null) {
         this.resetScroll();
-        this.loadNextElements();
-        this.limit = tempLimit;
-
+        return this.loadNextElements(context);
     }
 
     async loadNextElements(context = null){
-        if (this.loading) return;
+        if (this.loading || this.endReached) return;
         this.loading = true;
+
+        // Show skeleton loader
+        const skeletonLoader = this.skeletonLoader();
+        this.parentElement.appendChild(skeletonLoader);
 
         const data = {
             scrollIdentifier: this.scrollIdentifier,
@@ -52,8 +71,19 @@ class InfinityScroll{
         try {
             const response = await Ajax.jsonPost(this.fetchUrl, data);
 
+            // Remove skeleton loader
+            skeletonLoader.remove();
+
             if(!Array.isArray(response) || response.length === 0){
-                throw new Error('No more data to load');
+                this.endReached = true;
+                this.loading = false;
+                console.warn('InfinityScroll.loadNextElements: No data received or data is not an array');
+                return false;
+            }
+
+            if(response.length < this.limit){
+                this.endReached = true;
+                console.warn('InfinityScroll.loadNextElements: No more data to load, end reached');
             }
 
             response.forEach(item => {
@@ -68,6 +98,9 @@ class InfinityScroll{
 
         } catch(error){
             console.error('InfinityScroll.loadNextElements: Error fetching data', error);
+
+            // Remove skeleton loader on error
+            skeletonLoader.remove();
 
             this.loading = false;
             return false;
