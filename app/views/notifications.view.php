@@ -12,7 +12,7 @@
             
             <div class="form-group">
                 <label for="dummyUserId">User ID (optional):</label>
-                <input type="number" id="dummyUserId" class="form-input" 
+                <input type="text" id="dummyUserId" class="form-input" 
                        placeholder="Leave empty to send to yourself">
                 <small class="form-help">If left empty, the notification will be sent to you (session user).</small>
             </div>
@@ -33,7 +33,7 @@
             <form id="customNotificationForm">
                 <div class="form-group">
                     <label for="customUserId">User ID (optional):</label>
-                    <input type="number" id="customUserId" class="form-input" 
+                    <input type="text" id="customUserId" class="form-input" 
                            placeholder="Leave empty to send to yourself">
                     <small class="form-help">If left empty, the notification will be sent to you (session user).</small>
                 </div>
