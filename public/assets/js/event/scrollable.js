@@ -4,11 +4,10 @@ const newEventScroll = new InfinityScroll(
     document.getElementById('eventsGrid'),
     eventCardRenderer,
     0,
-    100
+    2
 );
-newEventScroll.loadNextElements().then(() => {
-    lucide.createIcons();
-});
+
+
 
 const repEventScroll = new InfinityScroll(
     'getRepEvents',
@@ -34,5 +33,6 @@ const formCategorySuggestionScroll = new InfinityScroll(
     document.getElementById('categorySuggestions'),
     categorySuggestionRenderer,
 );
+
 
 categoryScroll.loadNextElements();

@@ -4,6 +4,9 @@ const eventGrid = document.getElementById('eventsGrid');
 var runningFavToggles = {};
 var runningPartToggle = {};
 
+newEventScroll.setupAutoLoadOnScroll();
+newEventScroll.loadNextElements();
+
 eventGrid.addEventListener('event:participants-click', (e) => {
     const { eventId, current, element } = e.detail;
     console.log(`Participants button clicked for event ID: ${eventId}, currently active: ${current}`);
@@ -72,6 +75,10 @@ eventGrid.addEventListener('event:favorite-toggle', (e) => {
     );
     
     e.stopPropagation();
+});
+
+newEventScroll.addEventListener('successfulLoad', () => {
+    lucide.createIcons();
 });
 
 })();
