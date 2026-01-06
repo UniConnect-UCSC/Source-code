@@ -142,11 +142,8 @@ function filterAndRender(){
     if(!categoryInputValue){return;}
 
     filterTimeout = setTimeout(() => {
+        formCategorySuggestionScroll.loadNextElements();
 
-        formCategorySuggestionScroll.loadNextElements({
-            'searchTerm': categoryInputValue,
-            'excludeIds': selectedList.map(cat => cat.id)
-        });
     }, debounceDelay);
 
 }
@@ -166,19 +163,14 @@ categoryInput.addEventListener('keydown', (e) => {
     }
 });
 
-suggestionsDiv.addEventListener('scroll', () => {
-    const { scrollTop, scrollHeight, clientHeight } = suggestionsDiv;
-    const threshold = 20; //px
 
-    if (scrollTop + clientHeight >= scrollHeight - threshold) {
-        
-        console.log('Scrolled to bottom, loading more suggestions');
+formCategorySuggestionScroll.setupAutoLoadOnScroll();
 
-        formCategorySuggestionScroll.loadNextElements({
-            'searchTerm': categoryInput.value,
-            'excludeIds': selectedList.map(cat => cat.id)
-        });
-    }
+formCategorySuggestionScroll.setContextProvider(() => {
+    return {
+        'searchTerm': categoryInput.value,
+        'excludeIds': selectedList.map(cat => cat.id)
+    };
 });
 
 function resetEventModal(){
