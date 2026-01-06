@@ -23,6 +23,7 @@ class InfinityScroll{
         this.endReached = false;
         this.maxRefreshLimit = 100;
         this.skeletonLoader = this.#defaultSkeletonLoader;
+        this.abortController = null;
     }
 
     #defaultSkeletonLoader(){
@@ -41,6 +42,12 @@ class InfinityScroll{
         this.skeletonLoader = loaderFunction;
     }
 
+    abort(reason = 'Aborted by user') {
+        if (this.abortController) {
+            this.abortController.abort(reason);
+        }
+    }
+
     resetScroll() {
         this.offset = 0;
         this.endReached = false;
@@ -54,6 +61,8 @@ class InfinityScroll{
 
     async loadNextElements(context = null){
         if (this.loading || this.endReached) return;
+
+        this.abortController = new AbortController();
         this.loading = true;
 
         // Show skeleton loader
@@ -69,7 +78,7 @@ class InfinityScroll{
         if(context){data['context'] = context;}
 
         try {
-            const response = await Ajax.jsonPost(this.fetchUrl, data);
+            const response = await Ajax.jsonPost(this.fetchUrl, data, this.abortController.signal);
 
             // Remove skeleton loader
             skeletonLoader.remove();
@@ -94,15 +103,19 @@ class InfinityScroll{
             this.offset += this.limit;
 
             this.loading = false;
+            this.abortController = null;
             return true;
 
         } catch(error){
-            console.error('InfinityScroll.loadNextElements: Error fetching data', error);
+            if(!this.abortController.signal.aborted){
+                console.warn('InfinityScroll.loadNextElements: Error fetching data', error);
+            }
 
             // Remove skeleton loader on error
             skeletonLoader.remove();
 
             this.loading = false;
+            this.abortController = null;
             return false;
         }
     }
