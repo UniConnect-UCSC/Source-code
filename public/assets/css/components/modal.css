@@ -181,7 +181,8 @@
     display: none;
 }
 
-.suggestions-list.show {
+/* Hide when inner suggestions div is empty */
+.suggestions-list:has(> *) {
     display: block;
 }
 
@@ -215,30 +216,3 @@
     border: 1px solid var(--color-primary-gray);
 }
 
-/* Loading indicator for category suggestions */
-.loading-indicator {
-    display: None;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-2);
-    padding: var(--spacing-3);
-    color: var(--color-brand-600);
-    font-size: var(--text-sm);
-    background: var(--color-primary-white);
-    border-top: 1px solid var(--color-primary-gray);
-    flex-shrink: 0;
-}
-
-.loading-spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--color-brand-200);
-    border-top-color: var(--color-brand-600);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    position: relative;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}

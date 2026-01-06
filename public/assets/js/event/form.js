@@ -72,11 +72,8 @@ if (clearBtn) clearBtn.addEventListener('click', clearImage);
 const categoryInput = document.getElementById('categoryInput');
 const selectedElement = document.getElementById('eventCategories');
 const suggestionsDiv = document.getElementById('categorySuggestions');
-const suggestionsWrapper = document.getElementById('categorySuggestionsWrapper');
-const loadingIndicator = document.getElementById('categoryLoadingIndicator');
 const selectedList = [];
-var noMoreSuggestions = false;
-var isLoading = false;
+var filterTimeout;
 
 function renderTags(){
     
@@ -126,30 +123,33 @@ function addCategory(selection){
 
     renderTags();
     updateHidden();
-    suggestionsWrapper.classList.remove('show');
     categoryInput.value = ''; 
+    filterAndRender();
 }
 
 function filterAndRender(){
-
+    const debounceDelay = 300;
     const categoryInputValue = categoryInput.value;
 
-    if(!categoryInputValue){
-        suggestionsWrapper.classList.remove('show');
-        return;
+    // Clear existing timeout to debounce
+    if(filterTimeout){
+        clearTimeout(filterTimeout);
     }
 
+    formCategorySuggestionScroll.abort();
     formCategorySuggestionScroll.resetScroll();
-    noMoreSuggestions = false;
-    formCategorySuggestionScroll.loadNextElements({
-        'searchTerm': categoryInputValue,
-        'excludeIds': selectedList.map(cat => cat.id)
-    }).then(() => {
-        suggestionsWrapper.classList.add('show');
-    });
+
+    if(!categoryInputValue){return;}
+
+    filterTimeout = setTimeout(() => {
+
+        formCategorySuggestionScroll.loadNextElements({
+            'searchTerm': categoryInputValue,
+            'excludeIds': selectedList.map(cat => cat.id)
+        });
+    }, debounceDelay);
 
 }
-
 
 categoryInput.addEventListener('focus',filterAndRender);
 categoryInput.addEventListener('input',filterAndRender);
@@ -166,26 +166,17 @@ categoryInput.addEventListener('keydown', (e) => {
     }
 });
 
-suggestionsWrapper.addEventListener('scroll', () => {
-    const { scrollTop, scrollHeight, clientHeight } = suggestionsWrapper;
+suggestionsDiv.addEventListener('scroll', () => {
+    const { scrollTop, scrollHeight, clientHeight } = suggestionsDiv;
     const threshold = 20; //px
 
-    if (scrollTop + clientHeight >= scrollHeight - threshold && !noMoreSuggestions && !isLoading) {
+    if (scrollTop + clientHeight >= scrollHeight - threshold) {
         
-        isLoading = true;
-
-        loadingIndicator.style.display = 'flex';
+        console.log('Scrolled to bottom, loading more suggestions');
 
         formCategorySuggestionScroll.loadNextElements({
             'searchTerm': categoryInput.value,
             'excludeIds': selectedList.map(cat => cat.id)
-        }).then( result => {
-            if(!result){
-                console.log('No more suggestions to load');
-                noMoreSuggestions = true;
-            }
-            loadingIndicator.style.display = 'none';
-            isLoading = false;
         });
     }
 });
@@ -200,7 +191,7 @@ function resetEventModal(){
 
     // Hide suggestions and clear input
     categoryInput.value = '';
-    suggestionsWrapper.classList.remove('show');
+    filterAndRender();
 
     // Close modal
     formEventModal.classList.remove('active');
