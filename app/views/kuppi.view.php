@@ -1,10 +1,14 @@
 
-// ...existing code...
 <script>
 const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCategories ?? []))); ?>;
 </script>
-<script src="/assets/js/kuppi.js"></script>
+
+
 <?php component("navbar"); ?>
+
+<!-- Kuppi Modal styles -->
+<link rel="stylesheet" href="/assets/css/components/kuppi/kuppiModal.css">
+<link rel="stylesheet" href="/assets/css/components/kuppi/kuppiRibbon.css">
 
 <div class="home-layout">
     <!-- Left Nav Panel -->
@@ -12,49 +16,69 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
 
     <!-- Center Feed -->
     <div class="feed">
-        <div class="kuppi-feed-header">
-            <h2 class="feed-title">Kuppi Sessions</h2>
-        </div>
+        <header class="kuppi-page-header">
+            <h1>Kuppi Sessions</h1>
+            <div class="subtitle">Discover and join peer-led study sessions</div>
+        </header>
+        <div class="search-wrapper">
+            <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
+            <input type="search" id="search-bar" data-search class="search" placeholder="Search Kuppi" aria-label="Search" />
+        </div> 
         <div class="kuppi-feed-actions">
-            <a href="javascript:void(0);" class="btn" onclick="openRequestKuppiModal()">Request a Kuppi</a>
+            <a href="javascript:void(0);" class="btn" onclick="openRequestKuppiModal(kuppiCategories)">Request a Kuppi</a>
             <a href="javascript:void(0);" class="btn" onclick="openHostKuppiModal(kuppiCategories)">Host Kuppi</a>
-            <a href="/kuppi/my_kuppis" class="btn">My Kuppies</a>
-            <a href="/kuppi/kuppi_requests" class="btn">Kuppi Requests</a>
+            <a href="javascript:void(0);" class="btn" onclick="openMyKuppisModal()">My Kuppis</a>
+            <a href="javascript:void(0);" class="btn" onclick="openKuppiRequestsModal()">Kuppi Requests</a>
         </div>
-        <div class="kuppi-feed" data-id="<?= htmlspecialchars($id ?? '') ?>" onclick="openKuppiModal(this)">
-
-            <?php
-            if (!empty($testKuppi)) {
-                foreach ($testKuppi as $kuppi) {
-                    component("kuppiPost", [
-                        "host_name" => $kuppi->host_name,
-
-                        "id" => $kuppi->id,
-                        "topic" => $kuppi->topic,
-                        "university" => $kuppi->university ?? 'Unknown University',
-                        "date" => date('Y-m-d', strtotime($kuppi->kuppi_date_time)),
-                        "time" => date('H:i', strtotime($kuppi->kuppi_date_time)),
-                        "category" => $kuppi->category,
-                        "platform" => $kuppi->platform,
-                        "image" => $kuppi->image_url,
-                        "context" => "main"
-                    ]);
-                }
-            }
-            ?>
-
+        <div class="kuppi-feed kuppi-fade-in" id="kuppi-container">
         </div>
     </div>
 
 
     <?php component("widgetPanel"); ?>
+    <!-- show kuppi details  -->   
     <div id="kuppiModal" class="kuppi-modal-overlay" style="display:none;">
         <div class="kuppi-modal-content">
             <button class="kuppi-modal-close" onclick="closeKuppiModal()">&times;</button>
             <div id="kuppiModalBody"></div>
         </div>
+    </div> 
 
-
-        <!-- Right Widget Panel -->
-
+    <!-- dedicated modal for My Kuppis -->
+    <div id="myKuppisModal" class="kuppi-modal-overlay" style="display:none;">
+        <div class="kuppi-modal-content" style="max-width:900px;">
+            <button class="kuppi-modal-close" onclick="closeMyKuppisModal()">&times;</button>
+            <div id="myKuppisModalBody">
+                    <div class="kuppi-modal-header-row" style="display:flex; align-items:center; justify-content:center; gap:12px;">
+                        <h2 style="margin: 20px;0;">My Hosts and Requests</h2>
+                    </div>            
+                    <div class="kuppi-modal-list" id="my-kuppi-content"></div>
+            </div>
+        </div>
     </div>
+
+    <div id="kuppiRequestsModal" class="kuppi-modal-overlay" style="display:none;">
+        <div class="kuppi-modal-content" style="max-width:600px;">
+            <button class="kuppi-modal-close" onclick="closeKuppiRequestsModal()">&times;</button>
+            <div id="kuppiRequestsModalBody">
+                <h2>Kuppi Requests</h2>
+                <div class="kuppi-modal-list" id="kuppi-requests-content"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="/assets/js/kuppi/KuppiModal.js"></script>
+<script src="/assets/js/kuppi/hostKuppiModal.js"></script>
+<script src="/assets/js/kuppi/requestKuppiModal.js"></script>
+<script src="/assets/js/kuppi/volunteerKuppiModal.js"></script>
+<script src="/assets/js/kuppi/editKuppiModal.js"></script>
+<script src="/assets/js/kuppi/editKuppiRequestModal.js"></script>
+<script src="/assets/js/kuppi/myKuppisModal.js"></script>
+<script src="/assets/js/kuppi/kuppiRequestsModal.js"></script>
+<script src="/assets/js/kuppi/filters.js"></script>
+<script src="/assets/js/kuppi/api.js"></script>
+<script src="/assets/js/kuppi/renderKuppicard.js"></script>
+<script src="/assets/js/kuppi/searchBar.js" defer></script>
+<script src="/assets/js/kuppi/index.js"></script>

@@ -3,30 +3,14 @@ require_once(__DIR__."/../models/Kuppi.php");
 require_once(__DIR__."/../models/KuppiCategory.php");
 require_once(__DIR__."/../models/User.php");
 require_once(__DIR__."/../models/University.php");
+require_once(__DIR__."/../core/functions.php");
 
 class Kuppi extends Controller
 {
     public function index(){
-        $usermodel = new User();
-        $kuppimodel = new KuppiModel();
-        $Kuppis = $kuppimodel->getKuppi();
+        // Only load categories; posts will be fetched dynamically via AJAX
         $KuppiCategorymodel = new KuppiCategoryModel();
         $KuppiCategories = $KuppiCategorymodel->getAllKuppiCategories();
-        $universitymodel = new University();
-        error_log('kuppiCategories: ' . print_r($KuppiCategories, true));   
-        if(is_array($Kuppis)){
-            foreach ($Kuppis as $kuppi) {
-                $host_name = $usermodel->getUserNameById($kuppi->host_id);
-                $kuppi->host_name = $host_name;
-                $university_id = $kuppi->university_id;
-                $kuppi->university = $universitymodel->getUniversityName($university_id);
-                $categoryObj = $KuppiCategorymodel->getKuppiCategoryById($kuppi->category_id);
-                $kuppi->category = $categoryObj ? $categoryObj->category_name : '';
-            }
-        } 
-
- //changes to be made : university id to university name
-
         $this->view('kuppi', [
             'title' => 'UniConnect',
             'head' => '
@@ -36,18 +20,33 @@ class Kuppi extends Controller
             <link rel="stylesheet" href="/assets/css/components/navPanel.css">
             <link rel="stylesheet" href="/assets/css/components/feed.css">
             <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
-            <link rel="stylesheet" href="/assets/css/components/kuppiPost.css">
+            <link rel="stylesheet" href="/assets/css/components/kuppi/kuppiPost.css">
             <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
             ',
-            'testKuppi' => $Kuppis,
             'kuppiCategories' => $KuppiCategories
         ]);
     }
+    // JSON endpoint: return paginated Kuppi posts enriched with names
+    private function fetchKuppis($offset, $limit){
+        
+        
+        $kuppiModel = new KuppiModel();
+        $kuppies = $kuppiModel->getKuppi($offset, $limit) ?? [];
+
+        foreach ($kuppies as $item){
+            $item->host_name = $item->host_f_name." ".$item->host_l_name;
+            $item->requester_name = $item->requester_f_name." ".$item->requester_l_name;
+        }
+
+        return $kuppies;
+    }
+
+
     public  function create(){
         $user = new User();
         $university_id = $_SESSION['user_universityID'] ?? null;
-          error_log('user_universityID: ' . print_r($_SESSION, true));
 
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Retrieve form data
             $topic = $_POST['topic'] ?? '';
@@ -55,15 +54,16 @@ class Kuppi extends Controller
             $time = $_POST['time'] ?? '';
             $platform = $_POST['platform'] ?? '';
             $category_id = $_POST['category_id'] ?? '';
-
+            $link = $_POST['link'] ?? '';
+            
             // Validate and sanitize input as needed
-
+            
             // Combine date and time into a single datetime string
             $kuppiDateTime = $date . ' ' . $time;
-
+            
             // Create a new KuppiModel instance
             $kuppiModel = new KuppiModel();
-
+            
             // Prepare data for insertion
             $data = [
                 'topic' => $topic,
@@ -73,14 +73,15 @@ class Kuppi extends Controller
                 'host_id' => $_SESSION['user_id'],
                 'category_id' => $category_id,
                 'university_id' => $_SESSION['user_universityID'],
-                'status' => 'In Progress'
-            
+                'status' => 'In Progress',
+                'kuppi_url' => $link,
+                
                 // Add other necessary fields like university_id, image_url, etc.
             ];
-
+            
             // Insert the new Kuppi session into the database
-            $insertedId = $kuppiModel->insert(array_keys($data), [array_values($data)]);
-
+            $insertedId = $kuppiModel->insert($data);
+            
             if ($insertedId) {
                 echo "Kuppi session created successfully!";
                 header('Location: /kuppi');
@@ -93,15 +94,15 @@ class Kuppi extends Controller
             exit();
         }
     }
-
+    
     public function request_kuppi(){
         $kuppiModel = new KuppiModel();
-
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $topic = $_POST['topic'];
             $requester_id = $_SESSION['user_id'];
             $category_id = $_POST['category_id'] ?? '';
-
+            
             $data = [
                 'topic' => $topic,
                 'category_id' => $category_id,
@@ -110,9 +111,9 @@ class Kuppi extends Controller
                 'university_id' => $_SESSION['user_universityID'],
                 'status' => 'Requested' // Initial status
             ];
-
-            $insertedId = $kuppiModel->insert(array_keys($data), [array_values($data)]);
-
+            
+            $insertedId = $kuppiModel->insert($data);
+            
             if ($insertedId) {
                 echo "Kuppi request submitted successfully!";
                 header('Location: /kuppi');
@@ -125,28 +126,31 @@ class Kuppi extends Controller
             exit();
         }
     }
+    
     public function edit_kuppi($id){
         $kuppiModel = new KuppiModel();
-
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $topic = $_POST['topic'] ?? '';
             $date = $_POST['date'] ?? '';
             $time = $_POST['time'] ?? '';
             $platform = $_POST['platform'] ?? '';
             if (!empty($category_id)) {
-            $data['category_id'] = (int)$category_id;
+                $data['category_id'] = (int)$category_id;
             }
             $kuppiDateTime = $date . ' ' . $time;
-
+            $link = $_POST['link'] ?? '';
+            
             $data = [
                 'topic' => $topic,
                 'kuppi_date_time' => $kuppiDateTime,
                 'platform' => $platform,
                 'category_id' => $category_id,
+                'kuppi_url' => $link
             ];
-
+            
             $updated = $kuppiModel->update($id, $data);
-
+            
             if ($updated) {
                 header('Location: /kuppi');
                 exit();
@@ -154,21 +158,15 @@ class Kuppi extends Controller
                 echo "Error updating Kuppi session.";
             }
         } else {
-            $kuppi = $kuppiModel->getKuppiById($id);
-            $KuppiCategory = new KuppiCategoryModel();
-            $KuppiCategories = $KuppiCategory->getAllKuppiCategories();
-
-            $this->view('edit_kuppi', [
-                'title' => 'Edit Kuppi',
-                'kuppi' => $kuppi,
-                'kuppiCategories' => $KuppiCategories
-            ]);
+            header('Location: /kuppi');
+            console_error('Invalid request method for editing Kuppi.');
+            exit();
         }
     }
     public function delete_kuppi($id){
         $kuppiModel = new KuppiModel();
         $deleted = $kuppiModel->delete($id);
-
+        
         if ($deleted) {
             header('Location: /kuppi');
             exit();
@@ -176,71 +174,45 @@ class Kuppi extends Controller
             echo "Error deleting Kuppi session.";
         }
     }
-    public function my_kuppis(){
-        $kuppi = new KuppiModel();
-        $mykuppies = $kuppi->getMyKuppies($_SESSION['user_id']);
-        $kuppiCategoryModel = new KuppiCategoryModel();
-        $universitymodel = new University();
-        if(is_array($mykuppies)){
-            foreach ($mykuppies as $kuppi) {
-                $categoryObj = $kuppiCategoryModel->getKuppiCategoryById($kuppi->category_id);
-                $kuppi->category = $categoryObj ? $categoryObj->category_name : '';
-                $university_id = $kuppi->university_id;
-                $kuppi->university = $universitymodel->getUniversityName($university_id);
-            }
-        }
-        $this->view('my_kuppis', [
-            'title' => 'My Kuppis',
-            'head' => '
-            <link rel="stylesheet" href="/assets/css/pages/kuppi.css">
-            <link rel="stylesheet" href="/assets/css/pages/home.css">
-            <link rel="stylesheet" href="/assets/css/components/navbar.css">
-            <link rel="stylesheet" href="/assets/css/components/navPanel.css">
-            <link rel="stylesheet" href="/assets/css/components/feed.css">
-            <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
-            <link rel="stylesheet" href="/assets/css/components/kuppiPost.css">
-            <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
-            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-            ',
-            'myKuppies' => $mykuppies
-        ]);
-    }
-    public function kuppi_requests(){
-        $usermodel = new User();
+    public function fetchMyKuppies($offset, $limit){
+
+        
         $kuppiModel = new KuppiModel();
-        $kuppiRequests = $kuppiModel->getKuppiRequests();
         $KuppiCategorymodel = new KuppiCategoryModel();
-        $KuppiCategories = $KuppiCategorymodel->getAllKuppiCategories();
-        if(is_array($kuppiRequests)){
-            foreach ($kuppiRequests as $kuppi) {
-                $kuppi->requester_name = (new User())->getUserNameById($kuppi->requester_id);
-                $categoryObj = $KuppiCategorymodel->getKuppiCategoryById($kuppi->category_id);
-                $kuppi->category = $categoryObj ? $categoryObj->category_name : '';
-                $kuppi->requester_university = $usermodel->getUserUniversityNameById($kuppi->requester_id);
+
+        $myKuppies = $kuppiModel->getMyHosts($offset ,$limit ) ?? [];
+
+        foreach ($myKuppies as $item){
+            $item->host_name = $item->host_f_name." ".$item->host_l_name;
+
+            if(isset($item->requester_f_name) || !empty($item->requester_f_name)){
+                $item->requester_name = $item->requester_f_name." ".$item->requester_l_name;
             }
-
+            $item->university = $item->host_university;
+            if (!isset($item->image_url) || empty($item->image_url)) {
+                 $item->image_url = 'assets/images/ml-banner.jpg';
+            }
         }
-
-        $this->view('kuppi_requests', [
-            'title' => 'Kuppi Requests',
-            'head' => '
-
-            <link rel="stylesheet" href="/assets/css/pages/home.css">
-            <link rel="stylesheet" href="/assets/css/pages/kuppi.css">
-            <link rel="stylesheet" href="/assets/css/components/feed.css">
-            <link rel="stylesheet" href="/assets/css/components/kuppiPost.css">
-            <link rel="stylesheet" href="/assets/css/components/navbar.css">
-            <link rel="stylesheet" href="/assets/css/components/navPanel.css">
-            <link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
-            <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
-            <link rel="stylesheet" href="/assets/css/pages/kuppi_requests.css">
-
-            ',
-            'kuppiRequests' => $kuppiRequests,
-            'kuppiCategories' => $KuppiCategories
-        ]);
-    
+        return $myKuppies;
     }
+
+
+    public function fetchKuppiRequests($offset, $limit){
+
+        
+        $kuppiModel = new KuppiModel();
+        $kuppiRequests = $kuppiModel->getKuppiRequests($offset, $limit);
+
+        foreach ($kuppiRequests as $item) {
+            $item->requester_name = $item->requester_f_name.' '.$item->requester_l_name;
+
+            if (!isset($item->image_url) || empty($item->image_url)) {
+                 $item->image_url = 'assets/images/ml-banner.jpg';
+            }
+        }
+        return $kuppiRequests;
+    }
+    
     public function approve_request($id){
         $kuppiModel = new KuppiModel();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -255,12 +227,60 @@ class Kuppi extends Controller
             ];
         }
         $updated = $kuppiModel->update($id, $data);
-
+        
         if ($updated) {
             header('Location: /kuppi/kuppi_requests');
             exit();
         } else {
             echo "Error approving Kuppi request.";
+        }
+    }
+    public function editKuppiRequest(){
+        $kuppiModel = new KuppiModel();
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $id = $_POST['id'] ?? '';
+            $topic = $_POST['topic'] ?? '';
+            $category_id = $_POST['category_id'] ?? '';
+            
+            $data = [
+                'topic' => $topic,
+                'category_id' => $category_id
+            ];
+            
+            $updated = $kuppiModel->update($id, $data);
+            
+            if($updated){
+                header('Location: /kuppi/myKuppis');
+                exit();
+            } else {
+                echo "Error updating Kuppi request.";
+            }
+        } else {
+            header('Location: /kuppi/myKuppis');
+            exit();
+        }
+        
+    }
+    public function scrollable(){
+        $data = parseRequestData();
+        header('Content-Type: application/json');
+    
+        switch ($data['scrollIdentifier']) {
+            case 'getAllKuppies':
+                $response = $this->fetchKuppis($data['offset'], $data['limit']);
+                echo json_encode($response);
+                break;
+            case 'getMyKuppies':
+                $response = $this->fetchMyKuppies($data['offset'], $data['limit']);
+                echo json_encode($response);
+                break;
+            case 'getKuppiRequests':
+                $response = $this->fetchKuppiRequests($data['offset'], $data['limit']);
+                echo json_encode($response);
+                break;
+            default:
+                # code...
+                break;
         }
     }
 }

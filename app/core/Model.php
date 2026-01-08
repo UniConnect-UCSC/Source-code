@@ -186,7 +186,6 @@ trait Model
             
             $sql .= $limit ? " LIMIT $limit " : "";
             $sql .= $offset ? " OFFSET $offset " : "";
-
             return $this->query($sql, $data);
         } catch (PDOException $e) {
             die("WHERE query failed: " . $e->getMessage());

@@ -34,13 +34,23 @@
     <?php component("widgetPanel"); ?>
 </div>
 
+<!-- Kuppi Modal styles -->
+<link rel="stylesheet" href="/assets/css/components/kuppi/kuppiModal.css">
+
 <!-- Modal markup (must exist once on the page) -->
 <div id="kuppiModal" class="kuppi-modal-overlay" style="display:none;">
-  <div class="kuppi-modal-content">
+    <div class="kuppi-modal-content">
     <button class="kuppi-modal-close" onclick="closeKuppiModal()">&times;</button>
     <div id="kuppiModalBody"></div>
   </div>
 </div>
 
 <script>const kuppiCategories = <?= json_encode($kuppiCategories ?? []) ?>;</script>
-<script src="/assets/js/kuppi.js"></script>
+<!-- Modular kuppi modal scripts for requests page -->
+<script src="/assets/js/kuppi/renderKuppiModal.js"></script>
+<script src="/assets/js/kuppi/hostKuppiModal.js"></script>
+<script src="/assets/js/kuppi/volunteerKuppiModal.js"></script>
+<script src="/assets/js/kuppi/editKuppiModal.js"></script>
+<script src="/assets/js/kuppi/editKuppiRequestModal.js"></script>
+<script src="/assets/js/kuppi/kuppiRequestsModal.js"></script>
+<script src="/assets/js/kuppi/filters.js"></script>
