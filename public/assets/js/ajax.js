@@ -61,7 +61,8 @@ class Ajax {
     data = null,
     passedHeaders = {},
     timeout = 0,
-    credentials
+    credentials,
+    abortSignal = null
   ) {
     const finalHeaders = this.#buildHeader(passedHeaders); // Overrides defaults if provided
     const finalTimeout =
@@ -87,6 +88,11 @@ class Ajax {
       );
     }
 
+    // Listen to external abort signal if provided
+    if (abortSignal) {
+      abortSignal.addEventListener('abort', () => controller.abort(abortSignal.reason));
+    }
+
     let response;
     try {
       response = await fetch(requestUrl, {
@@ -98,22 +104,29 @@ class Ajax {
       });
     } catch (err) {
       if (timerId) clearTimeout(timerId);
-      // Network/abort error
-      throw new AjaxError(err?.message || "Network error", { url: requestUrl });
+      
+      // Check if request was aborted
+      if (controller.signal.aborted) {
+        throw new AjaxError(`user_aborted Reason: ${controller.signal.reason}`);
+      }
+      
+      // Network error
+      throw new AjaxError(err?.message || "Network error");
     }
 
     if (timerId) clearTimeout(timerId);
 
     const contentType = response.headers.get("content-type") || "";
     let parsed;
+
+    if (!contentType.includes("application/json")) {
+      throw new AjaxError("Unsupported content type. Expected application/json");
+    }
+
     try {
-      if (contentType.includes("application/json")) {
-        parsed = await response.json();
-      } else {
-        throw new Error("Unsupported content type Must be application/json");
-      }
-    } catch (_) {
-      throw new AjaxError("Failed to parse response");
+      parsed = await response.json();
+    } catch (err) {
+      throw new AjaxError("Failed to parse JSON response");
     }
 
     if (!response.ok) {
@@ -130,12 +143,12 @@ class Ajax {
   }
 
   // Convenience methods
-  static jsonPost(urlPath, data) {
-    return this.request("POST", urlPath, data, { "Content-Type": "application/json" });
+  static jsonPost(urlPath, data, abortSignal = null) {
+    return this.request("POST", urlPath, data, { "Content-Type": "application/json" }, undefined, undefined, abortSignal);
   }
 
-  static formDataPost(urlPath, formData){
-    return this.request("POST", urlPath, formData);
+  static formDataPost(urlPath, formData, abortSignal = null){
+    return this.request("POST", urlPath, formData, undefined, undefined, undefined, abortSignal);
   }
 
   static fireAndForget(urlPath, data) {
