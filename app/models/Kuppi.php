@@ -41,7 +41,6 @@ class KuppiModel {
        
     }
     public function getMyHosts($offset ,$limit ){
-        // Get Kuppies where user is host OR requester
         $conditions = [
             ['m.host_id','=',$_SESSION['user_id']],       
         ];
@@ -78,6 +77,47 @@ class KuppiModel {
 
         return $data;
     }
+
+    public function getMyRequests($offset, $limit ){
+        $conditions = [
+            ['m.requester_id','=',$_SESSION['user_id']],  
+        ];
+
+        $join = [
+            ["users","m.requester_id = r.id", "INNER" ,"r"],
+            ["users","m.host_id = h.id", "LEFT","h"],
+            ["kuppi_categories","m.category_id = c.id", "INNER" ,"c"],
+            ["universities", "h.university_id = n.id", "LEFT" ,"n"],
+            ["universities", "r.university_id = s.id", "INNER" ,"s"]
+        ];
+
+        
+        $selected = [
+            "m.*",
+            ["h.f_name" , "host_f_name"],
+            ["r.f_name" , "requester_f_name"],
+            ["h.l_name" , "host_l_name"],           
+            ["r.l_name" , "requester_l_name"],
+            ["c.category_name" , "category"],
+            ["n.name" , "host_university"],
+            ["s.name" , "requester_university"]
+        ];
+        $data = $this->where(
+            conditions: $conditions,
+            join: $join,
+            offset: $offset,
+            limit: $limit,
+            selected: $selected
+        );
+
+        if(!is_array($data)) {
+            return [];
+        }
+
+        return $data;
+
+    }
+
     public function getKuppiById($id){
         $result = $this->where(conditions: [['id','=',$id]], limit: 1);
         return $result ? $result[0] : null;

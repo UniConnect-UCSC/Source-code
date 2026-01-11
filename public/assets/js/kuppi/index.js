@@ -11,15 +11,25 @@
   );
   newMainKuppiScroll.loadNextElements();
 
-  const newMyKuppiScroll = new InfinityScroll(
-    'getMyKuppies',
+  const newMyHostKuppiScroll = new InfinityScroll(
+    'getMyHostKuppies',
     '/kuppi/scrollable',
     document.getElementById("my-kuppi-content"),
     window.renderMyKuppiCards,
     0,
     4
   );
-  window.newMyKuppiScroll = newMyKuppiScroll;
+  window.newMyHostKuppiScroll = newMyHostKuppiScroll;
+
+  const newMyRequestsScroll = new InfinityScroll (
+    'getMyRequests',
+    '/kuppi/scrollable',
+    document.getElementById("my-kuppi-content"),
+    window.renderMyRequestsCards,
+    0,
+    4
+  );
+  window.newMyRequestsScroll = newMyRequestsScroll;
 
   const newKuppiRequestsScroll = new InfinityScroll(
     'getKuppiRequests',

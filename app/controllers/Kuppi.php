@@ -163,6 +163,7 @@ class Kuppi extends Controller
             exit();
         }
     }
+
     public function delete_kuppi($id){
         $kuppiModel = new KuppiModel();
         $deleted = $kuppiModel->delete($id);
@@ -174,11 +175,11 @@ class Kuppi extends Controller
             echo "Error deleting Kuppi session.";
         }
     }
-    public function fetchMyKuppies($offset, $limit){
+
+    public function fetchMyHostKuppies($offset, $limit){
 
         
         $kuppiModel = new KuppiModel();
-        $KuppiCategorymodel = new KuppiCategoryModel();
 
         $myKuppies = $kuppiModel->getMyHosts($offset ,$limit ) ?? [];
 
@@ -196,6 +197,23 @@ class Kuppi extends Controller
         return $myKuppies;
     }
 
+    public function fetchMyRequests($offset , $limit){
+        $kuppiModel = new KuppiModel();
+        $myRequests = $kuppiModel->getMyRequests($offset, $limit) ?? [];
+
+        foreach ($myRequests as $item){
+            $item->requester_name = $item->requester_f_name." ".$item->requester_l_name;
+
+            if(isset($item->host_f_name) || !empty($item->host_f_name)){
+                $item->host_name = $item->host_f_name." ".$item->host_l_name;
+            }
+            $item->university = $item->host_university ?? $item->requester_university;
+            if (!isset($item->image_url) || empty($item->image_url)) {
+                 $item->image_url = 'assets/images/ml-banner.jpg';
+            }
+        }
+        return $myRequests;
+    }
 
     public function fetchKuppiRequests($offset, $limit){
 
@@ -235,6 +253,7 @@ class Kuppi extends Controller
             echo "Error approving Kuppi request.";
         }
     }
+
     public function editKuppiRequest(){
         $kuppiModel = new KuppiModel();
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -261,6 +280,7 @@ class Kuppi extends Controller
         }
         
     }
+
     public function scrollable(){
         $data = parseRequestData();
         header('Content-Type: application/json');
@@ -270,12 +290,16 @@ class Kuppi extends Controller
                 $response = $this->fetchKuppis($data['offset'], $data['limit']);
                 echo json_encode($response);
                 break;
-            case 'getMyKuppies':
-                $response = $this->fetchMyKuppies($data['offset'], $data['limit']);
+            case 'getMyHostKuppies':
+                $response = $this->fetchMyHostKuppies($data['offset'], $data['limit']);
                 echo json_encode($response);
                 break;
             case 'getKuppiRequests':
                 $response = $this->fetchKuppiRequests($data['offset'], $data['limit']);
+                echo json_encode($response);
+                break;
+            case 'getMyRequests':
+                $response = $this->fetchMyRequests($data['offset'], $data['limit']);
                 echo json_encode($response);
                 break;
             default:

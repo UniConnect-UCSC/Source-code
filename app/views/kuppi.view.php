@@ -48,9 +48,17 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
     <div id="myKuppisModal" class="kuppi-modal-overlay" style="display:none;">
         <div class="kuppi-modal-content" style="max-width:900px;">
             <button class="kuppi-modal-close" onclick="closeMyKuppisModal()">&times;</button>
+    
             <div id="myKuppisModalBody">
                     <div class="kuppi-modal-header-row" style="display:flex; align-items:center; justify-content:center; gap:12px;">
                         <h2 style="margin: 20px;0;">My Hosts and Requests</h2>
+                    </div>
+                    <div class="kuppi-modal-tabs" >
+                            <button id="myHosts">My Hosts </button>
+                            <button id="myRequests">My Requests </button>
+                            <button id="reports">Reports </button>
+                            <button id="myAttends">My Attends </button>
+                            <button id="myFavourites">My Favourites </button>
                     </div>            
                     <div class="kuppi-modal-list" id="my-kuppi-content"></div>
             </div>

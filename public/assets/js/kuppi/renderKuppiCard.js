@@ -252,7 +252,12 @@
   function renderKuppiRequestsCards(data){
     return buildKuppiCard(data, 'kuppi-requests-modal');
   }
+
+  function renderMyRequestsCards(data) {
+    return buildKuppiCard(data, 'my-kuppi-modal');
+  }
   window.renderMainKuppiCards = renderMainKuppiCards;
   window.renderMyKuppiCards = renderMyKuppiCards;
   window.renderKuppiRequestsCards = renderKuppiRequestsCards;
+  window.renderMyRequestsCards = renderMyRequestsCards;
 })();

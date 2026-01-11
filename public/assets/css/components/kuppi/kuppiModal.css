@@ -8,9 +8,50 @@
   justify-content: center;
   background: rgba(17, 24, 39, 0.45);
   backdrop-filter: blur(4px);
-  z-index: 900; /* Base below edit-post modal */
+  z-index: 900; 
 }
 
+.kuppi-modal-tabs {
+  display : flex;
+  align-items : center;
+  justify-content : center;
+  background: var(--color-brand-50);
+  border-radius: 10px;
+  position: relative;
+  padding: 6px; 
+  
+}
+
+.kuppi-modal-tabs button{
+  width : 20%;
+  background : transparent;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  color: #374151;
+  border-radius: 10px;
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .08s ease;
+}
+
+.kuppi-modal-tabs button:hover:not(.active) {
+  background: var(--color-brand-100); 
+}
+
+.kuppi-modal-tabs button:focus-visible {
+  outline: 3px solid var(--color-brand-200); 
+  outline-offset: 2px;
+}
+
+.kuppi-modal-tabs .active {
+  background: var(--color-brand-500);
+  color: #ffffff;
+  border-radius: 10px;
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
+  z-index: 1;
+  pointer-events: none; /* prevents double-click on active */
+}
 /* Ensure specific overlays stack correctly relative to each other */
 #kuppiModal.kuppi-modal-overlay { z-index: 950; }
 #myKuppisModal.kuppi-modal-overlay { z-index: 900; }
@@ -110,13 +151,26 @@
 #kuppiModalBody button[type="submit"]:active { transform: translateY(1px); }
 
 /* Grid lists inside My Kuppis / Requests */
-.kuppi-modal-list { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
-@media (max-width: 760px){ .kuppi-modal-list { grid-template-columns: 1fr; } }
+.kuppi-modal-list { 
+  display:grid; 
+  grid-template-columns: repeat(2, minmax(0,1fr)); 
+  gap: 16px; 
+}
+@media (max-width: 760px){ 
+  .kuppi-modal-list { grid-template-columns: 1fr; } 
+}
 
-/* Images inside detail modal */
-#kuppiModalBody img { border: 1px solid #e5e7eb; border-radius:12px; }
-/* Make the header image modest and consistent */
-#kuppiModalBody img { max-height: 160px; object-fit: cover; width: 100%; margin-top: 12px; }
+#kuppiModalBody img { 
+  border: 1px solid #e5e7eb; 
+  border-radius:12px; 
+}
+
+#kuppiModalBody img { 
+  max-height: 160px; 
+  object-fit: cover; 
+  width: 100%; 
+  margin-top: 12px; 
+}
 
 /* Structured details within modal (labels + values) */
 .kuppi-details {
@@ -127,10 +181,24 @@
   align-items: start;
   margin-top: 12px;
 }
-.kuppi-details .kuppi-detail-label { color: #374151; font-weight: 600; }
-.kuppi-details .kuppi-detail-value { color: #111827; font-size: 16px; }
-.kuppi-details a { color: #2563eb; text-decoration: none; }
-.kuppi-details a:hover { text-decoration: underline; }
+.kuppi-details .kuppi-detail-label { 
+  color: #374151;
+  font-weight: 600; 
+}
+
+.kuppi-details .kuppi-detail-value { 
+  color: #111827; 
+  font-size: 16px; 
+}
+
+.kuppi-details a { 
+  color: #2563eb; 
+  text-decoration: none; 
+}
+
+.kuppi-details a:hover { 
+  text-decoration: underline; 
+}
 
 /* Compact, label-free layout */
 .kuppi-details.kuppi-details-compact {
