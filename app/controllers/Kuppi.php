@@ -80,7 +80,7 @@ class Kuppi extends Controller
             ];
             
             // Insert the new Kuppi session into the database
-            $insertedId = $kuppiModel->insert($data);
+            $insertedId = $kuppiModel->insertAndFetch($data);
             
             if ($insertedId) {
                 echo "Kuppi session created successfully!";
@@ -112,7 +112,7 @@ class Kuppi extends Controller
                 'status' => 'Requested' // Initial status
             ];
             
-            $insertedId = $kuppiModel->insert($data);
+            $insertedId = $kuppiModel->insertAndFetch($data);
             
             if ($insertedId) {
                 echo "Kuppi request submitted successfully!";
@@ -305,6 +305,50 @@ class Kuppi extends Controller
             default:
                 # code...
                 break;
+        }
+    }
+
+    public function reportKuppi(){
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+            exit;
+        }
+
+        try {
+            $data = parseRequestData();
+            $id = $data['id'] ?? null;
+
+            if (!$id) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Missing or invalid kuppi id']);
+                exit;
+            }
+
+            $kuppiModel = new KuppiModel();
+
+            $existing = $kuppiModel->first(['id' => $id]);
+            if (!$existing) {
+                http_response_code(404);
+                echo json_encode(['success' => false, 'message' => 'Kuppi not found']);
+                exit;
+            }
+
+            $kuppiModel->update($id, ['is_reported' => true]);
+
+            $updated = $kuppiModel->first(['id' => $id]);
+            if ($updated && (bool)$updated->is_reported === true) {
+                echo json_encode(['success' => true, 'message' => 'Kuppi reported']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Failed to update report flag']);
+            }
+        } catch (Throwable $e) {
+            error_log('reportKuppi error: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Server error']);
         }
     }
 }

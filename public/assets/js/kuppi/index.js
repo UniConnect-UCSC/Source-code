@@ -1,5 +1,4 @@
 
-  console.log(document.getElementById("kuppi-container"));
 
   const newMainKuppiScroll = new InfinityScroll(
     'getAllKuppies',
@@ -45,7 +44,6 @@
   function onScroll() {
 
     var nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 300;
-    console.log(endReached);
       if (nearBottom && !endReached){
       try {
         newMainKuppiScroll.loadNextElements();        

@@ -97,7 +97,8 @@
 /* Body area */
 #kuppiModalBody,
 #myKuppisModalBody,
-#kuppiRequestsModalBody {
+#kuppiRequestsModalBody,
+#reportKuppiModalBody {
   padding: 24px 28px;
   overflow-y: auto;
 }
@@ -105,7 +106,8 @@
 /* Typography within modal */
 #kuppiModalBody h2,
 #myKuppisModalBody h2,
-#kuppiRequestsModalBody h2 {
+#kuppiRequestsModalBody h2,
+#reportKuppiModalBody h3 {
   margin: 4px 0 14px 0;
   font-weight: 600;
   font-size: 22px;
@@ -114,7 +116,8 @@
 }
 #kuppiModalBody p,
 #myKuppisModalBody p,
-#kuppiRequestsModalBody p { color: #374151; line-height: 1.6; }
+#kuppiRequestsModalBody p,
+#reportKuppiModalBody p { color: #374151; line-height: 1.6; }
 #kuppiModalBody a { color: #2563eb; text-decoration: none; }
 #kuppiModalBody a:hover { text-decoration: underline; }
 
@@ -149,6 +152,33 @@
 }
 #kuppiModalBody button[type="submit"]:hover { background: #1d4ed8; }
 #kuppiModalBody button[type="submit"]:active { transform: translateY(1px); }
+
+/* Report modal actions area */
+.kuppi-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+.kuppi-modal-actions .btn {
+  appearance: none;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #111827;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease, transform .08s ease;
+}
+.kuppi-modal-actions .btn:hover { background: #f3f4f6; }
+.kuppi-modal-actions .btn:active { transform: translateY(1px); }
+.kuppi-modal-actions .btn.btn-danger {
+  background: #dc2626;
+  border-color: #b91c1c;
+  color: #ffffff;
+}
+.kuppi-modal-actions .btn.btn-danger:hover { background: #b91c1c; }
 
 /* Grid lists inside My Kuppis / Requests */
 .kuppi-modal-list { 

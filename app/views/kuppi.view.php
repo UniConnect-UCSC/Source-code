@@ -76,9 +76,24 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
         </div>
     </div>
 
+<div id="reportKuppiModal" class="kuppi-modal-overlay" style="display:none;">
+  <div class="kuppi-modal-content" style="max-width:420px;">
+    <button class="kuppi-modal-close" onclick="closeReportKuppiModal()">&times;</button>
+    <div id="reportKuppiModalBody">
+      <h3>Report Kuppi</h3>
+      <p>Are you sure you want to report this Kuppi?</p>
+      <div class="kuppi-modal-actions" style="display:flex; gap:12px; justify-content:flex-end; margin-top:16px;">
+        <button class="btn btn-danger" id="confirmReportKuppi">Yes, Report</button>
+        <button class="btn" onclick="closeReportKuppiModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script src="/assets/js/kuppi/kuppiModal.js"></script>
+<script src="/assets/js/kuppi/reportKuppiModal.js"></script>
 <script src="/assets/js/kuppi/hostKuppiModal.js"></script>
 <script src="/assets/js/kuppi/requestKuppiModal.js"></script>
 <script src="/assets/js/kuppi/volunteerKuppiModal.js"></script>

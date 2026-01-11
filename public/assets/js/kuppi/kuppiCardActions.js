@@ -104,8 +104,8 @@
       reportBtn.dataset.bound = 'true';
       reportBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-        if (typeof window.onKuppiReport === 'function') {
-          window.onKuppiReport(item);
+        if (typeof window.openReportKuppiModal === 'function') {
+          window.openReportKuppiModal(item);
         } else {
           reportBtn.dispatchEvent(new CustomEvent('kuppi:report', {
             bubbles: true,
@@ -116,6 +116,19 @@
     }
   }
 
-  // Expose for use in the card renderer
+  window.onKuppiReport = async function(item) {
+
+    try {
+      const res = await fetch('/kuppi/reportKuppi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: item?.id }) 
+      });
+
+    } catch (err) {
+      console.error('Report request error', err);
+    }
+  };
+
   window.renderKuppiCardActions = renderKuppiCardActions;
 })();
