@@ -65,7 +65,7 @@
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.12);
   width: 100%;
-  max-width: 640px; /* slightly more compact */
+  max-width: 720px; /* wider to give details more room */
   max-height: 84vh;
   overflow: hidden;
   display: grid;
@@ -191,6 +191,12 @@
   font-size: 16px; 
 }
 
+/* Smaller, lighter meta rows (date/time, platform) */
+.kuppi-details .kuppi-detail-value.kuppi-meta {
+  font-size: 13px;
+  color: #6b7280;
+}
+
 .kuppi-details a { 
   color: #2563eb; 
   text-decoration: none; 
@@ -225,4 +231,67 @@
   box-shadow: 0 1px 2px rgba(0,0,0,0.06) inset;
   display: inline-block;
   flex: 0 0 28px;
+}
+
+/* Side-by-side modal layout: image left, details right */
+.kuppi-modal-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.kuppi-modal-image {
+  flex: 0 0 340px;
+  max-width: 340px;
+}
+
+.kuppi-modal-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.kuppi-modal-side {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Compact details alignment to match feed styling */
+.kuppi-modal-side .kuppi-details {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .kuppi-modal-layout {
+    flex-direction: column;
+  }
+  .kuppi-modal-image {
+    max-width: 100%;
+    flex: 0 0 auto;
+  }
+}
+
+/* --- Modal layout refinements --- */
+/* Make the left image smaller and remove extra top spacing */
+#kuppiModalBody .kuppi-modal-image img {
+  max-height: 140px !important;
+  margin-top: 0 !important;
+}
+
+/* Ensure container width is constrained even if other rules apply */
+#kuppiModalBody .kuppi-modal-image {
+  flex-basis: 240px; /* narrower image column */
+  max-width: 240px;
+}
+
+/* Tighten spacing for values to match feed compact feel */
+.kuppi-modal-side .kuppi-detail-value {
+  line-height: 1.6;
+}
+
+/* Ensure the requester/host rows sit closely without large gaps */
+.kuppi-modal-side .kuppi-detail-value + .kuppi-detail-value {
+  margin-top: 4px;
 }

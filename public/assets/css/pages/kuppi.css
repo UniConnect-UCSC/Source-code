@@ -90,7 +90,7 @@ body {
 .kuppi-feed {
   grid-column: 2 / 3; 
   display: grid;
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(2, 1fr); 
   gap: var(--spacing-5);
 
 }
@@ -202,3 +202,253 @@ body {
 
 
 /* Modal styles removed in favor of components/kuppiModal.css */
+
+/* --- Kuppi modal card (class-based styling) --- */
+.kuppi-modal-card {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 12px;
+  align-items: start;
+  border: 1px solid #e0e0ff;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+}
+
+.kuppi-modal-card .post-image img {
+  width: 96px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.kuppi-post-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+/* Buttons inside modal card actions (Edit / Volunteer) */
+.kuppi-post-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: #f9fafb;
+  color: #111827;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid #e5e7eb;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .08s ease;
+}
+
+.kuppi-post-actions .btn:hover {
+  background: #eef2f7;
+  border-color: #d1d5db;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.kuppi-post-actions .btn:active {
+  transform: translateY(1px);
+}
+
+.kuppi-post-actions .btn-primary {
+  background: var(--color-brand-500, #6c63ff);
+  color: #fff;
+  border-color: transparent;
+}
+
+.kuppi-post-actions .btn-primary:hover {
+  background: var(--color-brand-600, #5a52e6);
+}
+
+.kuppi-modal-card .post-topic {
+  font-size: 1rem;
+  margin: 0 0 6px 0;
+}
+
+.kuppi-modal-card .post-university,
+.kuppi-modal-card .post-requester-university,
+.kuppi-modal-card .post-category,
+.kuppi-modal-card .post-host-name,
+.kuppi-modal-card .post-datetime,
+.kuppi-modal-card .post-platform {
+  margin: 2px 0;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+/* Ensure kuppi-image supports <img> content as used in Kuppi cards */
+.kuppi-image img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- Kuppi card styles (copied from event.css, renamed) --- */
+.kuppi-card {
+  background: var(--color-primary-white);
+  border: 2px solid var(--color-primary-gray);
+  border-radius: var(--rounded-xl);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.kuppi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-brand-100);
+}
+
+.kuppi-image {
+  width: 100%;
+  height: 180px;
+  background: var(--color-secondary-white);
+  overflow: hidden;
+}
+
+.kuppi-content {
+  padding: var(--spacing-4);
+}
+
+.kuppi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+}
+
+/* Give the title/university block more space than the actions */
+.kuppi-header > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.kuppi-header .kuppi-actions {
+  flex: 0 0 auto;
+}
+
+/* Allow long titles to wrap nicely */
+.kuppi-title {
+  max-width: 100%;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.kuppi-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.kuppi-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: var(--spacing-1);
+}
+
+.kuppi-university {
+  display: inline-block;
+  padding: var(--spacing-1) var(--spacing-2);
+  background: var(--color-brand-50);
+  border-radius: var(--rounded-full);
+  font-size: var(--text-sm);
+  color: var(--color-brand-800);
+  font-weight: 500;
+}
+
+/* Category badge not used */
+
+.kuppi-date {
+  color: var(--color-secondary-gray);
+  font-size: var(--text-sm);
+  margin-bottom: var(--spacing-2);
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.kuppi-description {
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-3);
+}
+
+.kuppi-location {
+  color: var(--color-secondary-gray);
+  font-size: var(--text-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+/* Generic icon buttons copied from event.css for independence */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--rounded-full);
+  border: 1px solid var(--color-primary-gray);
+  background: var(--color-primary-white);
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.icon-btn:hover {
+  border-color: var(--color-brand-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.icon-btn:active {
+  transform: translateY(1px);
+}
+
+.favorite-btn.active {
+  background: var(--color-brand-50);
+  border-color: var(--color-brand-300);
+  color: var(--color-brand-700);
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: 2px 8px;
+  border-radius: var(--rounded-full);
+  border: 1px solid var(--color-primary-gray);
+  background: var(--color-primary-white);
+  color: #111827;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.pill-btn:hover {
+  border-color: var(--color-brand-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.pill-btn:active {
+  transform: translateY(1px);
+}
+
+.participants-btn .participants-count {
+  font-weight: 600;
+}
+
+/* Smaller lucide icons inside buttons */
+.kuppi-actions .icon-btn .lucide,
+.pill-btn .lucide {
+  width: 16px;
+  height: 16px;
+}
