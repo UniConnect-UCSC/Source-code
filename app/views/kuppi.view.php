@@ -78,7 +78,7 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
 
 </div>
 
-<script src="/assets/js/kuppi/KuppiModal.js"></script>
+<script src="/assets/js/kuppi/kuppiModal.js"></script>
 <script src="/assets/js/kuppi/hostKuppiModal.js"></script>
 <script src="/assets/js/kuppi/requestKuppiModal.js"></script>
 <script src="/assets/js/kuppi/volunteerKuppiModal.js"></script>
@@ -87,7 +87,6 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
 <script src="/assets/js/kuppi/myKuppisModal.js"></script>
 <script src="/assets/js/kuppi/kuppiRequestsModal.js"></script>
 <script src="/assets/js/kuppi/filters.js"></script>
-<script src="/assets/js/kuppi/api.js"></script>
 <script src="/assets/js/kuppi/renderKuppicard.js"></script>
 <script src="/assets/js/kuppi/searchBar.js" defer></script>
 <script src="/assets/js/kuppi/index.js"></script>
