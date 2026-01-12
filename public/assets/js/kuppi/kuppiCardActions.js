@@ -130,5 +130,6 @@
     }
   };
 
+
   window.renderKuppiCardActions = renderKuppiCardActions;
 })();

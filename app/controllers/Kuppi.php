@@ -135,19 +135,21 @@ class Kuppi extends Controller
             $date = $_POST['date'] ?? '';
             $time = $_POST['time'] ?? '';
             $platform = $_POST['platform'] ?? '';
-            if (!empty($category_id)) {
-                $data['category_id'] = (int)$category_id;
-            }
-            $kuppiDateTime = $date . ' ' . $time;
+            $category_id = $_POST['category_id'] ?? '';
             $link = $_POST['link'] ?? '';
+            
+            $kuppiDateTime = $date . ' ' . $time;
             
             $data = [
                 'topic' => $topic,
                 'kuppi_date_time' => $kuppiDateTime,
                 'platform' => $platform,
-                'category_id' => $category_id,
                 'kuppi_url' => $link
             ];
+            
+            if (!empty($category_id)) {
+                $data['category_id'] = (int)$category_id;
+            }
             
             $updated = $kuppiModel->update($id, $data);
             
@@ -159,7 +161,6 @@ class Kuppi extends Controller
             }
         } else {
             header('Location: /kuppi');
-            console_error('Invalid request method for editing Kuppi.');
             exit();
         }
     }

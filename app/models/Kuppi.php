@@ -15,6 +15,9 @@ class KuppiModel {
             ["kuppi_categories","m.category_id = c.id", "INNER" ,"c"]
 
         ];
+        $orderBy = [
+            "m.kuppi_date_time" =>'DESC'
+        ];
 
         $selected = [
             "m.*",
@@ -28,6 +31,7 @@ class KuppiModel {
 
         $data = $this->where(
             conditions: $conditions,
+            orderBy: $orderBy,
             limit: $limit,
             offset: $offset,
             join: $join,
@@ -52,6 +56,9 @@ class KuppiModel {
             ["universities", "h.university_id = n.id", "INNER" ,"n"],
             ["universities", "r.university_id = s.id", "LEFT" ,"s"]
         ];
+        $orderBy = [
+            "m.kuppi_date_time" =>'DESC'
+        ];
 
         $selected = [
             "m.*",
@@ -66,6 +73,7 @@ class KuppiModel {
         $data = $this->where(
             conditions: $conditions,
             join: $join,
+            orderBy: $orderBy,
             offset: $offset,
             limit: $limit,
             selected: $selected
@@ -91,7 +99,9 @@ class KuppiModel {
             ["universities", "r.university_id = s.id", "INNER" ,"s"]
         ];
 
-        
+        $orderBy = [
+            "m.kuppi_date_time" =>'DESC'
+        ];
         $selected = [
             "m.*",
             ["h.f_name" , "host_f_name"],
@@ -106,6 +116,7 @@ class KuppiModel {
             conditions: $conditions,
             join: $join,
             offset: $offset,
+            orderBy: $orderBy,
             limit: $limit,
             selected: $selected
         );

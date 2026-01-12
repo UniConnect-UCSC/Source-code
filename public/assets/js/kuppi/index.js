@@ -1,5 +1,4 @@
 
-
   const newMainKuppiScroll = new InfinityScroll(
     'getAllKuppies',
     '/kuppi/scrollable',
@@ -40,22 +39,10 @@
   );
   window.newKuppiRequestsScroll = newKuppiRequestsScroll;
 
-  var endReached = false;
-  function onScroll() {
-
-    var nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 300;
-      if (nearBottom && !endReached){
-      try {
-        newMainKuppiScroll.loadNextElements();        
-      } catch (error) {
-        endReached = true;
-      }
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    window.addEventListener('scroll', onScroll);
-  });
+ newMainKuppiScroll.setupAutoLoadOnScroll();
+ newMainKuppiScroll.addEventListener('successfulLoad' , () => {
+  lucide.createIcons();
+ });
 
   
 
