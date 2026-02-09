@@ -9,7 +9,7 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
 <!-- Kuppi Modal styles -->
 <link rel="stylesheet" href="/assets/css/components/kuppi/kuppiModal.css">
 <link rel="stylesheet" href="/assets/css/components/kuppi/kuppiRibbon.css">
-<!-- Styles now copied into kuppi.css; event.css not required here -->
+<link rel="stylesheet" href="/assets/css/components/kuppi/validation.css">
 
 <div class="home-layout">
     <!-- Left Nav Panel -->
@@ -94,6 +94,7 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
 
 <script src="/assets/js/kuppi/kuppiModal.js"></script>
 <script src="/assets/js/kuppi/reportKuppiModal.js"></script>
+<script src="/assets/js/kuppi/validation.js"></script>
 <script src="/assets/js/kuppi/hostKuppiModal.js"></script>
 <script src="/assets/js/kuppi/requestKuppiModal.js"></script>
 <script src="/assets/js/kuppi/volunteerKuppiModal.js"></script>

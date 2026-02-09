@@ -67,10 +67,12 @@
         <div class="form-row">
           <label for="date">Date</label>
           <input type="date" id="date" name="date" required>
+          <div id="date-error" class="error-message"></div>
         </div>
         <div class="form-row">
           <label for="time">Time</label>
           <input type="time" id="time" name="time" required>
+          <div id="time-error" class="error-message"></div>
         </div>
         <div class="form-row">
           <label for="platform">Platform</label>
@@ -96,6 +98,7 @@
     const overlay = document.getElementById('kuppiModal');
     if (overlay) overlay.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    if (window.addDateTimeValidation) window.addDateTimeValidation();
   }
 
   window.openKuppiRequestModal = openKuppiRequestModal;
