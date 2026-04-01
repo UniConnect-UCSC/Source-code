@@ -24,7 +24,7 @@ const categoryScroll = new InfinityScroll(
     document.getElementById('categoriesSection'),
     categoryRenderer,
     0,
-    50
+    10
 );
 
 const formCategorySuggestionScroll = new InfinityScroll(
@@ -33,6 +33,3 @@ const formCategorySuggestionScroll = new InfinityScroll(
     document.getElementById('categorySuggestions'),
     categorySuggestionRenderer,
 );
-
-
-categoryScroll.loadNextElements();

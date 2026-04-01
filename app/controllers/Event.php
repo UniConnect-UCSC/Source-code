@@ -11,7 +11,6 @@ class Event extends Controller
 
         $eventModel = new EventModel();
         $response = $eventModel->getUpcomingEvents($limit, $offset, $categories);
-        $universityModel = new University();
         return $response;
     }
 
@@ -48,7 +47,7 @@ class Event extends Controller
     }
 
     private function addCategoryMappings($eventId, $categories){
-        require_once(__DIR__ . "/../models/favoriteEvents.php");
+        require_once(__DIR__ . "/../models/eventCategoryMapping.php");
         $mappingModel = new EventCategoryMappingModel();
         $mappingModel->mapEventToCategory($eventId, $categories);
     }
@@ -277,7 +276,8 @@ class Event extends Controller
 
             switch($data['scrollIdentifier']){
                 case 'getEvents':
-                    $response = $this->getEventData($data["limit"], $data['offset'], $data['context']['categories'] ?? []) ?? [];
+                    $filterCats = $data['context']['filterCategories'] ?? $data['filterCategories'] ?? [];
+                    $response = $this->getEventData($data["limit"], $data['offset'], $filterCats) ?? [];
                     echo json_encode($response);
                     break;
 

@@ -68,6 +68,14 @@ class EventModel
             ["CASE WHEN p.event_id IS NULL THEN 0 ELSE 1 END", "is_participating"]
         ];
 
+        // If categories provided, join the mapping table and filter by category_id (match ANY)
+        $groupBy = null;
+        if (!empty($categories)) {
+            $join[] = ["event_category_mapping", "m.id = ecm.event_id", "INNER", "ecm"];
+            $conditions[] = ['ecm.category_id', 'IN', $categories];
+            $groupBy = ['m.id', 'u.name', 'is_favorite', 'is_participating']; // Group by event to avoid duplicates
+        }
+
         $tempData = $this->where(
             conditions: $conditions,
             limit: $limit,
@@ -75,10 +83,10 @@ class EventModel
             orderBy: ['event_timestamp' => 'ASC'],
             join: $join,
             selected: $selected,
-            showDeleted: false
+            showDeleted: false,
+            groupBy: $groupBy
         );
 
-        error_log(print_r($tempData, true));
         return $tempData;
     }
 

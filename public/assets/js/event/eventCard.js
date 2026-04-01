@@ -7,6 +7,13 @@ var runningPartToggle = {};
 newEventScroll.setupAutoLoadOnScroll();
 newEventScroll.loadNextElements();
 
+newEventScroll.setContextProvider(() => {
+    return {
+        filterCategories: window.selectedEventFilterCategories || [],
+    };
+});
+
+
 eventGrid.addEventListener('event:participants-click', (e) => {
     const { eventId, current, element } = e.detail;
     console.log(`Participants button clicked for event ID: ${eventId}, currently active: ${current}`);

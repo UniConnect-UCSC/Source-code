@@ -62,5 +62,6 @@
 <script src="/assets/js/event/form.js"></script>
 <script src="/assets/js/event/viewRepEvents.js"></script>
 <script src="/assets/js/event/eventCard.js"></script>
+<script src="/assets/js/event/categoryFilter.js"></script>
 
 <script src="/assets/js/event/event.js"></script>

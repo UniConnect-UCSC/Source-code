@@ -4,7 +4,6 @@ const searchToggleBtn = document.getElementById('searchToggleBtn');
 const searchInputWrapper = document.getElementById('searchInputWrapper');
 const searchInput = document.getElementById('searchInput');
 const filterButtons = document.querySelectorAll('#filterButtons .btn');
-const categoryWrapper = document.getElementById('categoryWrapper');
 
 // For hiding body scroll when modal is open
 document.body.classList.add('body-class');
@@ -56,36 +55,6 @@ filterButtons.forEach(btn => {
         // Implement filter logic here
 
     });
-});
-
-selectedCategory = [];
-
-categoryWrapper.addEventListener('click', (e) => {
-    const btn = e.target.closest('.category-btn');
-    if (!btn) return;
-    
-    if(btn.id === 'allCategoriesBtn'){
-        categoryWrapper.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedCategory = [];
-    }else{
-        document.getElementById('allCategoriesBtn').classList.remove('active');
-        
-        if(btn.classList.contains('active')){
-            btn.classList.remove('active');
-            selectedCategory = selectedCategory.filter(cat => cat !== btn.dataset.categoryId);        
-        }else{
-            btn.classList.add('active');
-            selectedCategory.push(btn.dataset.categoryId);
-        }
-    }
-
-    //Apply filtering
-    newEventScroll.resetScroll();
-    newEventScroll.loadNextElements({
-        context: { categories: selectedCategory }
-    });
-
 });
 
 
