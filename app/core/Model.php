@@ -30,6 +30,7 @@ trait Model
      * @param int $limit [DEFAULT: queries EVERYTHING]
      * @param int $offset [DEFAULT: 0]
      * @param array $orderBy Array of fields to order by with direction [field => 'ASC|DESC']
+    * @param array|string $groupBy Array or single field (alias.column) to group by
      * @param array $join Array of join definitions in format [[ <join_table_name>, <join_condition>, <JOIN_TYPE>, <alias> ] , [] ,]
      * @param array $selected Array of field and aliases(not required)  [[<Column_name>, <Alias>], [], ..] OR ["column_","",...]
      * @param bool $showDeleted If true, includes soft-deleted records; if false, excludes them
@@ -42,7 +43,7 @@ trait Model
      * Note(JOIN): make sure to add the aliases if join is used. the main table is aliased as 'm'
      * NOTE(JOIN): if the joining tables have the same column name the result will have the last one overwriting previous ones
      */
-    public function where($conditions, $limit = null, $offset = null, $orderBy = [], $join = [], $selected = [], $showDeleted = true)
+    public function where($conditions, $limit = null, $offset = null, $orderBy = [], $join = [], $selected = [], $showDeleted = true, $groupBy = null)
     {
         try {
             $operators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE', 'NOT IN', 'IN', 'IS'];
@@ -174,6 +175,15 @@ trait Model
 
             // Handle the trailing AND in the previous loop
             $sql .= "TRUE ";
+
+            // Build the GROUP BY clause (simple: accepts alias.column or array of fields)
+            if (!empty($groupBy)) {
+                if (!is_array($groupBy)) {
+                    $groupBy = [$groupBy];
+                }
+
+                $sql .= " GROUP BY " . implode(', ', $groupBy) . " ";
+            }
 
             // Build the ORDER BY clause
             foreach ($orderBy as $field => $direction) {
