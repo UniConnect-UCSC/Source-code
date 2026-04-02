@@ -46,11 +46,15 @@ class EventModel
         return $this->where(['university_id' => $universityId]);
     }
 
-    public function getUpcomingEvents($limit, $offset, $categories = []){
+    public function getUpcomingEvents($limit, $offset, $categories = [], $searchTerm = ''){
 
         $conditions = [
-            ['event_timestamp', '>=', date('Y-m-d H:i:s', time())]
+            ['event_timestamp', '>=', date('Y-m-d H:i:s', time())],
         ];
+
+        if(!empty($searchTerm)){
+            $conditions[] = ['title', 'LIKE', '%' . $searchTerm . '%'];
+        } 
 
         $join = [];
         $selected = [];
@@ -115,4 +119,24 @@ class EventModel
         return $this->delete([['id', '=', $eventId], ['posted_by', '=', $userId]], softDelete: false);
     }
 
+    public function getEventSuggestions($limit, $offset, $searchTerm){
+        $conditions = [
+            ['event_timestamp', '>=', date('Y-m-d H:i:s', time())],
+            ['title', 'LIKE', '%' . $searchTerm . '%']
+        ];
+
+        $selected = [
+            "m.id",
+            "m.title"
+        ];
+
+        return $this->where(
+            conditions: $conditions,
+            limit: $limit,
+            offset: $offset,
+            orderBy: ['event_timestamp' => 'ASC'],
+            selected: $selected,
+            showDeleted: false
+        );
+    }
 }

@@ -19,6 +19,8 @@
     align-items: center;
     gap: var(--spacing-2);
     flex: 0 0 auto;
+    position: relative;
+    z-index: 20;
 }
 
 .search-btn {
@@ -51,6 +53,7 @@
 
 .search-input-wrapper.active {
     width: 200px;
+    overflow: visible;
 }
 
 .search-input {

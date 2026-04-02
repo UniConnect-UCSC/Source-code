@@ -1,8 +1,5 @@
 const createEventBtn = document.getElementById('createEventBtn');
 const viewEventBtn = document.getElementById('viewEventBtn');
-const searchToggleBtn = document.getElementById('searchToggleBtn');
-const searchInputWrapper = document.getElementById('searchInputWrapper');
-const searchInput = document.getElementById('searchInput');
 const filterButtons = document.querySelectorAll('#filterButtons .btn');
 
 // For hiding body scroll when modal is open
@@ -32,19 +29,6 @@ viewEventBtn.addEventListener('click', () => {
     viewEventModal.classList.add('active');
 });
 
-// Option search and filtering
-searchToggleBtn.addEventListener('click', () => {
-    searchInputWrapper.classList.toggle('active');
-    document.getElementById('filterButtons').classList.toggle('shifted');
-    if (searchInputWrapper.classList.contains('active')) {
-        searchInput.focus();
-    }
-});
-
-searchInput.addEventListener('input', (e) => {
-    searchQuery = e.target.value;
-    // Implement search filtering logic here (AJAX)
-});
 
 filterButtons.forEach(btn => {
     btn.addEventListener('click', () => {

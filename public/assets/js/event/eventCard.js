@@ -10,6 +10,7 @@ newEventScroll.loadNextElements();
 newEventScroll.setContextProvider(() => {
     return {
         filterCategories: window.selectedEventFilterCategories || [],
+        searchTerm: window.selectedEventSearchQuery || ''
     };
 });
 

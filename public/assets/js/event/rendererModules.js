@@ -247,3 +247,18 @@ function categorySuggestionRenderer($data){
 
     return suggestionDiv;
 }
+
+function searchSuggestionRenderer(suggestion) {
+    if (!suggestion || !suggestion.title || !suggestion.id) return null;
+
+    const item = document.createElement('div');
+    item.className = 'suggestion-item';
+    item.textContent = suggestion.title;
+    item.dataset.eventId = suggestion.id;
+
+    item.addEventListener('click', () => {
+        executeSearch(suggestion.title);
+    });
+
+    return item;
+}

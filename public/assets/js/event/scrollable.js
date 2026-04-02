@@ -33,3 +33,12 @@ const formCategorySuggestionScroll = new InfinityScroll(
     document.getElementById('categorySuggestions'),
     categorySuggestionRenderer,
 );
+
+const searchEventScroll = new InfinityScroll(
+    'getEventSuggestions',
+    '/event/scrollable',
+    document.getElementById('searchSuggestions'),
+    searchSuggestionRenderer,
+    0,
+    5
+);

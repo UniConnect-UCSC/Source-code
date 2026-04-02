@@ -22,6 +22,7 @@
                     <button class="search-btn" id="searchToggleBtn">🔍</button>
                     <div class="search-input-wrapper" id="searchInputWrapper">
                         <input type="text" class="search-input" id="searchInput" placeholder="Search events...">
+                        <div class="search-suggestions" id="searchSuggestions"></div>
                     </div>
                 </div>
                 <div class="filter-buttons" id="filterButtons">
@@ -62,6 +63,7 @@
 <script src="/assets/js/event/form.js"></script>
 <script src="/assets/js/event/viewRepEvents.js"></script>
 <script src="/assets/js/event/eventCard.js"></script>
+<script src="/assets/js/event/eventSearch.js"></script>
 <script src="/assets/js/event/categoryFilter.js"></script>
 
 <script src="/assets/js/event/event.js"></script>

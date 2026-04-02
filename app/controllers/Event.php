@@ -6,11 +6,16 @@ require_once(__DIR__ . "/../models/University.php");
 
 class Event extends Controller
 {
-    private function getEventData($limit, $offset, $categories = [])
-    {
+    private function getEventData($limit, $offset, $categories = [], $searchTerm = ''){
 
         $eventModel = new EventModel();
-        $response = $eventModel->getUpcomingEvents($limit, $offset, $categories);
+        $response = $eventModel->getUpcomingEvents($limit, $offset, $categories, $searchTerm);
+        return $response;
+    }
+
+    private function getEventSuggestions($limit, $offset, $searchTerm){
+        $eventModel = new EventModel();
+        $response = $eventModel->getEventSuggestions($limit, $offset, $searchTerm);
         return $response;
     }
 
@@ -324,7 +329,14 @@ class Event extends Controller
             switch($data['scrollIdentifier']){
                 case 'getEvents':
                     $filterCats = $data['context']['filterCategories'] ?? $data['filterCategories'] ?? [];
-                    $response = $this->getEventData($data["limit"], $data['offset'], $filterCats) ?? [];
+                    $searchTerm = $data['context']['searchTerm'] ?? $data['searchTerm'] ?? '';
+                    $response = $this->getEventData($data["limit"], $data['offset'], $filterCats, $searchTerm) ?? [];
+                    echo json_encode($response);
+                    break;
+
+                case 'getEventSuggestions':
+                    $searchTerm = $data['context']['searchTerm'] ?? '';
+                    $response = $this->getEventSuggestions($data["limit"], $data['offset'], $searchTerm) ?? [];
                     echo json_encode($response);
                     break;
 
