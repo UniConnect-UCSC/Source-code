@@ -11,7 +11,8 @@ newEventScroll.setContextProvider(() => {
     return {
         filterCategories: window.selectedEventFilterCategories || [],
         searchTerm: window.selectedEventSearchQuery || '',
-        onlyFavorites: window.selectedEventFavoritesOnly || false
+        onlyFavorites: window.selectedEventFavoritesOnly || false,
+        filterButton: window.selectedEventFilterButton || null
     };
 });
 

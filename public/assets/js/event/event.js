@@ -34,10 +34,8 @@ filterButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         filterButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        currentFilter = btn.dataset.filter;
-    
-        // Implement filter logic here
-
+        window.selectedEventFilterButton = btn.dataset.filter;
+        newEventScroll.refresh();
     });
 });
 

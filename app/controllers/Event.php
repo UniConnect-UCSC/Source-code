@@ -6,10 +6,10 @@ require_once(__DIR__ . "/../models/University.php");
 
 class Event extends Controller
 {
-    private function getEventData($limit, $offset, $categories = [], $searchTerm = '', $onlyFavorites = false){
+    private function getEventData($limit, $offset, $categories = [], $searchTerm = '', $onlyFavorites = false, $filterType = "for-you"){
 
         $eventModel = new EventModel();
-        $response = $eventModel->getUpcomingEvents($limit, $offset, $categories, $searchTerm, $onlyFavorites);
+        $response = $eventModel->getUpcomingEvents($limit, $offset, $categories, $searchTerm, $onlyFavorites, $filterType);
         return $response;
     }
 
@@ -330,10 +330,12 @@ class Event extends Controller
 
             switch($data['scrollIdentifier']){
                 case 'getEvents':
-                    $filterCats = $data['context']['filterCategories'] ?? $data['filterCategories'] ?? [];
-                    $searchTerm = $data['context']['searchTerm'] ?? $data['searchTerm'] ?? '';
-                    $onlyFavorites = $data['context']['onlyFavorites'] ?? $data['onlyFavorites'] ?? false;
-                    $response = $this->getEventData($data["limit"], $data['offset'], $filterCats, $searchTerm, $onlyFavorites) ?? [];
+                    $filterCats = $data['context']['filterCategories'] ?? [];
+                    $searchTerm = $data['context']['searchTerm'] ?? '';
+                    $onlyFavorites = $data['context']['onlyFavorites']  ?? false;
+                    $filterType = $data['context']['filterButton'] ?? "for-you";
+
+                    $response = $this->getEventData($data["limit"], $data['offset'], $filterCats, $searchTerm, $onlyFavorites, $filterType) ?? [];
                     echo json_encode($response);
                     break;
 
