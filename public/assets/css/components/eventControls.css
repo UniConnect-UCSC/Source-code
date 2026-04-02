@@ -132,6 +132,31 @@
     box-shadow: var(--shadow-md);
 }
 
+.controls #viewFavoritesBtn {
+    margin-left: auto;
+    background: var(--color-primary-white);
+    color: var(--color-brand-800);
+    border: 2px solid var(--color-brand-300);
+}
+
+.controls #viewFavoritesBtn:hover {
+    background: var(--color-brand-50);
+    border-color: var(--color-brand-400);
+    box-shadow: var(--shadow-sm);
+}
+
+.controls #viewFavoritesBtn.active {
+    background: var(--color-brand-100);
+    color: var(--color-brand-800);
+    border-color: var(--color-brand-200);
+    box-shadow: none;
+}
+
+.controls #viewFavoritesBtn.active:hover {
+    background: var(--color-brand-100);
+    border-color: var(--color-brand-200);
+}
+
 .categories-wrapper {
     display: flex;
     align-items: center;

@@ -46,7 +46,7 @@ class EventModel
         return $this->where(['university_id' => $universityId]);
     }
 
-    public function getUpcomingEvents($limit, $offset, $categories = [], $searchTerm = ''){
+    public function getUpcomingEvents($limit, $offset, $categories = [], $searchTerm = '', $onlyFavorites = false){
 
         $conditions = [
             ['event_timestamp', '>=', date('Y-m-d H:i:s', time())],
@@ -59,9 +59,11 @@ class EventModel
         $join = [];
         $selected = [];
 
+        $favoritesJoinType = $onlyFavorites ? "INNER" : "LEFT";
+
         $join = [
             ["universities", "m.university_id = u.id", "INNER", "u"],
-            ["event_favorites", ["m.id = f.event_id", ["f.user_id", "=", $_SESSION["user_id"]]], "LEFT", "f"],
+            ["event_favorites", ["m.id = f.event_id", ["f.user_id", "=", $_SESSION["user_id"]]], $favoritesJoinType, "f"],
             ["event_participations", ["m.id = p.event_id", ["p.user_id", "=", $_SESSION["user_id"]]], "LEFT", "p"]
         ];
 

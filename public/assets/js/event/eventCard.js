@@ -10,7 +10,8 @@ newEventScroll.loadNextElements();
 newEventScroll.setContextProvider(() => {
     return {
         filterCategories: window.selectedEventFilterCategories || [],
-        searchTerm: window.selectedEventSearchQuery || ''
+        searchTerm: window.selectedEventSearchQuery || '',
+        onlyFavorites: window.selectedEventFavoritesOnly || false
     };
 });
 

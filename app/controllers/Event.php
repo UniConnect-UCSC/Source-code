@@ -6,10 +6,10 @@ require_once(__DIR__ . "/../models/University.php");
 
 class Event extends Controller
 {
-    private function getEventData($limit, $offset, $categories = [], $searchTerm = ''){
+    private function getEventData($limit, $offset, $categories = [], $searchTerm = '', $onlyFavorites = false){
 
         $eventModel = new EventModel();
-        $response = $eventModel->getUpcomingEvents($limit, $offset, $categories, $searchTerm);
+        $response = $eventModel->getUpcomingEvents($limit, $offset, $categories, $searchTerm, $onlyFavorites);
         return $response;
     }
 
@@ -330,7 +330,8 @@ class Event extends Controller
                 case 'getEvents':
                     $filterCats = $data['context']['filterCategories'] ?? $data['filterCategories'] ?? [];
                     $searchTerm = $data['context']['searchTerm'] ?? $data['searchTerm'] ?? '';
-                    $response = $this->getEventData($data["limit"], $data['offset'], $filterCats, $searchTerm) ?? [];
+                    $onlyFavorites = $data['context']['onlyFavorites'] ?? $data['onlyFavorites'] ?? false;
+                    $response = $this->getEventData($data["limit"], $data['offset'], $filterCats, $searchTerm, $onlyFavorites) ?? [];
                     echo json_encode($response);
                     break;
 

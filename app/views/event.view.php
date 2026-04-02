@@ -65,5 +65,6 @@
 <script src="/assets/js/event/eventCard.js"></script>
 <script src="/assets/js/event/eventSearch.js"></script>
 <script src="/assets/js/event/categoryFilter.js"></script>
+<script src="/assets/js/event/favoritesFilter.js"></script>
 
 <script src="/assets/js/event/event.js"></script>
