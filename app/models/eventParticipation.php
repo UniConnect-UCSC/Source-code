@@ -54,6 +54,16 @@ class EventParticipationModel {
         return $this->updateAndFetchParticipationCount($eventId, false);
     }
 
+    
+    // This function is only implemented for deletion when event is deleted.
+    // Thus a count update is not needed
+    public function removeAllParticipatorsForEvent($eventId) {
+        $this->delete([
+            ['event_id', '=', $eventId]
+        ]);
+        return true;
+    } 
+
     private function updateAndFetchParticipationCount($eventId, $increment = true) {
             require_once(__DIR__ . "/Event.php");
             $eventModel = new EventModel();

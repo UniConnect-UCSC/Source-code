@@ -32,6 +32,39 @@ class Event extends Controller
         $categoryModel = new EventCategoryModel();
         return $categoryModel->getAllCategories($searchTerm, $excludeIds, $limit, $offset) ?? null;
     }
+
+    //Done this instead of using a cascade is for a easier transition into soft deletion
+    //Can break if exited in middle of the process
+    //Implement a transaction like feature in the future
+    private function deleteEventOrchestrator($userId, $eventId){
+
+        //Deletion of category mappings for the event
+        require_once(__DIR__ . "/../models/eventCategoryMapping.php");
+        $mappingModel = new EventCategoryMappingModel();
+        $status = $mappingModel->deleteMappingsForEvent($eventId);
+        if(!$status){return false;}
+
+        //Deletion of participators for the event
+        require_once(__DIR__ . "/../models/eventParticipation.php");
+        $participationModel = new EventParticipationModel();
+        $status = $participationModel->removeAllParticipatorsForEvent($eventId);
+        if(!$status){return false;}
+
+        //Deletion of favorites for the event
+        require_once(__DIR__ . "/../models/eventFavorites.php");
+        $favoriteModel = new EventFavoritesModel();
+        $status = $favoriteModel->removeAllFavoritesForEvent($eventId);
+        if(!$status){return false;}
+
+        // Should notify the users who favorite-ed the event about the deletion (future improvement)
+
+        // Removal of the event
+        $eventModel = new EventModel();
+        $status = $eventModel->deleteEvent($userId, $eventId); 
+        if(!$status){return false;}
+
+        return true;
+    }
     
     private function uploadEventImage($file){
 
@@ -111,7 +144,6 @@ class Event extends Controller
             return;
         }
 
-        $eventModel = new EventModel();
 
         // Validation of user access
         if(!isset($_SESSION['user_id']) || !$this->checkIfUniRep($_SESSION['user_id'])){
@@ -120,17 +152,7 @@ class Event extends Controller
             return;
         }
 
-        //Fetch user's university for verification
-        $universityId = $this->getUniRepUniversity($_SESSION['user_id']);
-        $eventUniId = $eventModel->getEventUni($data['event_id']);
-
-        if($eventUniId != $universityId){
-            http_response_code(403);
-            echo json_encode(['error' => 'Unauthorized to modify this event']);
-            return;
-        }
-
-        $result = $eventModel->deleteEvent($data['event_id']);
+        $result = $this->deleteEventOrchestrator($_SESSION['user_id'], $data['event_id']);
 
         if($result){
             echo json_encode(['success' => 'Event deleted successfully']);

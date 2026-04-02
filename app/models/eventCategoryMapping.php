@@ -15,5 +15,10 @@ class EventCategoryMappingModel{
         $this->insert($columns, $data);
     }
 
-
+    function deleteMappingsForEvent($eventId){
+        $this->delete([
+            ['event_id', '=', $eventId]
+        ]);
+        return true;
+    }
 }

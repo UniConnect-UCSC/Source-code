@@ -16,4 +16,12 @@ class EventFavoritesModel{
             ['event_id', '=', $eventId]
         ]);
     }
+
+    function removeAllFavoritesForEvent($eventId){
+        $this->delete([
+            ['event_id', '=', $eventId]
+        ]);
+        return true;
+    }
+
 }

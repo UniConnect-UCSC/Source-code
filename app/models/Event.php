@@ -119,8 +119,8 @@ class EventModel
         return $this->update($id, $data, $id_column);
     }
 
-    public function deleteEvent($eventId){
-        return $this->delete($eventId, softDelete: true);
+    public function deleteEvent($userId, $eventId){
+        return $this->delete([['id', '=', $eventId], ['posted_by', '=', $userId]], softDelete: false);
     }
 
 }
