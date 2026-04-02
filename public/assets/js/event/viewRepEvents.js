@@ -41,7 +41,10 @@ repEventListDiv.addEventListener('click', function(e) {
         document.getElementById('eventForm').setAttribute('type', 'update');
         document.getElementById('eventForm').setAttribute('data-id', row.getAttribute('data-id'));
         document.getElementById('eventDescription').value = row.getAttribute('data-description');
-        document.getElementById('eventDate').value = row.getAttribute('data-timestamp');
+
+        let raw = row.getAttribute('data-timestamp'); // e.g. "2024-04-02 15:30:00"
+        let formatted = raw.replace(' ', 'T').slice(0, 16); // "2024-04-02T15:30"
+        document.getElementById('eventDate').value = formatted;
 
         // Enables Form
         document.getElementById('modalHeaderName').innerText = "Edit Event";
