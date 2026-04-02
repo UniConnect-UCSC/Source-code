@@ -20,11 +20,8 @@ class Event extends Controller
         return $repModel->isRep($userId);
     }
     
-    private function getUniRepUniversity($userId){
-        require_once(__DIR__ . "/../models/Representative.php");
-        $repModel = new UniversityRepresentative();
-        $repDetails = $repModel->getRepDetails($userId);
-        return $repDetails ? $repDetails->university_id : null;
+    private function getUniRepUniversity(){
+        return $_SESSION['user_universityID'];
     }
 
     private function getEventCategories($searchTerm, $excludeIds, $limit, $offset){
@@ -122,14 +119,29 @@ class Event extends Controller
         }
 
         $eventModel = new EventModel();
-        $universityId = $this->getUniRepUniversity($_SESSION['user_id']);
+        $universityId = $this->getUniRepUniversity();
 
-        if ($universityId) {
-            $events = $eventModel->getUniUpcomingEvents($universityId, $limit, $offset);
-            return $events;
-        } else {
-            return null;
+        $events = $eventModel->getUniUpcomingEvents($universityId, $limit, $offset);
+        return $events;
+    }
+
+    public function getAllCategoriesForEvent(){
+        header('Content-Type: application/json');
+
+        if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+            http_response_code(405);
+            echo json_encode(['error' => 'Invalid request method']);
+            return;
         }
+
+        $data = parseRequestData();
+        $eventId = $data['event_id'];
+
+        require_once(__DIR__ . "/../models/eventCategoryMapping.php");
+        $mappingModel = new EventCategoryMappingModel();
+        $categories = $mappingModel->getCategoriesForEvent($eventId);
+
+        echo json_encode(['success' => true, 'categories' => $categories]);
     }
 
     // Fix redundant verification code
@@ -185,7 +197,7 @@ class Event extends Controller
         }
 
         //Fetch user's university for verification
-        $universityId = $this->getUniRepUniversity($_SESSION['user_id']);
+        $universityId = $this->getUniRepUniversity();
         $eventUniId = $eventModel->getEventUni($data['event_id']);
 
         if($eventUniId != $universityId){

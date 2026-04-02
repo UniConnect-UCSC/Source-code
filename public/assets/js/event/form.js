@@ -72,7 +72,7 @@ if (clearBtn) clearBtn.addEventListener('click', clearImage);
 const categoryInput = document.getElementById('categoryInput');
 const selectedElement = document.getElementById('eventCategories');
 const suggestionsDiv = document.getElementById('categorySuggestions');
-const selectedList = [];
+var selectedList = [];
 var filterTimeout;
 
 function renderTags(){
@@ -161,6 +161,14 @@ categoryInput.addEventListener('keydown', (e) => {
             return;
         } 
     }
+});
+
+formEventModal.addEventListener('categoriesReady', (e) => {
+    console.log('Categories ready event received with data:', e.detail);
+    const categories = e.detail;
+    selectedList = categories.map(cat => ({ id: cat.id, name: cat.name }));
+    renderTags();
+    updateHidden();
 });
 
 

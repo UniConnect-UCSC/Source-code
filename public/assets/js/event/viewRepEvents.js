@@ -1,4 +1,3 @@
-
 const viewEventModal = document.getElementById('viewEventsModal');
 const closeViewEventsModalBtn = document.getElementById('closeViewEventsModalBtn');
 const repEventListDiv = document.getElementById('repEventsList');
@@ -23,6 +22,18 @@ repEventListDiv.addEventListener('click', function(e) {
 
     if (editBtn){
         const row = editBtn.closest('.rep-event-row');
+
+        Ajax.jsonPost('/event/getAllCategoriesForEvent', { event_id: row.getAttribute('data-id') }).then(
+            (response) => {
+                if(response.success){
+                    const categoriesReadyEvent = new CustomEvent('categoriesReady', { detail: response.categories });
+                    formEventModal.dispatchEvent(categoriesReadyEvent);
+                }else{
+                    console.error('Failed to fetch categories for event:', response.message);
+                }
+            }
+        )
+
         //Set form values
         document.getElementById('eventTitle').value = row.querySelector('.title').textContent;
         document.getElementById('eventHeldAt').value = row.querySelector('.location').textContent;
@@ -55,8 +66,3 @@ repEventListDiv.addEventListener('click', function(e) {
 
 });
 
-repEventListDiv.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        // Delete logic here
-    });
-});
