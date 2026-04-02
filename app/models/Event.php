@@ -106,17 +106,9 @@ class EventModel
     }
 
     public function updateEvent($eventId, $data){
-        $requiredFields = ['updated_at'];        
 
-        if (!$this->validate($data, $requiredFields)) {
-            return false;
-        }
-
-        $id_column = 'id';
-        $id = $data[$id_column];
-        unset($data[$id_column]); // Remove id from data to prevent updating it
-
-        return $this->update($id, $data, $id_column);
+        $this->update($eventId, $data, 'id');
+        return true;
     }
 
     public function deleteEvent($userId, $eventId){

@@ -82,6 +82,13 @@ class Event extends Controller
         $mappingModel->mapEventToCategory($eventId, $categories);
     }
 
+    private function updateCategoryMappings($eventId, $categories){
+        require_once(__DIR__ . "/../models/eventCategoryMapping.php");
+        $mappingModel = new EventCategoryMappingModel();
+        $mappingModel->deleteMappingsForEvent($eventId);
+        $mappingModel->mapEventToCategory($eventId, $categories);
+    }
+
     private function toggleEventFavorite($eventId, $userId, $currentStatus){
         require_once(__DIR__ . "/../models/eventFavorites.php");
         $favoriteModel = new EventFavoritesModel();
@@ -206,10 +213,10 @@ class Event extends Controller
             return;
         }
 
+        $mediaUrl = uploadImageToCloudinary($data['FILES']['event_image'] ?? null, 'uniconnect_events');
+
         // Data from view to model conversion
         $eventData = [
-            'id' => $data['event_id'], // unset and used as condition in model method
-            'posted_by' => $_SESSION['user_id'],
             'title' => trim($data['title']),
             'description' => trim($data['description']),
             'event_timestamp' => trim($data['event_timestamp']),
@@ -217,7 +224,14 @@ class Event extends Controller
             'updated_at' => date('Y-m-d H:i:s', time())
         ];
 
-        $result = $eventModel->update($data['event_id'], $eventData);
+        if($mediaUrl){
+            $eventData['media_url'] = $mediaUrl;
+        }
+
+        $result = $eventModel->updateEvent($data['event_id'], $eventData);
+        if($result && isset($data["eventCategories"])){
+            $this->updateCategoryMappings($data['event_id'], json_decode($data["eventCategories"], true));
+        }
 
         if($result){
             echo json_encode(['status' => 'success']);
