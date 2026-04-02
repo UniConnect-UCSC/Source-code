@@ -53,8 +53,8 @@ class Event extends Controller
     }
 
     private function toggleEventFavorite($eventId, $userId, $currentStatus){
-        require_once(__DIR__ . "/../models/favoriteEvents.php");
-        $favoriteModel = new FavoriteEventsModel();
+        require_once(__DIR__ . "/../models/eventFavorites.php");
+        $favoriteModel = new EventFavoritesModel();
 
         if($currentStatus){
             $favoriteModel->removeFavorite($userId, $eventId);
@@ -228,7 +228,6 @@ class Event extends Controller
 
         if (!$eventId) {
             http_response_code(500);
-            echo json_encode($error);
         } 
 
         // Handle event categories

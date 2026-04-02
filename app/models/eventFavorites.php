@@ -1,8 +1,8 @@
 <?php
 
-class FavoriteEventsModel{
+class EventFavoritesModel{
     use Model;
-    protected $table = 'favorite_events';
+    protected $table = 'event_favorites';
     protected $columns = ['user_id', 'event_id'];
 
     function addFavorite($userId, $eventId){
@@ -16,5 +16,4 @@ class FavoriteEventsModel{
             ['event_id', '=', $eventId]
         ]);
     }
-
 }
