@@ -42,10 +42,12 @@
 
             </div>
 
+            <?php if (!empty($isUniRep)): ?>
             <div class='rep-btn-wrapper'>
                 <button class="btn btn-primary" id="createEventBtn">Create Event</button>
                 <button class="btn btn-primary" id="viewEventBtn">Manage Events</button>
             </div>
+            <?php endif; ?>
 
         </div>
 

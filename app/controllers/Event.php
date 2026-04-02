@@ -20,6 +20,8 @@ class Event extends Controller
     }
 
     private function checkIfUniRep($userId){
+        if(!$userId){return false;}
+
         require_once(__DIR__ . "/../models/Representative.php");
         $repModel = new UniversityRepresentative();
         return $repModel->isRep($userId);
@@ -360,6 +362,7 @@ class Event extends Controller
     }
 
     public function index(){
+        $isUniRep = $this->checkIfUniRep($_SESSION['user_id'] ?? null);
 
         $this->view('event', [
             'title' => 'Event Page',
@@ -375,6 +378,7 @@ class Event extends Controller
                 <link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
                 <link rel="stylesheet" href="/assets/css/pages/home.css">
                 ',
+            'isUniRep' => $isUniRep
 
         ]);
     }
