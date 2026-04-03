@@ -62,26 +62,39 @@ class TempModel {
     }
 
     public function fetchNextBatch(){
+        error_log("[TempModel] fetchNextBatch called. hasMoreRecords: " . ($this->hasMoreRecords ? 'true' : 'false'));
 
         if(!$this->hasMoreRecords){
+            error_log("[TempModel] No more records to fetch.");
             return [];
         }
 
         $this->whereConstructorInputs['limit'] = $this->perLimit;
         $this->whereConstructorInputs['offset'] = $this->batchSize;
+        error_log("[TempModel] whereConstructorInputs: " . print_r($this->whereConstructorInputs, true));
 
-        $response = $this->where(...$this->whereConstructorInputs);
+        try {
+            $response = $this->where(...$this->whereConstructorInputs);
+            error_log("[TempModel] where() response: " . print_r($response, true));
+        } catch (Throwable $e) {
+            error_log("[TempModel] Exception in where(): " . $e->getMessage());
+            $this->hasMoreRecords = false;
+            return [];
+        }
 
         if ($response === false || empty($response) || !is_array($response)) {
+            error_log("[TempModel] No results or error from where().");
             $this->hasMoreRecords = false;
             return [];
         }
 
         if(count($response) < $this->perLimit){
+            error_log("[TempModel] Fetched less than perLimit, marking as last batch.");
             $this->hasMoreRecords = false;
         }
 
         $this->batchSize += $this->perLimit;
+        error_log("[TempModel] Returning batch of " . count($response) . " rows.");
 
         return $response;
     }
