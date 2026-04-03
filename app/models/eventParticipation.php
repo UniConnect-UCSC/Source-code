@@ -64,6 +64,11 @@ class EventParticipationModel {
         return true;
     } 
 
+    public function getParticipatorsForEvent($eventId) {
+        $participators = $this->where([['event_id', '=', $eventId]]);
+        return $participators ? $participators : [];
+    }
+
     private function updateAndFetchParticipationCount($eventId, $increment = true) {
             require_once(__DIR__ . "/Event.php");
             $eventModel = new EventModel();

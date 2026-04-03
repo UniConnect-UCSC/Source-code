@@ -42,14 +42,50 @@ class Event extends Controller
         return $eventModel->getEventTitle($eventId);
     }
 
+    private function getNotifyingUsersForDeletion($eventId){
+        require_once(__DIR__ . "/../models/eventParticipation.php");
+        $participationModel = new EventParticipationModel();
+        $participatingUserIds = $participationModel->getParticipatorsForEvent($eventId);
+
+        require_once(__DIR__ . "/../models/eventFavorites.php");
+        $favoriteModel = new EventFavoritesModel();
+        $favoriteUserIds = $favoriteModel->getUsersForEvent($eventId);
+
+        $userIds = [];
+
+        foreach ($participatingUserIds as $row) {
+            $userIds[$row->user_id] = true;
+        }
+
+        foreach ($favoriteUserIds as $row) {
+            $userIds[$row->user_id] = true;
+            }
+
+        return array_keys($userIds);
+    }
+
     //Done this instead of using a cascade is for a easier transition into soft deletion
     //Can break if exited in middle of the process
     //Implement a transaction like feature in the future
     private function deleteEventOrchestrator($userId, $eventId){
 
         global $notificationService;
-        require_once(__DIR__ . "/../notifications/recipientProviders/multiUserProvider.php");
+        require_once(__DIR__ . "/../notifications/recipientProviders/deterministicMultiUserProvider.php");
 
+        $userIds = $this->getNotifyingUsersForDeletion($eventId);
+       
+        $notification = new Notification(
+            type: "event_deleted",
+            title: "Event Cancellation Notice" ,
+            message: "We regret to inform you that an event - " . $this->getEventTitle($eventId) . " has been cancelled. Sorry for the inconvenience.",
+            metadata: [
+                'url' => '/event'
+            ]
+        );
+
+        $provider = new deterministicMultiUserProvider($userIds);
+
+        $notificationService->notify($notification, $provider, ['in_app']);
 
         //Deletion of category mappings for the event
         require_once(__DIR__ . "/../models/eventCategoryMapping.php");
@@ -57,51 +93,11 @@ class Event extends Controller
         $status = $mappingModel->deleteMappingsForEvent($eventId);
         if(!$status){return false;}
 
-        $notification = new Notification(
-            type: "event_deleted",
-            title: "Participating Event Cancellation Notice" ,
-            message: "We regret to inform you that an event - " . $this->getEventTitle($eventId) . " has been cancelled. Sorry for the inconvenience.",
-            metadata: [
-                'url' => '/event'
-            ]
-        );
-
-        // Notify all users who where participating the event about the deletion
-        $provider = new multiUserProvider(
-            idColumnName: "user_id",
-            tableName: "event_participations",
-            whereConstructorInputs: [
-                "conditions" => [['event_id', '=', $eventId]],
-            ]
-        );
-
-        $notificationService->notify($notification, $provider, ['in_app']);
-
         //Deletion of participators for the event
         require_once(__DIR__ . "/../models/eventParticipation.php");
         $participationModel = new EventParticipationModel();
         $status = $participationModel->removeAllParticipatorsForEvent($eventId);
         if(!$status){return false;}
-
-        $notification = new Notification(
-            type: "event_deleted",
-            title: "Favourited Event Cancellation Notice" ,
-            message: "We regret to inform you that an event - " . $this->getEventTitle($eventId) . " has been cancelled. Sorry for the inconvenience.",
-            metadata: [
-                'url' => '/event'
-            ]
-        );
-
-        // Notify all users who favorited the event about the deletion
-        $provider = new multiUserProvider(
-            idColumnName: "user_id",
-            tableName: "event_favorites",
-            whereConstructorInputs: [
-                "conditions" => [['event_id', '=', $eventId]],
-            ]
-        );
-
-        $notificationService->notify($notification, $provider, ['in_app']);
 
         //Deletion of favorites for the event
         require_once(__DIR__ . "/../models/eventFavorites.php");

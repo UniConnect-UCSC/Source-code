@@ -24,4 +24,9 @@ class EventFavoritesModel{
         return true;
     }
 
+    function getUsersForEvent($eventId){
+        $favorites = $this->where(conditions: [['event_id', '=', $eventId]]);
+        return $favorites ? $favorites : [];
+    }
+
 }
