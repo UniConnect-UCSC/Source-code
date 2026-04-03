@@ -42,6 +42,11 @@ class EventModel
         return $event ? $event->university_id : null;
     }
 
+    public function getEventTitle($id){
+        $event = $this->getEvent($id);
+        return $event ? $event->title : "";
+    }
+
     public function getEventByUniversity($universityId){
         return $this->where(['university_id' => $universityId]);
     }
