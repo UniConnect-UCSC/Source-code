@@ -2,6 +2,12 @@
 
 require_once(__DIR__ . '/../recipients/userRecipient.php'); 
 
+/**
+ * This Provider is Very non-derministic provider 
+ * Prefer using this for everything as this is much more optimized for client side and will not cause memory issues
+ * AVOID!! using this from notifications sent on data that's been deleted afterwards (event deletion notice for notifying participating users)
+ * use the deterministic provider for that
+ * */
 class multiUserProvider implements RecipientProviderInterface {
     private string $idColumnName;
     private array $whereConstructorInputs;
