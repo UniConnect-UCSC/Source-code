@@ -19,7 +19,9 @@
                 <div class="search-container">
                 
                     <!--change the icon to an actual icon image -->
-                    <button class="search-btn" id="searchToggleBtn">🔍</button>
+                    <button class="search-btn" id="searchToggleBtn"><i data-lucide="search"></i></button>
+                    <script>lucide.createIcons();</script>
+
                     <div class="search-input-wrapper" id="searchInputWrapper">
                         <input type="text" class="search-input" id="searchInput" placeholder="Search events...">
                         <div class="search-suggestions" id="searchSuggestions"></div>
