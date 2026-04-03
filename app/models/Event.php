@@ -134,7 +134,7 @@ class EventModel
     public function getEventSuggestions($limit, $offset, $searchTerm){
         $conditions = [
             ['event_timestamp', '>=', date('Y-m-d H:i:s', time())],
-            ['title', 'LIKE', '%' . $searchTerm . '%']
+            ['title', 'ILIKE', '%' . $searchTerm . '%']
         ];
 
         $selected = [
