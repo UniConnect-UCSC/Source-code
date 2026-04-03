@@ -109,12 +109,16 @@ class NotificationWorker {
     }
 
     private function getNextNotificationJobDataBatch(int $offset): array {
-        return $this->where(
+        $tempData = $this->where(
             conditions: [['status', '=', 'queued']],
             orderBy: ['created_at' => 'ASC'],
             limit: $this->jobFetchLimit,
             offset: $offset
         );
+        if ($tempData === false || $tempData === null) {
+            return [];
+        }
+        return $tempData;
     }
 
     private function mapDBData(object $dbData): array {
