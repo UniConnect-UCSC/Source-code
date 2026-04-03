@@ -58,7 +58,7 @@ class EventModel
         ];
 
         if(!empty($searchTerm)){
-            $conditions[] = ['title', 'LIKE', '%' . $searchTerm . '%'];
+            $conditions[] = ['title', 'ILIKE', '%' . $searchTerm . '%'];
         } 
 
         $join = [];
