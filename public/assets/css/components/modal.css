@@ -181,7 +181,8 @@
     display: none;
 }
 
-.suggestions-list.show {
+/* Hide when inner suggestions div is empty */
+.suggestions-list:has(> *) {
     display: block;
 }
 
@@ -214,3 +215,4 @@
     border-radius: var(--rounded-md);
     border: 1px solid var(--color-primary-gray);
 }
+

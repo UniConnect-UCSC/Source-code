@@ -6,10 +6,12 @@ function eventCardRenderer($data){
     const heldAt = $data.held_at || $data.location || '';
     const timestamp = $data.event_timestamp || $data.date || '';
     const id = $data.id || $data.event_id || '';
+    const mediaUrl = $data.media_url || '';
     const participantsCount = Number(
-        $data.participants_count ?? $data.attendees_count ?? $data.attendees ?? $data.participants ?? 0
+        $data.participant_count ?? $data.attendees_count ?? $data.attendees ?? $data.participants ?? 0
     );
     const isFavorite = Boolean($data.is_favorite ?? $data.favorite ?? false);
+    const isParticipating = Boolean($data.is_participating ?? $data.participating ?? false);
 
     // Format: "D, M d, Y h:i A"
     const formatDate = (value) => {
@@ -33,10 +35,16 @@ function eventCardRenderer($data){
     const card = document.createElement('div');
     card.className = 'event-card';
 
-    // Image placeholder
-    const image = document.createElement('div');
-    image.className = 'event-image';
-    card.appendChild(image);
+    const imageDiv = document.createElement('div');
+    imageDiv.className = 'event-image-div';
+    if (mediaUrl) {
+        const imgTag = document.createElement('img');
+        imgTag.src = mediaUrl;
+        imgTag.alt = title || 'Event image';
+        imgTag.className = 'event-image'; 
+        imageDiv.appendChild(imgTag);
+    }
+    card.appendChild(imageDiv);
 
     // Content wrapper
     const content = document.createElement('div');
@@ -67,16 +75,15 @@ function eventCardRenderer($data){
 
     // Participants button
     const participantsBtn = document.createElement('button');
-    participantsBtn.className = 'pill-btn participants-btn';
+    participantsBtn.className = 'pill-btn participants-btn' + (isParticipating ? ' active' : '');
+
     participantsBtn.type = 'button';
-    participantsBtn.setAttribute('aria-label', 'View participants');
-    if (id) participantsBtn.dataset.eventId = id;
 
     const participantsIcon = document.createElement('i');
     participantsIcon.setAttribute('data-lucide', 'users');
     const participantsText = document.createElement('span');
     participantsText.className = 'participants-count';
-    participantsText.textContent = String(isFinite(participantsCount) ? participantsCount : 0);
+    participantsText.textContent = (participantsCount) ? participantsCount : 0;
     participantsBtn.appendChild(participantsIcon);
     participantsBtn.appendChild(participantsText);
 
@@ -84,9 +91,6 @@ function eventCardRenderer($data){
     const favBtn = document.createElement('button');
     favBtn.className = 'icon-btn favorite-btn' + (isFavorite ? ' active' : '');
     favBtn.type = 'button';
-    favBtn.setAttribute('aria-pressed', isFavorite ? 'true' : 'false');
-    favBtn.setAttribute('aria-label', isFavorite ? 'Unfavorite event' : 'Favorite event');
-    if (id) favBtn.dataset.eventId = id;
 
     const favIcon = document.createElement('i');
     favIcon.setAttribute('data-lucide', 'heart');
@@ -118,18 +122,26 @@ function eventCardRenderer($data){
     participantsBtn.addEventListener('click', () => {
         const ev = new CustomEvent('event:participants-click', {
             bubbles: true,
-            detail: { id, source: 'participants' }
+            detail: {
+                eventId: id,
+                current: participantsBtn.classList.contains('active'),
+                element: participantsBtn
+            }
         });
         participantsBtn.dispatchEvent(ev);
     });
 
     favBtn.addEventListener('click', () => {
-        const next = !favBtn.classList.contains('active');
-        favBtn.classList.toggle('active');
-        favBtn.setAttribute('aria-pressed', next ? 'true' : 'false');
+        //const next = !favBtn.classList.contains('active');
+        //favBtn.classList.toggle('active');
+        //favBtn.setAttribute('aria-pressed', next ? 'true' : 'false');
         const ev = new CustomEvent('event:favorite-toggle', {
             bubbles: true,
-            detail: { id, favorite: next, source: 'favorite' }
+            detail: {
+                eventId: id,
+                current: favBtn.classList.contains('active'),
+                element: favBtn
+            }
         });
         favBtn.dispatchEvent(ev);
     });
@@ -211,4 +223,42 @@ function categoryRenderer($data){
     categoryBtn.textContent = name;
 
     return categoryBtn;
+}
+
+function categorySuggestionRenderer($data){
+    if(!$data["id"] || !$data["name"]){
+        return null;
+    }
+
+    const id = $data["id"];
+    const name = $data["name"].charAt(0).toUpperCase() + $data["name"].slice(1);
+
+    const tempSuggestion = {
+        id: id,
+        name: name
+    }
+
+    const suggestionDiv = document.createElement('div');
+    suggestionDiv.className = 'suggestion-item';
+    suggestionDiv.textContent = name;
+    suggestionDiv.addEventListener('click', () => {
+        addCategory(tempSuggestion);
+    });
+
+    return suggestionDiv;
+}
+
+function searchSuggestionRenderer(suggestion) {
+    if (!suggestion || !suggestion.title || !suggestion.id) return null;
+
+    const item = document.createElement('div');
+    item.className = 'suggestion-item';
+    item.textContent = suggestion.title;
+    item.dataset.eventId = suggestion.id;
+
+    item.addEventListener('click', () => {
+        executeSearch(suggestion.title);
+    });
+
+    return item;
 }
