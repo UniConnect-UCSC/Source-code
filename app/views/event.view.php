@@ -7,7 +7,6 @@
 <div class="home-layout">
 
 <?php component("navPanel"); ?>
-<?php component("formEventModal"); ?>
 
 <div class="feed">
     <header>
@@ -20,9 +19,12 @@
                 <div class="search-container">
                 
                     <!--change the icon to an actual icon image -->
-                    <button class="search-btn" id="searchToggleBtn">🔍</button>
+                    <button class="search-btn" id="searchToggleBtn"><i data-lucide="search"></i></button>
+                    <script>lucide.createIcons();</script>
+
                     <div class="search-input-wrapper" id="searchInputWrapper">
                         <input type="text" class="search-input" id="searchInput" placeholder="Search events...">
+                        <div class="search-suggestions" id="searchSuggestions"></div>
                     </div>
                 </div>
                 <div class="filter-buttons" id="filterButtons">
@@ -42,10 +44,12 @@
 
             </div>
 
+            <?php if (!empty($isUniRep)): ?>
             <div class='rep-btn-wrapper'>
                 <button class="btn btn-primary" id="createEventBtn">Create Event</button>
                 <button class="btn btn-primary" id="viewEventBtn">Manage Events</button>
             </div>
+            <?php endif; ?>
 
         </div>
 
@@ -59,9 +63,12 @@
 
 
 <script src="/assets/js/event/rendererModules.js"></script>
-<script src="/assets/js/event/categoryPicker.js"></script>
-<script src="/assets/js/event/form.js"></script>
 <script src="/assets/js/event/scrollable.js"></script>
+<script src="/assets/js/event/form.js"></script>
 <script src="/assets/js/event/viewRepEvents.js"></script>
+<script src="/assets/js/event/eventCard.js"></script>
+<script src="/assets/js/event/eventSearch.js"></script>
+<script src="/assets/js/event/categoryFilter.js"></script>
+<script src="/assets/js/event/favoritesFilter.js"></script>
 
 <script src="/assets/js/event/event.js"></script>
