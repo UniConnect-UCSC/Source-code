@@ -152,6 +152,53 @@ class KuppiModel {
         return $data;
     }
 
+    public function getMyFavorites($offset, $limit, $status = null) {
+        $conditions = [
+            ['f.user_id', '=', $_SESSION['user_id']]
+        ];
+
+        if ($status) {
+            $conditions[] = ['m.status', '=', $status];
+        }
+
+        $join = [
+            ["kuppi_favorites", "m.id = f.kuppi_id", "INNER", "f"],
+            ["universities", "m.university_id = u.id", "INNER", "u"],
+            ["users", "m.host_id = h.id", "INNER", "h"],
+            ["users", "m.requester_id = r.id", "LEFT", "r"],
+            ["kuppi_categories", "m.category_id = c.id", "INNER", "c"]
+        ];
+
+        $orderBy = [
+            "m.kuppi_date_time" => 'DESC'
+        ];
+
+        $selected = [
+            "m.*",
+            ["u.name", "university"],
+            ["h.f_name", "host_f_name"],
+            ["h.l_name", "host_l_name"],
+            ["r.f_name", "requester_f_name"],
+            ["r.l_name", "requester_l_name"],
+            ["c.category_name", "category"]
+        ];
+
+        $data = $this->where(
+            conditions: $conditions,
+            join: $join,
+            orderBy: $orderBy,
+            offset: $offset,
+            limit: $limit,
+            selected: $selected
+        );
+
+        if (!is_array($data)) {
+            return [];
+        }
+
+        return $data;
+    }
+
     public function getMyRequests($offset, $limit ,$status = null){
         $conditions = [
             ['m.requester_id','=',$_SESSION['user_id']],  

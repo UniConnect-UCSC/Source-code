@@ -85,7 +85,7 @@
       myRequests:   () => { window.newMyRequestsScroll?.resetScroll?.();      window.newMyRequestsScroll?.loadNextElements?.(); },
       reports:      () => { window.newReportsKuppiScroll?.resetScroll?.();    window.newReportsKuppiScroll?.loadNextElements?.(); },
       myAttends:    () => { window.newMyParticipationsScroll?.resetScroll?.();  window.newMyParticipationsScroll?.loadNextElements?.(); },
-      myFavourites: () => { window.newMyFavouritesKuppiScroll?.resetScroll?.(); window.newMyFavouritesKuppiScroll?.loadNextElements?.(); }
+      myFavourites: () => { window.newMyFavoritesScroll?.resetScroll?.(); window.newMyFavoritesScroll?.loadNextElements?.(); }
     };
 
     if (!listenersBound) {

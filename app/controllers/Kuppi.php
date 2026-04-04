@@ -617,6 +617,27 @@ class Kuppi extends Controller
         return $kuppiRequests;
     }
     
+    private function fetchMyFavorites($offset, $limit, $status = null){
+
+        $kuppiModel = new KuppiModel();
+        $favorites = $kuppiModel->getMyFavorites($offset, $limit, $status) ?? [];
+
+        foreach ($favorites as $item){
+            $item->host_name = $item->host_f_name . ' ' . $item->host_l_name;
+
+            if (isset($item->requester_f_name) && !empty($item->requester_f_name)){
+                $item->requester_name = $item->requester_f_name . ' ' . $item->requester_l_name;
+            }
+
+            $item->university = $item->university ?? '';
+
+            if (!isset($item->image_url) || empty($item->image_url)) {
+                $item->image_url = 'assets/images/ml-banner.jpg';
+            }
+        }
+
+        return $favorites;
+    }
 
 
     public function scrollable(){
@@ -645,6 +666,11 @@ class Kuppi extends Controller
             case 'getMyParticipations':
                 $status = $data['context']['status'] ?? null;
                 $response = $this->fetchMyParticipations($data['offset'], $data['limit'], $status);
+                echo json_encode($response);
+                break;
+            case 'getMyFavorites':
+                $status = $data['context']['status'] ?? null;
+                $response = $this->fetchMyFavorites($data['offset'], $data['limit'], $status);
                 echo json_encode($response);
                 break;
             default:

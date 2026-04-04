@@ -339,6 +339,28 @@
     }
   }
 
+    class MyFavoriteCard extends ModalKuppiCard {
+    buildActions() {
+      var item    = this.item;
+      var actions = el('div', 'kuppi-post-actions');
+      var isCompleted = item.status === 'Completed';
+
+      if (isCompleted) {
+        var reviewBtn = el('button', 'btn btn-primary', 'Review');
+        reviewBtn.onclick = function (e) {
+          e.stopPropagation();
+          window.openReviewModal({
+            id: item.id,
+            host_id :item.host_id
+          });
+        };
+        actions.appendChild(reviewBtn);
+      }
+
+      return actions.children.length > 0 ? actions : null;
+    }
+  }
+
   /* ══════════════════════════════════════════════════════
      KuppiCardFactory — creates the right card by context
      ══════════════════════════════════════════════════════ */
@@ -351,6 +373,7 @@
         case 'kuppi-requests':    return new KuppiRequestCard(data, context).render();
         case 'my-requests':       return new MyRequestCard(data, context).render();
         case 'my-participations': return new MyAttendCard(data, context).render();
+        case 'my-favorites':      return new MyFavoriteCard(data, context).render();
         default:
           console.error('Unknown kuppi card context: ' + context);
           return null;
@@ -366,5 +389,6 @@
   window.renderKuppiRequestsCards  = function (data) { return KuppiCardFactory.create(data, 'kuppi-requests'); };
   window.renderMyRequestsCards     = function (data) { return KuppiCardFactory.create(data, 'my-requests'); };
   window.renderMyParticipationCards= function (data) { return KuppiCardFactory.create(data, 'my-participations'); };
+  window.renderMyFavoriteCards     = function (data) { return KuppiCardFactory.create(data, 'my-favorites'); };
 
 })();
