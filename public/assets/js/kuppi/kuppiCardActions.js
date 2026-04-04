@@ -1,13 +1,8 @@
 (function () {
   function renderKuppiCardActions(card, item) {
-    // Find or create the right-side header actions container
-    const header = card.querySelector('.kuppi-header') || card.querySelector('.event-header') || card;
+    
+    const header = card.querySelector('.kuppi-header');
     let headerRight = header.querySelector('.kuppi-actions');
-    if (!headerRight) {
-      headerRight = document.createElement('div');
-      headerRight.className = 'kuppi-actions';
-      header.appendChild(headerRight);
-    }
 
     // Participants pill button
     const participantsBtn = document.createElement('button');
@@ -21,23 +16,30 @@
 
     const participantsText = document.createElement('span');
     participantsText.className = 'participants-count';
-    const count = Number(item?.participants_count ?? item?.participants ?? 0);
+    const count = Number(item.participants ?? 0);
     participantsText.textContent = String(isFinite(count) ? count : 0);
+    
+    if(item.is_participating) {
+      participantsBtn.classList.add('active');
+    }
     participantsBtn.append(participantsIcon, participantsText);
 
-    // Favorite heart button
     const favBtn = document.createElement('button');
-    const isFavorite = Boolean(item?.is_favorite ?? item?.favorite);
-    favBtn.className = 'icon-btn favorite-btn' + (isFavorite ? ' active' : '');
+    favBtn.className = 'pill-btn fav-btn';
     favBtn.type = 'button';
+    const isFavorite = Boolean(item?.is_favorite ?? item?.favorite ?? false);
+    if (isFavorite) {
+      favBtn.classList.add('active');
+    }
     favBtn.setAttribute('aria-pressed', isFavorite ? 'true' : 'false');
     favBtn.setAttribute('aria-label', isFavorite ? 'Unfavorite kuppi' : 'Favorite kuppi');
-    if (item && item.id) favBtn.dataset.kuppiId = item.id;
+    if(item && item.id) favBtn.dataset.kuppiId =item.id;
 
     const favIcon = document.createElement('i');
-    favIcon.setAttribute('data-lucide', 'heart');
+    favIcon.setAttribute('data-lucide','heart');
     favBtn.appendChild(favIcon);
 
+/*
     // Report button
     const reportBtn = document.createElement('button');
     reportBtn.className = 'icon-btn report-btn';
@@ -48,12 +50,18 @@
     const reportIcon = document.createElement('i');
     reportIcon.setAttribute('data-lucide', 'flag');
     reportBtn.appendChild(reportIcon);
-
+*/
     // Inject actions
-    headerRight.append(participantsBtn, favBtn, reportBtn);
+    headerRight.append(participantsBtn);
+    headerRight.append(favBtn);
 
     // Bind listeners safely
-    bindActionListeners({ card, item, participantsBtn, participantsText, favBtn, reportBtn });
+    const pData = {
+      participantsBtn  : participantsBtn,
+      participantsText : participantsText,
+      favBtn           : favBtn
+    };
+    bindActionListeners({ card, item, pData});
 
     // Render lucide icons
     if (window.lucide && typeof window.lucide.createIcons === 'function') {
@@ -61,23 +69,38 @@
     }
   }
 
-  function bindActionListeners({ card, item, participantsBtn, participantsText, favBtn, reportBtn }) {
+  function bindActionListeners({ card, item, pData}) {
+    var participantsBtn = pData.participantsBtn;
+    var participantsText = pData.participantsText;
+    var favBtn = pData.favBtn;
+    
     if (participantsBtn && !participantsBtn.dataset.bound) {
       participantsBtn.dataset.bound = 'true';
       participantsBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-        const current = Number(participantsText.textContent || '0');
-        const next = isFinite(current) ? current + 1 : 1;
-        participantsText.textContent = String(next);
+        console.log(`Participate btn clicked on ${item.topic} `);
 
-        if (typeof window.onKuppiParticipate === 'function') {
-          window.onKuppiParticipate(item);
+    const kuppiId = item.id;  
+    const current = item.is_participating;
+    const data = {
+        kuppi_id: kuppiId,
+        current_status: current,
+        action: "participate"
+    };
+  
+    Ajax.jsonPost('/kuppi/toggle', data).then((response) => {
+        if(response.newStatus === !current) {
+          console.log(`participant button successfully toggled to: ${response.newStatus}`);
+          participantsBtn.classList.toggle('active'); 
+          participantsText.textContent = response.participantCount;
+          item.is_participating = response.newStatus;
+
         } else {
-          participantsBtn.dispatchEvent(new CustomEvent('kuppi:participants-click', {
-            bubbles: true,
-            detail: { id: item?.id, count: next }
-          }));
+            console.error('Server response inconsistent with requested toggle action.');
+            console.log(response);
         }
+
+    });
       });
     }
 
@@ -85,21 +108,30 @@
       favBtn.dataset.bound = 'true';
       favBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-        const next = !favBtn.classList.contains('active');
-        favBtn.classList.toggle('active');
-        favBtn.setAttribute('aria-pressed', next ? 'true' : 'false');
+        const kuppiId = item.id;
+        const current = Boolean(item?.is_favorite ?? item?.favorite ?? favBtn.classList.contains('active'));
+        const data = {
+          kuppi_id: kuppiId,
+          current_status: current,
+          action: "favorite"
+        };
 
-        if (typeof window.onKuppiFavorite === 'function') {
-          window.onKuppiFavorite(item, favBtn, next);
-        } else {
-          favBtn.dispatchEvent(new CustomEvent('kuppi:favorite-toggle', {
-            bubbles: true,
-            detail: { id: item?.id, favorite: next }
-          }));
-        }
+        Ajax.jsonPost('/kuppi/toggle', data).then((response) => {
+          if (response.newStatus === !current) {
+            favBtn.classList.toggle('active', response.newStatus);
+            favBtn.setAttribute('aria-pressed', response.newStatus ? 'true' : 'false');
+            favBtn.setAttribute('aria-label', response.newStatus ? 'Unfavorite kuppi' : 'Favorite kuppi');
+            item.is_favorite = response.newStatus;
+          } else {
+            console.error('Server response inconsistent with favorite toggle action.');
+            console.log(response);
+          }
+        }).catch((err) => {
+          console.error('Favorite toggle failed', err);
+        });
       });
     }
-
+/*
     if (reportBtn && !reportBtn.dataset.bound) {
       reportBtn.dataset.bound = 'true';
       reportBtn.addEventListener('click', function (e) {
@@ -114,6 +146,7 @@
         }
       });
     }
+      */
   }
 
   window.onKuppiReport = async function(item) {

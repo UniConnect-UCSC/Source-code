@@ -14,7 +14,6 @@ body {
   padding: var(--spacing-3);
 }
 
-/* Page header and subtitle (copied from event.css for consistency) */
 .kuppi-page-header {
   text-align: center;
   margin-bottom: var(--spacing-8);
@@ -32,12 +31,10 @@ body {
   font-weight: 400;
 }
 
-/* Emphasized Kuppi search box overrides */
 .feed .search-wrapper {
   margin: 0 var(--spacing-3) var(--spacing-2);
 }
 
-/* Restore simple search input styling */
 .feed .search {
   width: 320px; /* slightly shorter for better fit */
   background: #ffffff;
@@ -87,7 +84,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-.kuppi-feed {
+.kuppi-grid {
   grid-column: 2 / 3; 
   display: grid;
   grid-template-columns: repeat(2, 1fr); 
@@ -104,7 +101,6 @@ body {
   margin-bottom: 0.5em;
 }
 
-/* Topics dropdown under search */
 .kuppi-topic-dropdown {
   position: absolute;
   top: calc(100% + 6px);
@@ -160,48 +156,23 @@ body {
   border-color: rgba(255, 255, 255, 0.75); /* subtle hover border */
 }
 
-/* optional: clearer keyboard focus without changing hover look */
 .kuppi-feed-actions .btn:focus-visible {
   outline: 4px solid #ffffff;
   outline-offset: 2px;
 }
 
 @media (max-width: 1024px) {
-  .kuppi-feed {
+  .kuppi-grid {
     grid-template-columns: repeat(2, 1fr); 
   }
 }
 
 @media (max-width: 768px) {
-  .kuppi-feed {
+  .kuppi-grid {
     grid-template-columns: 1fr; /* 1 per row on small screens */
   }
 }
 
-/* Centered loading under page title and across grid */
-.kuppi-feed .kuppi-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: #6b7280;
-  text-align: center;
-  min-height: 120px;
-  grid-column: 1 / -1; /* span all columns in grid */
-  justify-self: center; /* center within grid area */
-}
-.kuppi-feed .kuppi-spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #d1d5db;
-  border-top-color: #2563eb;
-  border-radius: 999px;
-  animation: kuppi-spin .8s linear infinite;
-}
-@keyframes kuppi-spin { to { transform: rotate(360deg); } }
-
-
-/* Modal styles removed in favor of components/kuppiModal.css */
 
 /* --- Kuppi modal card (class-based styling) --- */
 .kuppi-modal-card {
@@ -388,15 +359,15 @@ body {
   gap: var(--spacing-2);
 }
 
-/* Generic icon buttons copied from event.css for independence */
+
 .icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--rounded-full);
-  border: 1px solid var(--color-primary-gray);
+  border: 2px solid var(--color-primary-gray);
   background: var(--color-primary-white);
   color: #374151;
   cursor: pointer;
@@ -421,13 +392,13 @@ body {
 .pill-btn {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-1);
-  padding: 2px 8px;
+  gap: var(--spacing-2);
+  padding: var(--spacing-1) var(--spacing-3);
   border-radius: var(--rounded-full);
-  border: 1px solid var(--color-primary-gray);
+  border: 2px solid var(--color-primary-gray);
   background: var(--color-primary-white);
   color: #111827;
-  font-size: 12px;
+  font-size: var(--text-sm);
   line-height: 1;
   cursor: pointer;
   transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
@@ -438,7 +409,9 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
-.pill-btn:active {
+.pill-btn.active {
+  border-color: var(--color-brand-300);
+  background: var(--color-brand-100);
   transform: translateY(1px);
 }
 

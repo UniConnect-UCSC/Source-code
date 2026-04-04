@@ -1,274 +1,370 @@
-//const { act } = require("react");
+(function () {
 
-(function(){
-  function escapeHtml(s){
+  /* ── Utility ─────────────────────────────────────────── */
+
+  function escapeHtml(s) {
     if (!s) return '';
     return String(s)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#39;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
-  
-  function buildKuppiCard(item, context){
-    var isMyModal = (context === 'my-kuppi-modal');
-    var isRequestModal = (context === 'kuppi-requests-modal');
-    var isModal = (context === 'kuppi-requests-modal' || context === 'my-kuppi-modal');
-    var isMain = (context === 'main');
-    var card = document.createElement('div');
-    // Use kuppi-specific classes in main feed
-    card.className = isMain ? 'kuppi-card kuppi-post' : 'kuppi-post';
-    // contextual ribbon for My Kuppis / Requests
-    if (isModal) {
-      var isRequest = (!item || !item.kuppi_date_time);
-      var ribbon = document.createElement('div');
-      ribbon.className = 'kuppi-ribbon ' + (isRequest ? 'kuppi-ribbon--request' : 'kuppi-ribbon--host');
-      ribbon.textContent = isRequest ? 'Request' : 'Host';
-      card.appendChild(ribbon);
-    }
-    if (isModal) {
-      // Use class-based styling for modal cards
-      card.classList.add('kuppi-modal-card');
-    }
-    if (isMain) {
-      card.style.cursor = 'pointer';
-      card.onclick = function(){ 
-        if (typeof window.openKuppiModal === 'function') window.openKuppiModal(card); };
+
+  function el(tag, className, textContent) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (textContent) node.textContent = textContent;
+    return node;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     Base KuppiCard class
+     ══════════════════════════════════════════════════════ */
+
+  class KuppiCard {
+    constructor(item, context) {
+      this.item = item || {};
+      this.context = context || null; // e.g. 'main', 'my-kuppi', 'my-requests'
     }
 
-    var imgWrap = document.createElement('div');
-    var src = item && item.image_url ? ('/' + String(item.image_url).replace(/^\/+/, '')) : '/assets/images/ml-banner.jpg';
-    if (isMain) {
-      // Use kuppi-image with img element, styled via CSS
-      imgWrap.className = 'kuppi-image';
-      var imgMain = document.createElement('img');
-      imgMain.src = src;
-      imgMain.alt = escapeHtml(item && item.topic ? item.topic : 'Kuppi');
-      imgWrap.appendChild(imgMain);
-    } else {
-      imgWrap.className = 'post-image';
-      var img = document.createElement('img');
-      img.src = src;
-      img.alt = escapeHtml(item && item.topic ? item.topic : 'Kuppi');
-      imgWrap.appendChild(img);
+    /* ── Shared helpers ──────────────────────────────── */
+
+    getImageSrc() {
+      return this.item.image_url
+        ? '/' + String(this.item.image_url).replace(/^\/+/, '')
+        : '/assets/images/ml-banner.jpg';
     }
 
-    var content = document.createElement('div');
-    content.className = isMain ? 'kuppi-content' : 'post-content';
+    getAltText() {
+      return escapeHtml(this.item.topic || 'Kuppi');
+    }
 
-    if (isMain) {
-      // Kuppi-style header with title + university badge
-      var header = document.createElement('div');
-      header.className = 'kuppi-header';
-      var headerLeft = document.createElement('div');
+    getUniversity() {
+      return this.item.university || this.item.requester_university || '';
+    }
 
-      if (item && item.topic){
-        var h3 = document.createElement('h3');
-        h3.className = 'kuppi-title';
-        h3.textContent = item.topic;
-        headerLeft.appendChild(h3);
+    getRequesterName() {
+      var first = this.item.requester_f_name || '';
+      var last  = this.item.requester_l_name || '';
+      return (first + ' ' + last).trim();
+    }
+
+    /* ── Shared builders ─────────────────────────────── */
+
+    buildImage(className) {
+      var wrap = el('div', className);
+      var img  = el('img');
+      img.src  = this.getImageSrc();
+      img.alt  = this.getAltText();
+      wrap.appendChild(img);
+      return wrap;
+    }
+
+    setDataAttributes(card) {
+      var item = this.item;
+      if (item.kuppi_url || item.link)  card.dataset.link     = item.kuppi_url || item.link;
+      if (item.host_name)               card.dataset.hostName  = item.host_name;
+      if (item.topic)                   card.dataset.topic     = item.topic;
+      if (item.category)                card.dataset.category  = item.category;
+
+      var requester = this.getRequesterName();
+      if (requester) card.dataset.requesterName = requester;
+    }
+
+    /* ── Abstract — subclasses must implement ─────────── */
+
+    render() {
+      throw new Error('KuppiCard.render() must be implemented by subclass');
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     MainKuppiCard — main feed cards
+     ══════════════════════════════════════════════════════ */
+
+  class MainKuppiCard extends KuppiCard {
+
+    buildHeader() {
+      var header     = el('div', 'kuppi-header');
+      var headerLeft = el('div');
+
+      if (this.item.topic) {
+        headerLeft.appendChild(el('h3', 'kuppi-title', this.item.topic));
       }
-      var uni = item && item.university ? item.university : (item && item.requester_university ? item.requester_university : '');
-      if (uni){
-        var uniSpan = document.createElement('span');
-        uniSpan.className = 'kuppi-university';
-        uniSpan.textContent = uni;
-        headerLeft.appendChild(uniSpan);
-      }
 
-      // No category badge in the header
+      var uni = this.getUniversity();
+      if (uni) {
+        headerLeft.appendChild(el('span', 'kuppi-university', uni));
+      }
 
       header.appendChild(headerLeft);
+      header.appendChild(el('div', 'kuppi-actions'));
+      return header;
+    }
 
-      // Right actions container (buttons injected by actions module)
-      var headerRight = document.createElement('div');
-      headerRight.className = 'kuppi-actions';
-      header.appendChild(headerRight);
-
-      content.appendChild(header);
-    } else {
-      // Original compact header for modals
-      if (item && item.topic){
-        var h3 = document.createElement('h3');
-        h3.className = 'post-topic';
-        h3.textContent = item.topic;
-        content.appendChild(h3);
+    buildContentFields(content) {
+      if (this.item.kuppi_date_time) {
+        content.appendChild(el('div', 'kuppi-date', this.item.kuppi_date_time));
       }
-      if (item && item.university){
-        var pUni = document.createElement('p');
-        pUni.className = 'post-university';
-        pUni.textContent = item.university;
-        content.appendChild(pUni);
-      } else if (item && item.requester_university){
-        var pReqUni = document.createElement('p');
-        pReqUni.className = 'post-requester-university';
-        pReqUni.textContent = item.requester_university;
-        content.appendChild(pReqUni);
+      if (this.item.status) {
+        content.appendChild(el('p', 'post-status', this.item.status));
       }
-    }
-    if (!isMain && item && item.category){
-      var pCat = document.createElement('p');
-      pCat.className = 'post-category';
-      pCat.textContent = item.category;
-      content.appendChild(pCat);
-    }
-
-    if (!isMain && item && item.host_name){
-      var pReqName = document.createElement('p');
-      pReqName.className = 'post-host-name';
-      pReqName.textContent = item.host_name;
-      content.appendChild(pReqName);
-    }
-
-    var hasDate = item && item.kuppi_date_time;
-    if (hasDate){
-      if (isMain) {
-        var dateDiv = document.createElement('div');
-        dateDiv.className = 'kuppi-date';
-        dateDiv.textContent = item.kuppi_date_time;
-        content.appendChild(dateDiv);
-      } else {
-        var pDT = document.createElement('p');
-        pDT.className = 'post-datetime';
-        pDT.textContent = item.kuppi_date_time;
-        content.appendChild(pDT);
+      if (this.item.platform) {
+        content.appendChild(el('div', 'kuppi-location', 'Platform: ' + this.item.platform));
       }
-    }
 
-    if (item && item.platform){
-      if (isMain) {
-        var locationDiv = document.createElement('div');
-        locationDiv.className = 'kuppi-location';
-        locationDiv.textContent = 'Platform: ' + item.platform;
-        content.appendChild(locationDiv);
-      } else {
-        var pPlat = document.createElement('p');
-        pPlat.className = 'post-platform';
-        pPlat.textContent = 'Platform: ' + item.platform;
-        content.appendChild(pPlat);
-      }
-    }
-
-    // In main feed, add a brief description line
-    if (isMain) {
       var desc = '';
-      if (item && item.host_name) {
-        desc = 'Hosted by ' + item.host_name;
-      } else if (item && item.category) {
-        desc = 'Category: ' + item.category;
+      if (this.item.host_name) {
+        desc = 'Hosted by ' + this.item.host_name;
+      } else if (this.item.category) {
+        desc = 'Category: ' + this.item.category;
       }
       if (desc) {
-        var descriptionP = document.createElement('p');
-        descriptionP.className = 'kuppi-description';
-        descriptionP.textContent = desc;
-        content.appendChild(descriptionP);
+        content.appendChild(el('p', 'kuppi-description', desc));
       }
     }
-    // Set data attributes for modal usage (invisible on card)
-    // Prefer server-provided kuppi_url, fallback to link
-    if (item && (item.kuppi_url || item.link)) {
-      card.dataset.link = item.kuppi_url || item.link;
+
+    render() {
+      var item = this.item;
+      var card = el('div', 'kuppi-card kuppi-post');
+
+      card.onclick = function () {
+        if (typeof window.openKuppiModal === 'function') window.openKuppiModal(item);
+      };
+
+      card.appendChild(this.buildImage('kuppi-image'));
+
+      var content = el('div', 'kuppi-content');
+      content.appendChild(this.buildHeader());
+      this.buildContentFields(content);
+      this.setDataAttributes(card);
+      card.appendChild(content);
+
+      // Inject card-level actions (participate, etc.)
+      if (typeof window.renderKuppiCardActions === 'function') {
+        try { window.renderKuppiCardActions(card, this.item); }
+        catch (e) { console.debug('renderKuppiCardActions failed:', e); }
+      }
+
+      return card;
     }
-    if (item && item.host_name) {
-      card.dataset.hostName = item.host_name;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     ModalKuppiCard — base for all modal card variants
+     ══════════════════════════════════════════════════════ */
+
+  class ModalKuppiCard extends KuppiCard {
+
+    buildRibbon() {
+      // Treat rows with status 'Requested' as requests; others as hosted
+      var isRequest = this.item.status === 'Requested';
+      return el('div',
+        'kuppi-ribbon ' + (isRequest ? 'kuppi-ribbon--request' : 'kuppi-ribbon--host'),
+        isRequest ? 'Request' : 'Host'
+      );
     }
-    // Provide requester name for modal and other handlers
-    if (item && (item.requester_f_name || item.requester_l_name)) {
-      var _reqFirst = item.requester_f_name || '';
-      var _reqLast = item.requester_l_name || '';
-      var _requesterName = (_reqFirst + ' ' + _reqLast).trim();
-      if (_requesterName) {
-        card.dataset.requesterName = _requesterName;
+
+    buildHeader(content) {
+      if (this.item.topic) {
+        content.appendChild(el('h3', 'post-topic', this.item.topic));
+      }
+      if (this.item.university) {
+        content.appendChild(el('p', 'post-university', this.item.university));
+      } else if (this.item.requester_university) {
+        content.appendChild(el('p', 'post-requester-university', this.item.requester_university));
       }
     }
-    // Add topic/category to dataset for search/filter usage
-    if (item && item.topic) {
-      card.dataset.topic = item.topic;
+
+    buildContentFields(content) {
+      if (this.item.category) {
+        content.appendChild(el('p', 'post-category', this.item.category));
+      }
+      if (this.item.host_name) {
+        content.appendChild(el('p', 'post-host-name', this.item.host_name));
+      }
+      if (this.item.kuppi_date_time) {
+        content.appendChild(el('p', 'post-datetime', this.item.kuppi_date_time));
+      }
+      if (this.item.platform) {
+        content.appendChild(el('p', 'post-platform', 'Platform: ' + this.item.platform));
+      }
+      if (this.item.status) {
+        content.appendChild(el('p', 'post-status', this.item.status));
+      }
+      if (this.item.participants) {
+        content.appendChild(el('p', 'post-participants', 'Participant Count: ' + this.item.participants));
+      }
     }
-    if (item && item.category) {
-      card.dataset.category = item.category;
+
+    /* Subclasses override this to add their specific buttons */
+    buildActions() {
+      return null;
     }
 
+    render() {
+      var item = this.item;
+      var card = el('div', 'kuppi-post kuppi-modal-card');
 
-    // Actions in modal context
-    if (isModal) {
-      var actions = document.createElement('div');
-      actions.className = 'kuppi-post-actions';
-    
+      card.onclick = function (e) {
+        // Don't open modal if clicking on action buttons
+        if (e.target.closest('.kuppi-post-actions')) return;
+        if (typeof window.openKuppiModal === 'function') window.openKuppiModal(item);
+      };
 
-      var isMyrequest = isMyModal && item && !item.kuppi_date_time;
-      // If this is a hosted kuppi (has date/time), use the host edit modal
-      if (isMyModal && !isMyrequest) {
-        var editBtn = document.createElement('button');
-        editBtn.className = 'btn btn-primary';
-        editBtn.textContent = 'Edit';
-        editBtn.onclick = function(e){
+      card.appendChild(this.buildRibbon());
+      card.appendChild(this.buildImage('post-image'));
+
+      var content = el('div', 'post-content');
+      this.buildHeader(content);
+      this.buildContentFields(content);
+      this.setDataAttributes(card);
+
+      var actions = this.buildActions();
+      if (actions) content.appendChild(actions);
+
+      card.appendChild(content);
+      return card;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     MyKuppiCard — "My Kuppis" modal (hosted + requests)
+     ══════════════════════════════════════════════════════ */
+
+  class MyHostCard extends ModalKuppiCard {
+
+    buildActions() {
+      var item    = this.item;
+      var actions = el('div', 'kuppi-post-actions');
+
+        // "My Hosts" tab: user is host of these sessions, allow host edit + status
+      var editBtn = el('button', 'btn btn-primary', 'Edit');
+        editBtn.onclick = function (e) {
           e.stopPropagation();
-          var dt = String(item.kuppi_date_time || '');
+          var dt    = String(item.kuppi_date_time || '');
           var parts = dt.split(' ');
-          var date = parts[0] || '';
-          var time = parts[1] || '';
-          var payload = { id: item.id, topic: item.topic || '', date: date, time: time, platform: item.platform || '' };
-          window.openEditKuppiModal(payload);
-        };
-        actions.appendChild(editBtn);
-      }
-      // If this looks like a request (has requester fields, no date/time), use the request edit modal
-      if (isMyrequest) {
-        var editReqBtn = document.createElement('button');
-        editReqBtn.className = 'btn btn-primary';
-        editReqBtn.textContent = 'Edit';
-        editReqBtn.onclick = function(e){
+          window.openEditKuppiModal({
+            id:       item.id,
+            topic:    item.topic    || '',
+            date:     parts[0]     || '',
+            time:     parts[1]     || '',
+            platform: item.platform || ''
+          });
+      };
+
+      var changeStatusBtn = el('button', 'btn btn-primary', 'Change Status');
+        changeStatusBtn.onclick = function (e) {
           e.stopPropagation();
-          var payload = { id: item.id, topic: item.topic || '', category: item.category || '' };
-          window.openEditKuppiRequestModal(payload);
-        };
-        actions.appendChild(editReqBtn);
-      }
-      if (isRequestModal) {
-        var volunteerBtn = document.createElement('button');
-        volunteerBtn.className = 'btn btn-primary';
-        volunteerBtn.textContent = 'Volunteer';
-        volunteerBtn.onclick = function(e){
+          window.openChangeStatusModal({
+              item
+          });
+      };
+
+      actions.appendChild(editBtn);
+      actions.appendChild(changeStatusBtn);
+
+      return actions;
+    }
+  }
+
+  class MyRequestCard extends ModalKuppiCard {
+    buildActions() {
+      var item    = this.item;
+      var actions = el('div', 'kuppi-post-actions');
+
+      var editReqBtn = el('button', 'btn btn-primary', 'Edit');
+          editReqBtn.onclick = function (e) {
+            e.stopPropagation();
+            window.openEditKuppiRequestModal({
+              id:       item.id,
+              topic:    item.topic    || '',
+              category: item.category || ''
+            });
+          };
+          actions.appendChild(editReqBtn);
+          
+      return actions;
+    }
+  }
+
+  class MyAttendCard extends ModalKuppiCard {
+    buildActions() {
+      var item    = this.item;
+      var actions = el('div', 'kuppi-post-actions');
+      var isCompleted = item.status === 'Completed';
+
+      if (isCompleted) {
+        var reviewBtn = el('button', 'btn btn-primary', 'Review');
+        reviewBtn.onclick = function (e) {
           e.stopPropagation();
-          var payload = { id: item.id, topic: item.topic || '',category: item.category || '' };
-          window.openVolunteerKuppiModal(payload);
-        }
-        actions.appendChild(volunteerBtn);
+          window.openReviewModal({
+            id: item.id,
+            host_id :item.host_id
+          });
+        };
+        actions.appendChild(reviewBtn);
       }
 
-      if (actions.children.length > 0) {
-        content.appendChild(actions);
+      return actions.children.length > 0 ? actions : null;
+    }
+  }
+
+ 
+
+  /* ══════════════════════════════════════════════════════
+     KuppiRequestCard — "Kuppi Requests" modal
+     ══════════════════════════════════════════════════════ */
+
+  class KuppiRequestCard extends ModalKuppiCard {
+
+    buildActions() {
+      var item    = this.item;
+      var actions = el('div', 'kuppi-post-actions');
+
+      var volunteerBtn = el('button', 'btn btn-primary', 'Volunteer');
+      volunteerBtn.onclick = function (e) {
+        e.stopPropagation();
+        window.openVolunteerKuppiModal({
+          id:       item.id,
+          topic:    item.topic    || '',
+          category: item.category || ''
+        });
+      };
+      actions.appendChild(volunteerBtn);
+
+      return actions;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     KuppiCardFactory — creates the right card by context
+     ══════════════════════════════════════════════════════ */
+
+  class KuppiCardFactory {
+    static create(data, context) {
+      switch (context) {
+        case 'main':              return new MainKuppiCard(data, context).render();
+        case 'my-kuppi':          return new MyHostCard(data, context).render();
+        case 'kuppi-requests':    return new KuppiRequestCard(data, context).render();
+        case 'my-requests':       return new MyRequestCard(data, context).render();
+        case 'my-participations': return new MyAttendCard(data, context).render();
+        default:
+          console.error('Unknown kuppi card context: ' + context);
+          return null;
       }
     }
-
-    card.appendChild(imgWrap);
-    card.appendChild(content);
-    // Inject actions via shared module
-    if (isMain && typeof window.renderKuppiCardActions === 'function') {
-      try { window.renderKuppiCardActions(card, item); } catch(e){ console.debug('renderKuppiCardActions failed:', e); }
-    }
-    return card;
   }
 
-  function renderMainKuppiCards(data){
-    return buildKuppiCard(data, 'main');
-  }
+  /* ── Public API ──────────────────────────────────────── */
 
-  function renderMyKuppiCards(data){
-    return buildKuppiCard(data, 'my-kuppi-modal');
-  }
+  window.renderKuppiCards          = function (data, ctx) { return KuppiCardFactory.create(data, ctx); };
+  window.renderMainKuppiCards      = function (data) { return KuppiCardFactory.create(data, 'main'); };
+  window.renderMyKuppiCards        = function (data) { return KuppiCardFactory.create(data, 'my-kuppi'); };
+  window.renderKuppiRequestsCards  = function (data) { return KuppiCardFactory.create(data, 'kuppi-requests'); };
+  window.renderMyRequestsCards     = function (data) { return KuppiCardFactory.create(data, 'my-requests'); };
+  window.renderMyParticipationCards= function (data) { return KuppiCardFactory.create(data, 'my-participations'); };
 
-  function renderKuppiRequestsCards(data){
-    return buildKuppiCard(data, 'kuppi-requests-modal');
-  }
-
-  function renderMyRequestsCards(data) {
-    return buildKuppiCard(data, 'my-kuppi-modal');
-  }
-  window.renderMainKuppiCards = renderMainKuppiCards;
-  window.renderMyKuppiCards = renderMyKuppiCards;
-  window.renderKuppiRequestsCards = renderKuppiRequestsCards;
-  window.renderMyRequestsCards = renderMyRequestsCards;
 })();

@@ -12,8 +12,8 @@ class KuppiModel {
             ["universities", "m.university_id = u.id", "INNER", "u"],
             ["users", "m.host_id = h.id", "INNER", "h"],
             ["users", "m.requester_id = r.id", "LEFT", "r"],
-            ["kuppi_categories","m.category_id = c.id", "INNER" ,"c"]
-
+            ["kuppi_categories","m.category_id = c.id", "INNER" ,"c"],
+            ["kuppi_participants",["m.id = p.kuppi_id",["p.user_id", "=", $_SESSION["user_id"]]],"LEFT","p"]
         ];
         $orderBy = [
             "m.kuppi_date_time" =>'DESC'
@@ -25,7 +25,8 @@ class KuppiModel {
             ["h.f_name", "host_f_name"],
             ["h.l_name", "host_l_name"],
             ["r.f_name", "requester_f_name"],
-            ["r.l_name", "requester_l_name"]
+            ["r.l_name", "requester_l_name"],
+            ["CASE WHEN p.kuppi_id IS NULL THEN 0 ELSE 1 END", "is_participating"]
         ];
 
 
@@ -44,10 +45,15 @@ class KuppiModel {
         return $data;
        
     }
-    public function getMyHosts($offset ,$limit ){
+    
+    public function getMyHosts($offset ,$limit ,$status = null){
         $conditions = [
             ['m.host_id','=',$_SESSION['user_id']],       
         ];
+        
+        if ($status) {
+            $conditions[] = ['m.status', '=', $status];
+        }
 
         $join = [
             ["users","m.host_id = h.id", "INNER","h"],
@@ -86,10 +92,73 @@ class KuppiModel {
         return $data;
     }
 
-    public function getMyRequests($offset, $limit ){
+    public function getParticipantCount($kuppiId) {
+
+        $kuppi = $this->getKuppiById($kuppiId);
+        return $kuppi ? $kuppi->participants : null;
+    }
+
+    public function incrementParticipantCount($kuppiId, $incrementType = true) {
+
+        $amount = $incrementType ? 1 : -1;
+        return $this->increment(id: $kuppiId, column: 'participants', amount: $amount);
+
+    }
+
+    public function getMyParticipations($offset, $limit, $status = null) {
+        $conditions = [
+            ['p.user_id', '=', $_SESSION['user_id']]
+        ];
+
+        if ($status) {
+            $conditions[] = ['m.status', '=', $status];
+        }
+
+        $join = [
+            ["kuppi_participants", "m.id = p.kuppi_id", "INNER", "p"],
+            ["universities", "m.university_id = u.id", "INNER", "u"],
+            ["users", "m.host_id = h.id", "INNER", "h"],
+            ["users", "m.requester_id = r.id", "LEFT", "r"],
+            ["kuppi_categories", "m.category_id = c.id", "INNER", "c"]
+        ];
+
+        $orderBy = [
+            "m.kuppi_date_time" => 'DESC'
+        ];
+
+        $selected = [
+            "m.*",
+            ["u.name", "university"],
+            ["h.f_name", "host_f_name"],
+            ["h.l_name", "host_l_name"],
+            ["r.f_name", "requester_f_name"],
+            ["r.l_name", "requester_l_name"],
+            ["c.category_name", "category"]
+        ];
+
+        $data = $this->where(
+            conditions: $conditions,
+            join: $join,
+            orderBy: $orderBy,
+            offset: $offset,
+            limit: $limit,
+            selected: $selected
+        );
+
+        if (!is_array($data)) {
+            return [];
+        }
+
+        return $data;
+    }
+
+    public function getMyRequests($offset, $limit ,$status = null){
         $conditions = [
             ['m.requester_id','=',$_SESSION['user_id']],  
         ];
+        if ($status) {
+            $conditions[] = ['m.status', '=', $status];
+        }
 
         $join = [
             ["users","m.requester_id = r.id", "INNER" ,"r"],

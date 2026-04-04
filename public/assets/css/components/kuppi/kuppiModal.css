@@ -12,31 +12,35 @@
 }
 
 .kuppi-modal-tabs {
-  display : flex;
-  align-items : center;
-  justify-content : center;
-  background: var(--color-brand-50);
-  border-radius: 10px;
-  position: relative;
-  padding: 6px; 
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-0);
+  background: transparent;
 }
 
 .kuppi-modal-tabs button{
-  width : 20%;
-  background : transparent;
-  border: none;
-  padding: 10px;
   cursor: pointer;
+  padding: var(--spacing-1) var(--spacing-6);
+  border-radius: var(--rounded-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  border: none;
   position: relative;
   z-index: 2;
+  font-size: var(--text-sm);
   color: #374151;
-  border-radius: 10px;
+  background-color: var(--color-brand-100);
   transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .08s ease;
 }
 
 .kuppi-modal-tabs button:hover:not(.active) {
-  background: var(--color-brand-100); 
+  background-color: var(--color-brand-300); 
 }
 
 .kuppi-modal-tabs button:focus-visible {
@@ -45,12 +49,58 @@
 }
 
 .kuppi-modal-tabs .active {
-  background: var(--color-brand-500);
-  color: #ffffff;
-  border-radius: 10px;
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+  border-radius: var(--rounded-full);
   transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
   z-index: 1;
   pointer-events: none; /* prevents double-click on active */
+}
+
+/* Sub-filter rows inside My Kuppis modal (per-tab) */
+.kuppi-modal-filters {
+  display: none;            /* hidden by default; JS shows the active one */
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing-2);
+  margin: var(--spacing-3) 0 var(--spacing-6);
+  padding: 0 var(--spacing-4);
+}
+
+.kuppi-modal-filters.visible {
+  display: flex;
+}
+
+.kuppi-modal-filters button {
+  cursor: pointer;
+  padding: var(--spacing-1) var(--spacing-4);
+  border-radius: var(--rounded-full);
+  border: none;
+  background-color: var(--color-brand-50);
+  color: #374151;
+  font-size: var(--text-xs);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.kuppi-modal-filters button:hover:not(.active) {
+  background-color: var(--color-brand-200);
+}
+
+.kuppi-modal-filters button.active {
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+}
+
+/* Special "Manage Topics" accent button in My Favourites sub-filters */
+.kuppi-modal-filters .manage-topics-btn {
+  background-color: var(--color-brand-500);
+  color: var(--color-primary-white);
+  margin-left: auto;        /* push to far right */
+}
+
+.kuppi-modal-filters .manage-topics-btn:hover {
+  background-color: var(--color-brand-700);
 }
 /* Ensure specific overlays stack correctly relative to each other */
 #kuppiModal.kuppi-modal-overlay { z-index: 950; }
@@ -324,4 +374,271 @@
 /* Ensure the requester/host rows sit closely without large gaps */
 .kuppi-modal-side .kuppi-detail-value + .kuppi-detail-value {
   margin-top: 4px;
+}
+
+/* --- Change Status modal (reuses base kuppi modal styles) --- */
+
+/* Overlay for change-status modal sits above other kuppi modals */
+#changeStatusModal.kuppi-modal-overlay {
+  display: flex; /* always visible when created */
+  z-index: 960; /* slightly above #kuppiModal (950) */
+}
+
+/* Body spacing + typography */
+#changeStatusModalBody {
+  padding: 24px 28px;
+}
+
+#changeStatusModalBody h3 {
+  margin: 0 0 16px 0;
+  font-weight: 600;
+  font-size: 20px;
+  color: #111827;
+  text-align: center;
+}
+
+#changeStatusModalBody p {
+  margin: 0 0 16px 0;
+  color: #4b5563;
+  font-size: 14px;
+  text-align: center;
+}
+
+#changeStatusModalBody .form-row {
+  margin-bottom: 18px;
+}
+
+#changeStatusModalBody label {
+  display: block;
+  margin-bottom: 8px;
+  color: #374151;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+#changeStatusModalBody select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+#changeStatusModalBody select:focus {
+  outline: none;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(147,197,253,0.35);
+}
+
+#changeStatusModalBody .kuppi-modal-actions {
+  margin-top: 10px;
+}
+
+/* ── Review Modal ─────────────────────────────────────── */
+
+#reviewModal.kuppi-modal-overlay {
+  display: flex;
+  z-index: 960;
+}
+
+#reviewModalBody {
+  padding: 24px 28px;
+  text-align: center;
+}
+
+#reviewModalBody h3 {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  font-size: 20px;
+  color: #111827;
+}
+
+#reviewModalBody .review-intro {
+  margin: 0 0 20px 0;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+/* Star rating */
+.review-stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.review-star {
+  font-size: 36px;
+  color: #d1d5db;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+  user-select: none;
+  line-height: 1;
+}
+
+.review-star:hover {
+  transform: scale(1.15);
+}
+
+.review-star.active {
+  color: #f59e0b;
+}
+
+.review-rating-label {
+  min-height: 22px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* Comment */
+#reviewModalBody .review-comment-label {
+  display: block;
+  text-align: left;
+  margin-bottom: 6px;
+  color: #374151;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.review-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  resize: vertical;
+  font-family: inherit;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.review-textarea:focus {
+  outline: none;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.35);
+}
+
+/* Error */
+.review-error {
+  min-height: 20px;
+  margin: 8px 0 4px;
+  color: #dc2626;
+  font-size: 13px;
+}
+
+/* Success */
+.review-success {
+  font-size: 48px;
+  color: #16a34a;
+  margin: 16px 0 8px;
+}
+
+.review-success-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+}
+
+#reviewModalBody .kuppi-modal-actions {
+  margin-top: 14px;
+}
+
+.status-error {
+  min-height: 20px;
+  margin: 8px 0 4px;
+  color: #dc2626;
+  font-size: 13px;
+}
+
+/* ── Reviews section inside kuppi detail modal ── */
+.kuppi-modal-reviews-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.kuppi-reviews-btn {
+  margin-bottom: 14px;
+}
+
+.reviews-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 12px 0;
+  text-align: left;
+}
+
+.reviews-loading,
+.reviews-error,
+.reviews-empty {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  padding: 12px 0;
+}
+
+.reviews-error {
+  color: #dc2626;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.review-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.review-card-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #111827;
+}
+
+.review-card-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.review-star-display {
+  font-size: 16px;
+  color: #d1d5db;
+}
+
+.review-star-display.filled {
+  color: #f59e0b;
+}
+
+.review-card-text {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.5;
+  margin: 6px 0;
+}
+
+.review-card-date {
+  font-size: 12px;
+  color: #9ca3af;
 }

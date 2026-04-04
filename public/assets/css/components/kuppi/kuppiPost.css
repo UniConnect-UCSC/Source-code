@@ -60,6 +60,13 @@
   box-shadow: var(--shadow-sm);
 }
 
+.post-participants {
+  font-size: 15px;
+  color: var(--color-secondary-gray);
+  margin-bottom: 12px;
+}
+
+
 .card-platform {
   display: inline-block;
   background: var(--color-primary-gray);

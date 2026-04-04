@@ -1,4 +1,3 @@
-
 <script>
 const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCategories ?? []))); ?>;
 </script>
@@ -28,10 +27,9 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
         <div class="kuppi-feed-actions">
             <a href="javascript:void(0);" class="btn" onclick="openRequestKuppiModal(kuppiCategories)">Request a Kuppi</a>
             <a href="javascript:void(0);" class="btn" onclick="openHostKuppiModal(kuppiCategories)">Host Kuppi</a>
-            <a href="javascript:void(0);" class="btn" onclick="openMyKuppisModal()">My Kuppis</a>
-            <a href="javascript:void(0);" class="btn" onclick="openKuppiRequestsModal()">Kuppi Requests</a>
+            <a href="javascript:void(0);" class="btn" onclick="openMyKuppisModal()">Manage Kuppi</a>
         </div>
-        <div class="kuppi-feed kuppi-fade-in" id="kuppi-container">
+        <div class="kuppi-grid" id="kuppi-container">
         </div>
     </div>
 
@@ -54,13 +52,44 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
                     <div class="kuppi-modal-header-row" style="display:flex; align-items:center; justify-content:center; gap:12px;">
                         <h2 style="margin: 20px;0;">My Hosts and Requests</h2>
                     </div>
-                    <div class="kuppi-modal-tabs" >
-                            <button id="myHosts">My Hosts </button>
-                            <button id="myRequests">My Requests </button>
-                            <button id="reports">Reports </button>
-                            <button id="myAttends">My Attends </button>
-                            <button id="myFavourites">My Favourites </button>
-                    </div>            
+                    <div class="kuppi-modal-tabs">
+                            <button id="myHosts">My Hosts</button>
+                            <button id="myRequests">My Requests</button>
+                            <button id="reports">Reports</button>
+                            <button id="myAttends">My Attends</button>
+                            <button id="myFavourites">My Favourites</button>
+                    </div>
+
+                    <!-- Sub-filters per tab (only the active tab's row is visible) -->
+                    <div class="kuppi-modal-filters" id="my-hosts-filters" data-tab="myHosts">
+                        <button type="button" data-status-filter="" class="active">All</button>
+                        <button type="button" data-status-filter="In Progress">In Progress</button>
+                        <button type="button" data-status-filter="Completed">Completed</button>
+                        <button type="button" data-status-filter="Upcoming">Upcoming</button>
+                        <button type="button" data-status-filter="Cancelled">Cancelled</button>
+                    </div>
+
+                    <div class="kuppi-modal-filters" id="my-requests-filters" data-tab="myRequests">
+                        <button type="button" data-status-filter="">All</button>
+                        <button type="button" data-status-filter="Requested">Remain Request</button>
+                        <button type="button" data-status-filter="In Progress">Volunteered</button>
+                        <button type="button" data-status-filter="Completed">Completed</button>
+                    </div>
+
+                    <!-- Reports: no sub-filters -->
+
+                    <div class="kuppi-modal-filters" id="my-attends-filters" data-tab="myAttends">
+                        <button type="button" data-status-filter="">All</button>
+                        <button type="button" data-status-filter="Upcoming">Upcoming</button>
+                        <button type="button" data-status-filter="In Progress">In Progress</button>
+                        <button type="button" data-status-filter="Completed">Completed</button>
+                        <button type="button" data-status-filter="Reviewed">Reviewed</button>
+                    </div>
+
+                    <div class="kuppi-modal-filters" id="my-favourites-filters" data-tab="myFavourites">
+                        <button type="button" class="manage-topics-btn" id="manageFavTopicsBtn">&#9733; Manage Topics</button>
+                    </div>
+
                     <div class="kuppi-modal-list" id="my-kuppi-content"></div>
             </div>
         </div>
@@ -103,6 +132,8 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
 <script src="/assets/js/kuppi/myKuppisModal.js"></script>
 <script src="/assets/js/kuppi/kuppiRequestsModal.js"></script>
 <script src="/assets/js/kuppi/filters.js"></script>
+<script src="/assets/js/kuppi/openChangeStatusModal.js"></script>
+<script src="/assets/js/kuppi/openReviewModal.js"></script>
 <script src="/assets/js/kuppi/renderKuppiCard.js"></script>
 <script src="/assets/js/kuppi/searchBar.js" defer></script>
 <script src="/assets/js/kuppi/index.js"></script>
