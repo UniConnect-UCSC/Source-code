@@ -121,7 +121,8 @@ class KuppiModel {
             ["universities", "m.university_id = u.id", "INNER", "u"],
             ["users", "m.host_id = h.id", "INNER", "h"],
             ["users", "m.requester_id = r.id", "LEFT", "r"],
-            ["kuppi_categories", "m.category_id = c.id", "INNER", "c"]
+            ["kuppi_categories", "m.category_id = c.id", "INNER", "c"],
+            ["kuppi_favorites", ["m.id = f.kuppi_id", ["f.user_id", "=", $_SESSION['user_id']]], "LEFT", "f"]
         ];
 
         $orderBy = [
