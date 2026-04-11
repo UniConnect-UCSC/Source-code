@@ -37,4 +37,9 @@ class KuppiFavoriteModel {
 
         return true;
     }
+
+    public function getUsersForKuppi($kuppiId) {
+        $favorites = $this->where([['kuppi_id', '=', $kuppiId]]);
+        return $favorites ? $favorites : [];
+    }
 }

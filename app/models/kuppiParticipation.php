@@ -46,6 +46,11 @@ class KuppiParticipationModel {
         return $this->updateAndFetchParticipationCount($kuppiId, false);
     }
 
+    public function getParticipatorsForKuppi($kuppiId) {
+        $participators = $this->where([['kuppi_id', '=', $kuppiId]]);
+        return $participators ? $participators : [];
+    }
+
     private function updateAndFetchParticipationCount($kuppiId, $increment = true) {
             require_once(__DIR__ . "/Kuppi.php");
             $kuppiModel = new KuppiModel();

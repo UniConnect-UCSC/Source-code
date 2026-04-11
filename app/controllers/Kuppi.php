@@ -8,6 +8,7 @@ require_once(__DIR__."/../core/functions.php");
 require_once(__DIR__ . "/../models/kuppiVolunteerReview.php");
 require_once(__DIR__ . "/../models/kuppiParticipation.php");
 require_once(__DIR__ . "/../models/kuppiFavorites.php");
+require_once(__DIR__ . "/KuppiNotificationHandler.php");
 
 class Kuppi extends Controller
 {
@@ -275,7 +276,97 @@ class Kuppi extends Controller
             echo json_encode(['success' => false, 'message' => 'Server error']);
         }
     }
-    
+
+    public function notify($context, $kuppi, $newStatus) {
+        switch ($context) {
+            case 'statusChanged':
+                return $this->notifyStatusChange($context, $kuppi, $newStatus);
+
+            default:
+                throw new InvalidArgumentException('Invalid notification context');
+        }
+    }
+
+    private function notifyStatusChange($context, $kuppi, $newStatus): array {
+
+        $topic = $kuppi->topic ?? 'Kuppi';
+        $baseMeta = [
+            'context' => $context,
+            'status' => $newStatus,
+        ];
+        
+        if (!empty($kuppi->requester_id)) {
+            $requesterPayload = [
+                'type' => 'kuppi_request_status_changed',
+                'title' => 'Kuppi Request Status Updated',
+                'message' => 'Your requested kuppi "' . $topic . '" changed status to ' . $newStatus . '.',
+                'metadata' => $baseMeta,
+            ];
+        }
+
+        $hostPayload = [
+            'type' => 'kuppi_host_status_changed',
+            'title' => 'Kuppi Hosting Status Updated',
+            'message' => 'Your hosted kuppi "' . $topic . '" changed status to ' . $newStatus . '.',
+            'metadata' => $baseMeta,
+        ];
+
+        $participantsPayload = [
+            'type' => 'kuppi_participant_status_changed',
+            'title' => 'Kuppi You Joined Has Updated',
+            'message' => 'A kuppi you joined, "' . $topic . '", changed status to ' . $newStatus . '.',
+            'metadata' => $baseMeta,
+        ];
+
+        $favoritesPayload = [
+            'type' => 'kuppi_favorite_status_changed',
+            'title' => 'Favorite Kuppi Status Updated',
+            'message' => 'A kuppi in your favorites, "' . $topic . '", changed status to ' . $newStatus . '.',
+            'metadata' => $baseMeta,
+        ];
+
+        $handler = new KuppiNotificationHandler($kuppi);
+
+        $details = [];
+
+        if (!empty($kuppi->requester_id)) {
+            $details['requester'] = $handler->notifyRequester(
+                $requesterPayload['type'],
+                $requesterPayload['title'],
+                $requesterPayload['message'],
+                $requesterPayload['metadata']
+            );
+        }
+
+        $details['host'] = $handler->notifyHost(
+            $hostPayload['type'],
+            $hostPayload['title'],
+            $hostPayload['message'],
+            $hostPayload['metadata']
+        );
+        $details['participants'] = $handler->notifyParticipants(
+            $participantsPayload['type'],
+            $participantsPayload['title'],
+            $participantsPayload['message'],
+            $participantsPayload['metadata']
+        );
+        $details['favorites'] = $handler->notifyFavorites(
+            $favoritesPayload['type'],
+            $favoritesPayload['title'],
+            $favoritesPayload['message'],
+            $favoritesPayload['metadata']
+        );
+
+        return [
+            'success' => true,
+            'message' => 'Status-change notifications queued',
+            'context' => $context,
+            'kuppi_id' => (string)$kuppi->id,
+            'newStatus' => $newStatus,
+            'details' => $details,
+        ];
+    }
+
     public function editKuppiRequest(){
         $kuppiModel = new KuppiModel();
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -316,8 +407,13 @@ class Kuppi extends Controller
 
         try {
             $data = parseRequestData();
-            $kuppiId   = $data['id']     ?? null;
-            $currentStatus = $data['currentStatus'] ?? null;
+            $kuppiInput = $data['kuppi'] ?? null;
+            if (is_array($kuppiInput)) {
+                $kuppiInput = (object)$kuppiInput;
+            }
+
+            $kuppiId = $data['id'] ?? ($kuppiInput->id ?? null);
+            $currentStatus = $data['currentStatus'] ?? ($kuppiInput->status ?? null);
             $newStatus = $data['newStatus'] ?? null;
 
             if (!$kuppiId || !$newStatus || !$currentStatus) {
@@ -335,9 +431,18 @@ class Kuppi extends Controller
             $updated = $kuppiModel->update($kuppiId, ['status' => $newStatus]);
 
             if ($updated) {
+                $notification = null;
+                $kuppiData = $kuppiModel->getKuppiById($kuppiId);
+                try {
+
+                    if ($kuppiData) {
+                        $notification = $this->notify('statusChanged', $kuppiData, (string)$newStatus);
+                    }
+                } catch (Throwable $e) {
+                    error_log('changeStatus notifyStatusChange error: ' . $e->getMessage());
+                }
+
                 if($newStatus == 'Completed') {
-                    $kuppiModel2 = new KuppiModel();
-                    $kuppiData = $kuppiModel2->getKuppiById($kuppiId);
                     if ($kuppiData && isset($kuppiData->host_id)) {
                         $this->tabulateVolunteer('kuppiCompleted', $kuppiData->host_id);
                     }
@@ -346,6 +451,7 @@ class Kuppi extends Controller
                     'success'   => true,
                     'newStatus' => $newStatus,
                     'message'   => 'Changed status successfully',
+                    'notification' => $notification,
                 ]);
             } else {
                 http_response_code(500);

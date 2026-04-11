@@ -328,9 +328,9 @@
       volunteerBtn.onclick = function (e) {
         e.stopPropagation();
         window.openVolunteerKuppiModal({
-          id:       item.id,
-          topic:    item.topic    || '',
-          category: item.category || ''
+          id:           item.id,
+          topic:        item.topic || '',
+          category:     item.category || ''
         });
       };
       actions.appendChild(volunteerBtn);
