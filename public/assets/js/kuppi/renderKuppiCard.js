@@ -257,7 +257,7 @@
             });
         };
         actions.appendChild(editBtn);
-        
+
         var changeStatusBtn = el('button', 'btn btn-primary', 'Change Status');
           changeStatusBtn.onclick = function (e) {
             e.stopPropagation();
@@ -314,6 +314,41 @@
         };
         actions.appendChild(reviewBtn);
       }
+      else {
+        var removeParticipationBtn = el('button', 'btn btn-primary', 'Remove  Participation');
+        removeParticipationBtn.onclick = function (e) {
+          e.stopPropagation();
+          console.log(`Remove Particiapation btn clicked`);
+          const kuppiId = item.id;
+          const current = true;
+          const data = {
+            kuppi_id: kuppiId,
+            current_status: current,
+            action: "participate"
+          }
+        Ajax.jsonPost('/kuppi/toggle', data).then((response) => {
+          if(response.newStatus === !current) {
+            console.log(`removed participation successfully`);
+            item.is_participating = response.newStatus;
+  
+              if (window.newMyParticipationsScroll) {
+                window.newMyParticipationsScroll.resetScroll();
+                window.newMyParticipationsScroll.loadNextElements();
+              }
+  
+          } else {
+              console.error('Server response inconsistent with requested toggle action.');
+              console.log(response);
+          }
+  
+      });
+        }
+  
+        actions.appendChild(removeParticipationBtn);
+
+          
+      }  
+
 
       return actions.children.length > 0 ? actions : null;
     }
@@ -362,6 +397,35 @@
           });
         };
         actions.appendChild(reviewBtn);
+      } else {
+        var removeFavoriteBtn = el('button', 'btn btn-primary', 'Remove Flavorite');
+        removeFavoriteBtn.onclick = function (e) {
+          e.stopPropagation();
+        const kuppiId = item.id;
+        const current = true ;
+        const data = {
+          kuppi_id: kuppiId,
+          current_status: current,
+          action: "favorite"
+        };
+
+        Ajax.jsonPost('/kuppi/toggle', data).then((response) => {
+          if (response.newStatus === !current) {
+            console.log(`succefully removed the favorite item`);
+            item.is_favorite = response.newStatus;
+                if (window.newMyFavoritesScroll) {
+                window.newMyFavoritesScroll.resetScroll();
+                window.newMyFavoritesScroll.loadNextElements();
+              }
+          } else {
+            console.error('Server response inconsistent with favorite toggle action.');
+            console.log(response);
+          }
+        }).catch((err) => {
+          console.error('Favorite toggle failed', err);
+        });          
+        }
+        actions.appendChild(removeFavoriteBtn);
       }
 
       return actions.children.length > 0 ? actions : null;
