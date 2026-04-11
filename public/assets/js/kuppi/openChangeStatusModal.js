@@ -100,14 +100,23 @@
               body.appendChild(successMsg);
 
               setTimeout(() => overlay.remove(), 1500);
+              if(window.newMyHostKuppiScroll) {
+                  window.newMyHostKuppiScroll.resetScroll();
+                  window.newMyHostKuppiScroll.loadNextElements();
+              }
           } else {
               errorMsg.textContent = response.message || 'Failed to change Status. Please try again.';
-              confirmBtn.disabled = true;
-              confirmBtn.textContent = 'Change Status';
+              confirmBtn.disabled = false;
+              confirmBtn.textContent = 'Confirm';
               console.log('Error ', response.message);
 
             }
-          })
+          }).catch((err) => {
+              errorMsg.textContent = err?.message || 'A system error occurred. Please try again.';
+              confirmBtn.disabled = false;
+              confirmBtn.textContent = 'Confirm';
+              console.error('AjaxRequest Error:', err);
+          });
     };
 
     btnRow.appendChild(cancelBtn);

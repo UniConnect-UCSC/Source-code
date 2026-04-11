@@ -246,8 +246,15 @@ class Kuppi extends Controller
             ];
         }
         $updated = $kuppiModel->update($id, $data);
-        
+        $kuppi = $kuppiModel->getKuppiById($id);
         if ($updated) {
+            $this->tabulateVolunteer('volunteered', $_SESSION['user_id']);
+            
+            $this->notify(
+                'volunteered' ,
+                $kuppi,
+                null
+            );
             header('Location: /kuppi');
             exit();
         } else {
@@ -299,14 +306,63 @@ class Kuppi extends Controller
         }
     }
 
-    public function notify($context, $kuppi, $newStatus) {
+    public function notify($context, $kuppi, $data) {
         switch ($context) {
+            case 'volunteered':
+                return $this->notifyVolunteered($context, $kuppi);
             case 'statusChanged':
-                return $this->notifyStatusChange($context, $kuppi, $newStatus);
+                return $this->notifyStatusChange($context, $kuppi, $data);
 
             default:
                 throw new InvalidArgumentException('Invalid notification context');
         }
+    }
+
+    private function notifyVolunteered($context, $kuppi ) {
+        $topic = $kuppi->topic ?? 'Kuppi';
+        $baseMeta = [
+            'context' => $context,
+        ];
+
+        $requesterPayload = [
+            'type' => 'kuppi_volunteered_request',
+            'title' => 'Someone Volunteered for your Request!',
+            'message' => 'Someone has volunteered to host your requested kuppi "' . $topic . '".',
+            'metadata' => $baseMeta,
+        ];
+
+        $hostPayload = [
+            'type' => 'kuppi_volunteered_host',
+            'title' => 'Successfully Volunteered!',
+            'message' => 'You have successfully volunteered to host the kuppi "' . $topic . '".',
+            'metadata' => $baseMeta,
+        ];
+
+        $handler = new KuppiNotificationHandler($kuppi);
+        $details = [];
+
+        if (!empty($kuppi->requester_id)) {
+            $details['requester'] = $handler->notifyRequester(
+                $requesterPayload['type'],
+                $requesterPayload['title'],
+                $requesterPayload['message'],
+                $requesterPayload['metadata']
+            );
+        }
+
+        if (!empty($kuppi->host_id)) {
+            $details['host'] = $handler->notifyHost(
+                $hostPayload['type'],
+                $hostPayload['title'],
+                $hostPayload['message'],
+                $hostPayload['metadata']
+            );
+        }
+
+        return [
+            'success' => true,
+            'details' => $details,
+        ];
     }
 
     private function notifyStatusChange($context, $kuppi, $newStatus): array {
@@ -457,14 +513,10 @@ class Kuppi extends Controller
 
         try {
             $data = parseRequestData();
-            $kuppiInput = $data['kuppi'] ?? null;
-            if (is_array($kuppiInput)) {
-                $kuppiInput = (object)$kuppiInput;
-            }
 
-            $kuppiId = $data['id'] ?? ($kuppiInput->id ?? null);
-            $currentStatus = $data['currentStatus'] ?? ($kuppiInput->status ?? null);
-            $newStatus = $data['newStatus'] ?? null;
+            $kuppiId = $data['id'] ;
+            $currentStatus = $data['currentStatus'];
+            $newStatus = $data['newStatus'] ;
 
             if (!$kuppiId || !$newStatus || !$currentStatus) {
                 http_response_code(400);
@@ -624,7 +676,7 @@ class Kuppi extends Controller
         }
 
         if ($isFavorite) {
-            $result = $favoritesModel->unmarkFavorite($kuppiId, $userId);
+            $result = $favoritesModel->unmarkFavorite($kuppiId, $userId);            
             return [
                 'newStatus' => false,
                 'result' => $result // true or null
