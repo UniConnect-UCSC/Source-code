@@ -161,15 +161,15 @@ body {
   outline-offset: 2px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1600px) {
   .kuppi-grid {
     grid-template-columns: repeat(2, 1fr); 
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1300px) {
   .kuppi-grid {
-    grid-template-columns: 1fr; /* 1 per row on small screens */
+    grid-template-columns: 1fr; 
   }
 }
 
@@ -252,7 +252,6 @@ body {
   color: #333;
 }
 
-/* Ensure kuppi-image supports <img> content as used in Kuppi cards */
 .kuppi-image img {
   width: 100%;
   height: 180px;
@@ -260,7 +259,6 @@ body {
   display: block;
 }
 
-/* --- Kuppi card styles (copied from event.css, renamed) --- */
 .kuppi-card {
   background: var(--color-primary-white);
   border: 2px solid var(--color-primary-gray);
