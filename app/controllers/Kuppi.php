@@ -161,41 +161,63 @@ class Kuppi extends Controller
     }
     
     public function edit_kuppi($id){
-        $kuppiModel = new KuppiModel();
-        
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $topic = $_POST['topic'] ?? '';
-            $date = $_POST['date'] ?? '';
-            $time = $_POST['time'] ?? '';
-            $platform = $_POST['platform'] ?? '';
-            $category_id = $_POST['category_id'] ?? '';
-            $link = $_POST['link'] ?? '';
-            
-            $kuppiDateTime = $date . ' ' . $time;
-            
-            $data = [
-                'topic' => $topic,
-                'kuppi_date_time' => $kuppiDateTime,
-                'platform' => $platform,
-                'kuppi_url' => $link
-            ];
-            
-            if (!empty($category_id)) {
-                $data['category_id'] = (int)$category_id;
-            }
-            
-            $updated = $kuppiModel->update($id, $data);
-            
-            if ($updated) {
-                header('Location: /kuppi');
-                exit();
-            } else {
-                echo "Error updating Kuppi session.";
-            }
-        } else {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /kuppi');
             exit();
         }
+
+        $kuppiModel = new KuppiModel();
+        $kuppi = $kuppiModel->getKuppiById($id);
+
+        if (!$kuppi) {
+            echo "Kuppi session not found.";
+            return;
+        }
+
+        if ((int)($kuppi->host_id ?? 0) !== (int)($_SESSION['user_id'] ?? 0)) {
+            echo "You are not allowed to edit this session.";
+            return;
+        }
+
+        if (($kuppi->status ?? '') === 'Completed') {
+            echo "Can't edit already ended session";
+            return;
+        }
+
+        $topic = trim($_POST['topic'] ?? '');
+        $date = trim($_POST['date'] ?? '');
+        $time = trim($_POST['time'] ?? '');
+        $platform = trim($_POST['platform'] ?? '');
+        $category_id = $_POST['category_id'] ?? '';
+        $link = trim($_POST['link'] ?? '');
+
+        if ($topic === '' || $date === '' || $time === '' || $platform === '') {
+            http_response_code(422);
+            echo "Topic, date, time and platform are required.";
+            return;
+        }
+
+        $kuppiDateTime = $date . ' ' . $time;
+
+        $data = [
+            'topic' => $topic,
+            'kuppi_date_time' => $kuppiDateTime,
+            'platform' => $platform,
+            'kuppi_url' => $link
+        ];
+
+        if (!empty($category_id)) {
+            $data['category_id'] = (int)$category_id;
+        }
+
+        $updated = $kuppiModel->update($id, $data);
+
+        if ($updated) {
+            header('Location: /kuppi');
+            exit();
+        }
+
+        echo "Error updating Kuppi session.";
     }
 
     public function delete_kuppi($id){
@@ -369,31 +391,59 @@ class Kuppi extends Controller
 
     public function editKuppiRequest(){
         $kuppiModel = new KuppiModel();
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $id = $_POST['id'] ?? '';
-            $topic = $_POST['topic'] ?? '';
-            $category_id = $_POST['category_id'] ?? '';
-            
-            $data = [
-                'topic' => $topic,
-                'category_id' => $category_id
-            ];
-            
-            $updated = $kuppiModel->update($id, $data);
-            
-            if($updated){
-                header('Location: /kuppi/myKuppis');
-                exit();
-            } else {
-                echo "Error updating Kuppi request.";
-            }
-        } else {
+        if($_SERVER['REQUEST_METHOD'] !== 'POST'){
             header('Location: /kuppi/myKuppis');
             exit();
         }
-        
-        
-        
+
+        $id = $_POST['id'] ?? '';
+        $topic = trim($_POST['topic'] ?? '');
+        $category_id = $_POST['category_id'] ?? '';
+
+        if (empty($id)) {
+            http_response_code(400);
+            echo "Missing Kuppi request id.";
+            return;
+        }
+
+        $kuppi = $kuppiModel->getKuppiById($id);
+        if (!$kuppi) {
+            http_response_code(404);
+            echo "Kuppi request not found.";
+            return;
+        }
+
+        if ((int)($kuppi->requester_id ?? 0) !== (int)($_SESSION['user_id'] ?? 0)) {
+            http_response_code(403);
+            echo "You are not allowed to edit this request.";
+            return;
+        }
+
+        if (($kuppi->status ?? '') === 'Completed') {
+            http_response_code(400);
+            echo "Completed requests cannot be edited.";
+            return;
+        }
+
+        if ($topic === '' || empty($category_id)) {
+            http_response_code(422);
+            echo "Topic and category are required.";
+            return;
+        }
+
+        $data = [
+            'topic' => $topic,
+            'category_id' => (int)$category_id
+        ];
+
+        $updated = $kuppiModel->update($id, $data);
+
+        if($updated){
+            header('Location: /kuppi/myKuppis');
+            exit();
+        }
+
+        echo "Error updating Kuppi request.";
     }
 
     public function changeStatus() {

@@ -239,32 +239,36 @@
     buildActions() {
       var item    = this.item;
       var actions = el('div', 'kuppi-post-actions');
+      var isCompleted = item.status === 'Completed';
 
         // "My Hosts" tab: user is host of these sessions, allow host edit + status
-      var editBtn = el('button', 'btn btn-primary', 'Edit');
-        editBtn.onclick = function (e) {
-          e.stopPropagation();
-          var dt    = String(item.kuppi_date_time || '');
-          var parts = dt.split(' ');
-          window.openEditKuppiModal({
-            id:       item.id,
-            topic:    item.topic    || '',
-            date:     parts[0]     || '',
-            time:     parts[1]     || '',
-            platform: item.platform || ''
-          });
-      };
-
-      var changeStatusBtn = el('button', 'btn btn-primary', 'Change Status');
-        changeStatusBtn.onclick = function (e) {
-          e.stopPropagation();
-          window.openChangeStatusModal({
-              item
-          });
-      };
-
-      actions.appendChild(editBtn);
-      actions.appendChild(changeStatusBtn);
+      if (!isCompleted) {
+        var editBtn = el('button', 'btn btn-primary', 'Edit');
+          editBtn.onclick = function (e) {
+            e.stopPropagation();
+            var dt    = String(item.kuppi_date_time || '');
+            var parts = dt.split(' ');
+            window.openEditKuppiModal({
+              id:       item.id,
+              topic:    item.topic    || '',
+              date:     parts[0]     || '',
+              time:     parts[1]     || '',
+              platform: item.platform || ''
+            });
+        };
+        actions.appendChild(editBtn);
+        
+        var changeStatusBtn = el('button', 'btn btn-primary', 'Change Status');
+          changeStatusBtn.onclick = function (e) {
+            e.stopPropagation();
+            window.openChangeStatusModal({
+                item
+            });
+        };
+  
+        actions.appendChild(changeStatusBtn);
+      }
+      
 
       return actions;
     }
@@ -274,17 +278,20 @@
     buildActions() {
       var item    = this.item;
       var actions = el('div', 'kuppi-post-actions');
+      var isCompleted = item.status === 'Completed';
 
-      var editReqBtn = el('button', 'btn btn-primary', 'Edit');
-          editReqBtn.onclick = function (e) {
-            e.stopPropagation();
-            window.openEditKuppiRequestModal({
-              id:       item.id,
-              topic:    item.topic    || '',
-              category: item.category || ''
-            });
-          };
-          actions.appendChild(editReqBtn);
+      if (!isCompleted) {
+        var editReqBtn = el('button', 'btn btn-primary', 'Edit');
+            editReqBtn.onclick = function (e) {
+              e.stopPropagation();
+              window.openEditKuppiRequestModal({
+                id:       item.id,
+                topic:    item.topic    || '',
+                category: item.category || ''
+              });
+            };
+            actions.appendChild(editReqBtn);
+      }
           
       return actions;
     }
