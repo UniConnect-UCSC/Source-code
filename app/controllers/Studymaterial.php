@@ -13,6 +13,7 @@ class StudyMaterial extends Controller
 			<link rel="stylesheet" href="/assets/css/pages/home.css">
 			<link rel="stylesheet" href="/assets/css/components/feed.css">
 			<link rel="stylesheet" href="/assets/css/components/studyMaterialControl.css">
+			<link rel="stylesheet" href="/assets/css/components/studyMaterialCard.css">
 			<link rel="stylesheet" href="/assets/css/components/modal.css">
 			<link rel="stylesheet" href="/assets/css/components/navbar.css">
 			<link rel="stylesheet" href="/assets/css/components/navPanel.css">

@@ -1,0 +1,110 @@
+/* Study Material Card Component Styles */
+
+/* Feed grid */
+.sm-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: var(--spacing-6);
+	margin-top: var(--spacing-2);
+}
+
+/* Material Card */
+.sm-material-card {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-3);
+	padding: var(--spacing-5);
+	border: 2px solid var(--color-primary-gray);
+	border-radius: var(--rounded-xl);
+	background: var(--color-primary-white);
+	box-shadow: var(--shadow-sm);
+	transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.sm-material-card:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow-lg);
+	border-color: var(--color-brand-100);
+}
+
+/* Card Icon */
+.sm-material-icon {
+	width: 56px; 
+	height: 56px; 
+	border-radius: var(--rounded-lg);
+	display: inline-flex; 
+	align-items: center; 
+	justify-content: center;
+	font-weight: 700; 
+	color: white;
+	flex-shrink: 0;
+}
+
+.sm-material-icon.doc { 
+	background: var(--color-brand-600); 
+}
+
+.sm-material-icon.vid { 
+	background: #16a34a; 
+}
+
+.sm-material-icon.lnk { 
+	background: #f59e0b; 
+}
+
+/* Card Content */
+.sm-material-content {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-2);
+}
+
+.sm-material-title { 
+	margin: 0 0 var(--spacing-1) 0; 
+	font-size: var(--text-lg); 
+	font-weight: 600; 
+	color: #111827; 
+}
+
+.sm-material-content .sm-item-meta { 
+	margin-bottom: var(--spacing-2); 
+	color: var(--color-secondary-gray); 
+	font-size: var(--text-sm); 
+}
+
+.sm-item-meta-2 { 
+	margin-bottom: var(--spacing-2); 
+}
+
+.topic-pill {
+	display: inline-block;
+	background: var(--color-secondary-white);
+	border: 1px solid var(--color-primary-gray);
+	padding: 4px 12px;
+	border-radius: var(--rounded-full);
+	font-size: var(--text-xs);
+	color: #374151;
+	font-weight: 500;
+}
+
+.sm-item-tags { 
+	margin-top: var(--spacing-2); 
+	display: flex; 
+	gap: var(--spacing-2); 
+	flex-wrap: wrap; 
+}
+
+.tag {
+	background: var(--color-secondary-white);
+	border: 1px solid var(--color-primary-gray);
+	padding: 2px 8px;
+	border-radius: var(--rounded-full);
+	font-size: var(--text-xs);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+	.sm-grid { 
+		grid-template-columns: 1fr; 
+	}
+}
