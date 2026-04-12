@@ -11,6 +11,7 @@ class Friends extends Controller
             <link rel="stylesheet" href="/assets/css/components/navPanel.css">
             <link rel="stylesheet" href="/assets/css/components/friends.css">
             <link rel="stylesheet" href="/assets/css/components/friendRequests.css">
+            <link rel="stylesheet" href="/assets/css/components/friendSuggestions.css">
             '
         ]);
     }

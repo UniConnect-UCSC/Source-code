@@ -3,6 +3,7 @@
 <div class="search-layout">
     <?php
     component("navPanel");
-    component("searchResults");
+    component("searchResults", ['results' => $results ?? []]);
+
     ?>
 </div>

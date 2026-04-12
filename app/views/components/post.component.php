@@ -2,6 +2,22 @@
 if (!isset($postType)) {
     $postType = "";
 }
+
+// Use profileUser if passed and valid, otherwise fall back to session (logged-in user)
+$profileUser = $profileUser ?? null;
+
+if ($profileUser && is_object($profileUser)) {
+    $userEmail = $profileUser->email ?? "";
+    $userFName = $profileUser->f_name ?? "";
+    $userLName = $profileUser->l_name ?? "";
+    $profilePic = $profileUser->profile_picture ?? null;
+} else {
+    // Fallback for logged-in user's own posts
+    $userEmail = $_SESSION['user_email'] ?? "";
+    $userFName = $_SESSION['user_fName'] ?? "";
+    $userLName = $_SESSION['user_lName'] ?? "";
+    $profilePic = $_SESSION['user_profilePicture'] ?? null;
+}
 ?>
 
 <div class="post">
@@ -11,24 +27,24 @@ if (!isset($postType)) {
             <!-- User Profile Picture -->
             <div class="profile-section">
                 <?php
-                $userEmail = $_SESSION['user_email'] ?? "";
-                $userFName = $_SESSION['user_fName'] ?? "";
-                $userLName = $_SESSION['user_lName'] ?? "";
-                $profilePic = $_SESSION['user_profilePicture'] ?? null;
+                // $userEmail = $_SESSION['user_email'] ?? "";
+                // $userFName = $_SESSION['user_fName'] ?? "";
+                // $userLName = $_SESSION['user_lName'] ?? "";
+                // $profilePic = $_SESSION['user_profilePicture'] ?? null;
                 ?>
                 <?php if ($profilePic): ?>
-                <a href="/profile">
-                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-                </a>
+                    <a href="/profile">
+                        <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                    </a>
                 <?php else: ?>
-                <?php
+                    <?php
                     $fNameInitial = strtoupper($userFName[0] ?? '');
                     $lNameInitial = strtoupper($userLName[0] ?? '');
                     ?>
-                <a class="profile" href="/profile">
-                    <!-- //Is isAnonymous do not display initials -->
-                    <?= htmlspecialchars($isAnonymous ? 'An' : $fNameInitial) ?><?= htmlspecialchars($isAnonymous ? '' : $lNameInitial) ?>
-                </a>
+                    <a class="profile" href="/profile">
+                        <!-- //Is isAnonymous do not display initials -->
+                        <?= htmlspecialchars($isAnonymous ? 'An' : $fNameInitial) ?><?= htmlspecialchars($isAnonymous ? '' : $lNameInitial) ?>
+                    </a>
                 <?php endif; ?>
             </div>
 
@@ -46,16 +62,16 @@ if (!isset($postType)) {
 
                 <!-- Optionally render if the post belongs to the user -->
                 <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $authorId): ?>
-                <div onclick="openEditPostModal('<?= htmlspecialchars($mediaUrl ?? '') ?>')">Edit Post</div>
-                <div class="delete-post-btn" onclick="deletePost(this, event, '<?= htmlspecialchars($postType) ?>')">
-                    Delete Post</div>
+                    <div onclick="openEditPostModal('<?= htmlspecialchars($mediaUrl ?? '') ?>')">Edit Post</div>
+                    <div class="delete-post-btn" onclick="deletePost(this, event, '<?= htmlspecialchars($postType) ?>')">
+                        Delete Post</div>
                 <?php endif; ?>
 
                 <div>Copy URL</div>
 
                 <!-- Optionally Render if post doesnt belong to user -->
                 <?php if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != $authorId): ?>
-                <div>Report Post</div>
+                    <div>Report Post</div>
                 <?php endif; ?>
             </div>
         </div>
@@ -65,24 +81,24 @@ if (!isset($postType)) {
     </div>
 
     <?php if (isset($mediaUrl) && !empty($mediaUrl)): ?>
-    <div class="post-image">
-        <img src="<?= htmlspecialchars($mediaUrl) ?>" alt="Post Media">
-    </div>
+        <div class="post-image">
+            <img src="<?= htmlspecialchars($mediaUrl) ?>" alt="Post Media">
+        </div>
     <?php endif; ?>
 
     <div class="post-interactions">
         <div><i data-lucide="thumbs-up"></i> 4</div>
         <div class="interaction-counts">
             <div>5 Comments</div>
-            <i data-lucide="dot"></i>
-            <div>43 Reposts</div>
+            <!-- <i data-lucide="dot"></i>
+            <div>43 Reposts</div> -->
         </div>
     </div>
 
     <div class="post-actions">
         <div> <i data-lucide="thumbs-up"></i>Like</div>
         <div><i data-lucide="message-circle"></i>Comment</div>
-        <div><i data-lucide="repeat-2"></i>Repost</div>
+        <!-- <div><i data-lucide="repeat-2"></i>Repost</div> -->
     </div>
 </div>
 
@@ -98,13 +114,13 @@ if (!isset($postType)) {
         <div class="edit-modal-header">
             <div>
                 <?php if ($profilePic): ?>
-                <a href="/profile">
-                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-                </a>
+                    <a href="/profile">
+                        <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                    </a>
                 <?php else: ?>
-                <a class="profile" href="/profile">
-                    <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-                </a>
+                    <a class="profile" href="/profile">
+                        <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+                    </a>
                 <?php endif; ?>
             </div>
 

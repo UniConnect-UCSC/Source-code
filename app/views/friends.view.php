@@ -4,6 +4,7 @@
     <?php
     component("navPanel");
     component("friends");
+    // component("friendSuggestions");
     component("friendRequests");
     ?>
 </div>

@@ -1,0 +1,5 @@
+.friend-suggestions-container {
+  top: var(--spacing-24);
+  grid-column-start: 9;
+  grid-column-end: 13;
+}
