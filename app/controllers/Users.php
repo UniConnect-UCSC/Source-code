@@ -27,7 +27,7 @@ class Users extends Controller
         }
 
         $this->view('userSlug', [
-            'title' => 'University Feed | UniConnect',
+            'title' => 'Users | UniConnect',
             'head' => '
         
             <link rel="stylesheet" href="/assets/css/components/navbar.css">

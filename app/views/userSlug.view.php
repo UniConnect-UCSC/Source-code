@@ -15,6 +15,6 @@
         ]); ?>
     </div>
     <div class="profile-sidebar">
-        <?php component("profileSidebar"); ?>
+        <?php component("profileSidebar", ["profileUser" => $profileUser]); ?>
     </div>
 </div>

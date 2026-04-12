@@ -2,9 +2,14 @@
 <?php require_once(__DIR__ . "/../../models/UniversityPost.php"); ?>
 
 <?php
-$userId = $profileUser->id ?? $_SESSION['user_id'] ?? null;
+$profileUser = $profileUser ?? null;
+$loggedInUserId = $_SESSION['user_id'] ?? null;
+$profileUserId = $profileUser->id ?? null;
+$userId = $profileUserId ?? $loggedInUserId;
 $userFName = $profileUser->f_name ?? $_SESSION['user_fName'] ?? '';
 $userLName = $profileUser->l_name ?? $_SESSION['user_lName'] ?? '';
+$isOwnProfile = $loggedInUserId && ($profileUserId ? $loggedInUserId === $profileUserId : true);
+
 $globalModel = new GlobalPost();
 $globalPosts = $globalModel->where(
     [
@@ -32,6 +37,7 @@ $uniPosts = $uniModel->where(
             <p class="no-results-message">No global posts found.</p>
         <?php else: ?>
             <?php foreach ($globalPosts as $post): ?>
+                <?php if (!$isOwnProfile && !empty($post->is_anonymous)) continue; ?>
                 <?php
                 component("post", [
                     "postId" => $post->id,
@@ -44,7 +50,6 @@ $uniPosts = $uniModel->where(
                     "isAnonymous" => $post->is_anonymous,
                     "postType" => "global",
                     "profileUser" => $profileUser
-
                 ]);
                 ?>
             <?php endforeach; ?>
@@ -56,11 +61,12 @@ $uniPosts = $uniModel->where(
             <p class="no-results-message">No university posts found.</p>
         <?php else: ?>
             <?php foreach ($uniPosts as $post): ?>
+                <?php if (!$isOwnProfile && !empty($post->is_anonymous)) continue; ?>
                 <?php
                 component("post", [
                     "postId" => $post->id,
                     "authorId" => $post->user_id,
-                    "author" => $post->is_anonymous ? "Anonymous" : ($_SESSION['user_fName'] ?? '') . " " . ($_SESSION['user_lName'] ?? ''),
+                    "author" => $post->is_anonymous ? "Anonymous" : $userFName . " " . $userLName,
                     "caption" => $post->caption,
                     "createdAt" => $post->created_at,
                     "updatedAt" => $post->updated_at,
