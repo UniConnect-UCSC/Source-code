@@ -278,9 +278,9 @@
     buildActions() {
       var item    = this.item;
       var actions = el('div', 'kuppi-post-actions');
-      var isCompleted = item.status === 'Completed';
+      var isApproved = item.host_id ;
 
-      if (!isCompleted) {
+      if (!isApproved) {
         var editReqBtn = el('button', 'btn btn-primary', 'Edit');
             editReqBtn.onclick = function (e) {
               e.stopPropagation();
