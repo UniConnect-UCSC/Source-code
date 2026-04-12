@@ -9,6 +9,7 @@ require_once(__DIR__ . "/../models/kuppiVolunteerReview.php");
 require_once(__DIR__ . "/../models/kuppiParticipation.php");
 require_once(__DIR__ . "/../models/kuppiFavorites.php");
 require_once(__DIR__ . "/KuppiNotificationHandler.php");
+require_once(__DIR__ . "/../models/userKuppiFavoriteCategories.php");
 
 class Kuppi extends Controller
 {
@@ -665,9 +666,51 @@ class Kuppi extends Controller
             echo json_encode(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
         }
     }
+
+    public function removeFavoriteCategory() {
+        header('Content-Type: application/json');
+        
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+            return;
+        }
+
+        try {
+            $data = parseRequestData();
+            $categoryId = $data['categoryId'] ?? null;
+
+            if (!$categoryId) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Missing categoryId']);
+                return;
+            }
+
+            $userFavCategoryModel = new UserKuppiFavoriteCategoriesModel();
+            
+            $removed = $userFavCategoryModel->removeUserFavoriteCategory($_SESSION['user_id'], $categoryId);
+            
+            if ($removed) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Category removed from favorites'
+                ]);
+            } else {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Failed to remove category']);
+            }
+        } catch (Throwable $e) {
+            error_log('removeFavoriteCategory error: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
+        }
+    }
     
     private function toggleKuppiFavourite($kuppiId, $userId, $currentStatus) {
         $favoritesModel = new KuppiFavoriteModel();
+        $userFavCategoryModel = new UserKuppiFavoriteCategoriesModel();
+        $kuppiModel = new KuppiModel();
+
 
         // Handle true/false, "true"/"false", 1/0 safely
         $isFavorite = filter_var($currentStatus, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
@@ -684,6 +727,15 @@ class Kuppi extends Controller
         }
 
         $result = $favoritesModel->markFavorite($kuppiId, $userId);
+        
+        $kuppi = $kuppiModel->getKuppiById($kuppiId);
+        if ($kuppi && !empty($kuppi->category_id)) {
+            $isAlreadyMapped = $userFavCategoryModel->isAlreadyMapped($userId, $kuppi->category_id);
+            if (!$isAlreadyMapped) {
+                $userFavCategoryModel->createUserFavoriteCategory($userId, $kuppi->category_id);
+            }
+        }
+
         return [
             'newStatus' => true,
             'result' => $result // true or null
@@ -735,7 +787,6 @@ class Kuppi extends Controller
             
         }
     }
-
     private function fetchKuppis($offset, $limit){
         
         
@@ -847,6 +898,16 @@ class Kuppi extends Controller
         return $favorites;
     }
 
+    private function fetchMyFavoriteCategories($offset, $limit) {
+        $fvCategoryModel = new UserKuppiFavoriteCategoriesModel();
+        $favorites = $fvCategoryModel->getUserFavoriteCategories($offset, $limit);
+
+        foreach ($favorites as $item) {
+            $item->category = $item->category_name;
+        }
+
+        return $favorites;
+    }
 
     public function scrollable(){
         $data = parseRequestData();
@@ -879,6 +940,10 @@ class Kuppi extends Controller
             case 'getMyFavorites':
                 $status = $data['context']['status'] ?? null;
                 $response = $this->fetchMyFavorites($data['offset'], $data['limit'], $status);
+                echo json_encode($response);
+                break;
+            case 'getMyFavoriteCategories':
+                $response = $this->fetchMyFavoriteCategories($data['offset'], $data['limit']);
                 echo json_encode($response);
                 break;
             default:

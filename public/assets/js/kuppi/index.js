@@ -84,6 +84,16 @@
     return status ? { status } : {};
   });
 
+  const newFavoriteCategoriesScroll = new InfinityScroll(
+    'getMyFavoriteCategories',
+    '/kuppi/scrollable',
+    document.getElementById("my-kuppi-content"),
+    window.renderFavoriteCategories,
+    0,
+    6
+  );
+  window.newFavoriteCategoriesScroll = newFavoriteCategoriesScroll;
+
  newMainKuppiScroll.setupAutoLoadOnScroll();
  newMainKuppiScroll.addEventListener('successfulLoad' , () => {
   lucide.createIcons();
@@ -93,6 +103,7 @@
  newMyRequestsScroll.setupAutoLoadOnScroll();
  newMyParticipationsScroll.setupAutoLoadOnScroll();
  newMyFavoritesScroll.setupAutoLoadOnScroll();
+ newFavoriteCategoriesScroll.setupAutoLoadOnScroll();
 
   
 

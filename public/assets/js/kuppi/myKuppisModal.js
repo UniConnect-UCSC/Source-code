@@ -51,14 +51,82 @@
     scroll.resetScroll();
     scroll.loadNextElements();
   }
-  /** Re-fetch My Attends from backend with the selected status filter */
   function fetchAttendsWithStatus(status) {
     attendsStatusFilter = status;
     const scroll = window.newMyParticipationsScroll;
     if (!scroll) return;
     scroll.resetScroll();
     scroll.loadNextElements();
+  } 
+  function fetchFavoriteKuppiCategories() {
+    const scroll = window.newFavoriteCategoriesScroll;
+    if (!scroll) return;
+    scroll.resetScroll();
+    scroll.loadNextElements();
+    
   }
+
+  function renderFavoriteCategories(item) {
+    const list = document.getElementById('my-kuppi-content');
+    
+    // Add header if this is the first item being rendered
+    if (list && list.children.length === 0) {
+      const header = document.createElement('div');
+      header.className = 'fav-categories-header';
+      header.innerHTML = `
+        <div class="fav-col">Category Name</div>
+        <div class="fav-col text-right">Actions</div>
+      `;
+      list.appendChild(header);
+    }
+
+    const row = document.createElement('div');
+    row.className = 'fav-category-row';
+
+    const nameCol = document.createElement('div');
+    nameCol.className = 'fav-col fav-name';
+    nameCol.textContent = item.category_name ;
+    row.appendChild(nameCol);
+
+    const actionCol = document.createElement('div');
+    actionCol.className = 'fav-col fav-actions text-right';
+    
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'icon-btn btn-danger-outline';
+    removeBtn.title = 'Remove Category';
+    removeBtn.innerHTML = `<i data-lucide="trash-2"></i>`;
+    
+    if (window.lucide) {
+      setTimeout(() => window.lucide.createIcons({ root: removeBtn }), 0);
+    }
+    
+    removeBtn.onclick = function() {
+      if(confirm('Are you sure you want to remove this category from your favorites?')) {
+         const data = {
+             action: 'toggleFavourite',
+             kuppiId: item.id || null, // Assuming the backend needs kuppiId or category_id
+             currentStatus: true,
+             categoryId: item.category_id || item.id
+         };
+
+         Ajax.jsonPost('/kuppi/removeFavoriteCategory', { categoryId: item.category_id || item.id }).then(res => {
+             if(res && res.success){
+                 row.remove();
+             } else {
+                 alert('Error removing category');
+             }
+         }).catch(err => {
+             alert('Error removing category from server');
+         });
+      }
+    };
+    
+    actionCol.appendChild(removeBtn);
+    row.appendChild(actionCol);
+
+    return row;
+  }
+  window.renderFavoriteCategories = renderFavoriteCategories;
 
   /* ── main open / close ─────────────────────────── */
 
@@ -126,7 +194,7 @@
       const manageTopicsBtn = document.getElementById('manageFavTopicsBtn');
       if (manageTopicsBtn) {
         manageTopicsBtn.addEventListener('click', () => {
-          // TODO: open your "manage favourite topics" UI here
+          fetchFavoriteKuppiCategories();
           console.log('Manage favourite topics clicked');
         });
       }
