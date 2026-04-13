@@ -39,13 +39,6 @@
                 <textarea id="sm-description" name="description" rows="3" placeholder="Add a short description or notes (optional)"></textarea>
             </div>
 
-
-            <!-- This should be handled through a scroll element with a table with current subjects available -->
-            <div class="form-group">
-                <label for="sm-tags">Tags</label>
-                <input type="text" id="sm-tags" name="tags" placeholder="e.g., basics, regression, lecture-01 (comma separated)">
-            </div>
-
             <button type="submit" class="btn btn-primary" id="sm-upload-btn" style="width: 100%;">Confirm</button>
         </form>
     </div>
