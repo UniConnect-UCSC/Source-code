@@ -18,3 +18,26 @@ header h1 {
     color: var(--color-secondary-gray);
     font-weight: 400;
 }
+
+.btn {
+    padding: var(--spacing-2) var(--spacing-4);
+    border: none;
+    border-radius: var(--rounded-full);
+    font-size: var(--text-base);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.12s ease;
+}
+
+.btn-primary {
+    background: var(--color-brand-400);
+    color: var(--color-primary-white);
+}
+
+.btn-primary:hover {
+    background: var(--color-brand-600);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
