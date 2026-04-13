@@ -45,21 +45,12 @@
 	border-radius: var(--rounded-lg);
 	font-weight: 700;
 	font-size: var(--text-xs);
-	color: white;
+	color: var(--color-brand-700);
 	letter-spacing: 0.5px;
+	border: 1px solid var(--color-brand-200);
+	background: var(--color-brand-50);
 }
 
-.sm-type-badge.doc {
-	background: var(--color-brand-600);
-}
-
-.sm-type-badge.vid {
-	background: #16a34a;
-}
-
-.sm-type-badge.lnk {
-	background: #f59e0b;
-}
 
 /* Card Body */
 .sm-material-body {

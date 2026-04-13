@@ -18,7 +18,7 @@
                     <div class="sm-manage-list" id="sm-manage-list">
                         <div class="sm-manage-row" data-id="m1">
                             <div class="sm-manage-cell material-info">
-                                <div class="sm-item-icon doc">PDF</div>
+                                <div class="sm-item-icon">PDF</div>
                                 <h4 class="sm-item-title">Intro to Machine Learning</h4>
                             </div>
                             <div class="sm-manage-cell">Document</div>
@@ -31,7 +31,7 @@
                         </div>
                         <div class="sm-manage-row" data-id="m2">
                             <div class="sm-manage-cell material-info">
-                                <div class="sm-item-icon vid">VID</div>
+                                <div class="sm-item-icon">VID</div>
                                 <h4 class="sm-item-title">Linear Regression Deep Dive</h4>
                             </div>
                             <div class="sm-manage-cell">Video</div>
