@@ -112,5 +112,10 @@
 
 </div>
 
-<!-- Page script -->
+<!-- Page scripts -->
+<script src="/assets/js/studyMaterial/rendererModules.js"></script>
+<script src="/assets/js/studyMaterial/scrollable.js"></script>
+<script src="/assets/js/studyMaterial/form.js"></script>
+<script src="/assets/js/studyMaterial/manage.js"></script>
+
 <script src="/assets/js/studyMaterial/studyMaterial.js"></script>
