@@ -52,6 +52,31 @@
     display: none; /* Chrome, Safari, Opera */
 }
 
+/* Study material modal with same floating effect as event modal */
+#formStudyMaterialModal .modal-content {
+    max-width: 600px;
+    padding: var(--spacing-6);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+}
+
+#formStudyMaterialModal .modal-content .modal-header {
+    flex: 0 0 auto;
+}
+
+#formStudyMaterialModal .modal-content form {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding-right: 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#formStudyMaterialModal .modal-content form::-webkit-scrollbar {
+    display: none;
+}
+
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -121,6 +146,10 @@
 .form-group textarea {
     resize: vertical;
     min-height: 120px;
+}
+
+.form-group.hidden {
+    display: none;
 }
 
 /* Category picker */
