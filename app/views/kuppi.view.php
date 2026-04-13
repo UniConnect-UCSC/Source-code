@@ -32,7 +32,7 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
                 <script>lucide.createIcons();</script>
             </div>
                 <div class="filter-buttons" id="filterButtons">
-                    <button class="btn active" id="for-you-btn" data-filter="for-you" onclick="onForYouClick(event)">For You</button>
+                    <button class="btn " id="for-you-btn" data-filter="for-you" onclick="onForYouClick(event)">For You</button>
             </div>
 
         </div>

@@ -44,7 +44,7 @@
         <button class="kuppi-back-btn" id="backToSlides" title="Back">&#8592;</button>
         <h2>Host New Kuppi</h2>
       </div>
-      <form action="/kuppi/create" method="POST">
+      <form action="/kuppi/create" method="POST" enctype="multipart/form-data">
         <div class="form-row">
           <label for="topic">Topic</label>
           <input type="text" id="topic" name="topic" placeholder="Add a topic" value="${topic || ''}" required>
@@ -76,6 +76,10 @@
           <select name="category_id" id="category" required>
             ${categoryOptions}
           </select>
+        </div>
+        <div class="form-row">
+          <label for="kuppi_image">Session Image</label>
+          <input type="file" id="kuppi_image" name="kuppi_image" accept="image/*">
         </div>
         <button type="submit">Create Kuppi</button>
       </form>

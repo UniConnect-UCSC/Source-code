@@ -32,9 +32,14 @@
     /* ── Shared helpers ──────────────────────────────── */
 
     getImageSrc() {
-      return this.item.image_url
-        ? '/' + String(this.item.image_url).replace(/^\/+/, '')
-        : '/assets/images/ml-banner.jpg';
+      var raw = String(this.item.image_url || '').trim();
+      if (!raw) return '/assets/images/ml-banner.jpg';
+
+      if (/^https?:\/\//i.test(raw) || raw.startsWith('//')) {
+        return raw;
+      }
+
+      return '/' + raw.replace(/^\/+/, '');
     }
 
     getAltText() {
@@ -58,6 +63,11 @@
       var img  = el('img');
       img.src  = this.getImageSrc();
       img.alt  = this.getAltText();
+      img.onerror = function () {
+        if (img.src.indexOf('/assets/images/ml-banner.jpg') === -1) {
+          img.src = '/assets/images/ml-banner.jpg';
+        }
+      };
       wrap.appendChild(img);
       return wrap;
     }
@@ -253,7 +263,8 @@
               topic:    item.topic    || '',
               date:     parts[0]     || '',
               time:     parts[1]     || '',
-              platform: item.platform || ''
+              platform: item.platform || '',
+              link:     item.kuppi_url || item.link || ''
             });
         };
         actions.appendChild(editBtn);

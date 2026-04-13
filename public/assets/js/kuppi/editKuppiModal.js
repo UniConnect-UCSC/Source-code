@@ -8,7 +8,7 @@
     if (!body) return;
     body.innerHTML = `
       <h2>Edit Kuppi</h2>
-      <form action="/kuppi/edit_kuppi/${kuppiData.id}" method="POST">
+      <form action="/kuppi/edit_kuppi/${kuppiData.id}" method="POST" enctype="multipart/form-data">
         <div class="form-row">
           <label for="topic">Topic</label>
           <input type="text" id="topic" name="topic" value="${kuppiData.topic}" required>
@@ -23,7 +23,7 @@
         </div>
         <div class="form-row">
           <label for="link">Meeting Link</label>
-          <input type="url" id="link" name="link" value="${kuppiData.link || ''}" placeholder="Add meeting link" required>
+          <input type="url" id="link" name="link" value="${kuppiData.kuppi_url || ''}" placeholder="Add meeting link" required>
         </div>
         <div class="form-row">
           <label for="platform">Platform</label>
@@ -32,6 +32,10 @@
             <option value="Google Meet" ${kuppiData.platform === 'Google Meet' ? 'selected' : ''}>Google Meet</option>
             <option value="MS teams" ${kuppiData.platform === 'MS teams' ? 'selected' : ''}>MS teams</option>
           </select>
+        </div>
+        <div class="form-row">
+          <label for="kuppi_image">Session Image</label>
+          <input type="file" id="kuppi_image" name="kuppi_image" accept="image/*">
         </div>
         <button type="submit">Save Changes</button>
       </form>

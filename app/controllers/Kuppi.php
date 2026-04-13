@@ -89,12 +89,15 @@ class Kuppi extends Controller
 
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $topic = $_POST['topic'] ?? '';
-            $date = $_POST['date'] ?? '';
-            $time = $_POST['time'] ?? '';
-            $platform = $_POST['platform'] ?? '';
+            $topic = trim($_POST['topic'] ?? '');
+            $date = trim($_POST['date'] ?? '');
+            $time = trim($_POST['time'] ?? '');
+            $platform = trim($_POST['platform'] ?? '');
             $category_id = $_POST['category_id'] ?? '';
-            $link = $_POST['link'] ?? '';
+            $link = trim($_POST['link'] ?? '');
+
+            $uploadedImageUrl = uploadImageToCloudinary($_FILES['kuppi_image'] ?? null, 'uniconnect_kuppi');
+            $imageUrl = $uploadedImageUrl ?: 'assets/images/ml-banner.jpg';
             
             $kuppiDateTime = $date . ' ' . $time;
             
@@ -104,7 +107,7 @@ class Kuppi extends Controller
                 'topic' => $topic,
                 'kuppi_date_time' => $kuppiDateTime,
                 'platform' => $platform,
-                'image_url' => 'assets/images/ml-banner.jpg', 
+                'image_url' => $imageUrl,
                 'host_id' => $_SESSION['user_id'],
                 'category_id' => $category_id,
                 'university_id' => $_SESSION['user_universityID'],
@@ -206,6 +209,11 @@ class Kuppi extends Controller
             'platform' => $platform,
             'kuppi_url' => $link
         ];
+
+        $uploadedImageUrl = uploadImageToCloudinary($_FILES['kuppi_image'] ?? null, 'uniconnect_kuppi');
+        if (!empty($uploadedImageUrl)) {
+            $data['image_url'] = $uploadedImageUrl;
+        }
 
         if (!empty($category_id)) {
             $data['category_id'] = (int)$category_id;
