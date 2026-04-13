@@ -65,7 +65,7 @@
 
     // Render lucide icons
     if (window.lucide && typeof window.lucide.createIcons === 'function') {
-      window.lucide.createIcons();
+      window.lucide.createIcons({ root: headerRight });
     }
   }
 

@@ -315,7 +315,7 @@
         actions.appendChild(reviewBtn);
       }
       else {
-        var removeParticipationBtn = el('button', 'btn btn-primary', 'Remove  Participation');
+        var removeParticipationBtn = el('button', 'btn btn-primary', 'Remove Participation');
         removeParticipationBtn.onclick = function (e) {
           e.stopPropagation();
           console.log(`Remove Particiapation btn clicked`);
@@ -398,7 +398,7 @@
         };
         actions.appendChild(reviewBtn);
       } else {
-        var removeFavoriteBtn = el('button', 'btn btn-primary', 'Remove Flavorite');
+        var removeFavoriteBtn = el('button', 'btn btn-primary', 'Remove Favorite');
         removeFavoriteBtn.onclick = function (e) {
           e.stopPropagation();
         const kuppiId = item.id;
@@ -461,5 +461,6 @@
   window.renderMyRequestsCards     = function (data) { return KuppiCardFactory.create(data, 'my-requests'); };
   window.renderMyParticipationCards= function (data) { return KuppiCardFactory.create(data, 'my-participations'); };
   window.renderMyFavoriteCards     = function (data) { return KuppiCardFactory.create(data, 'my-favorites'); };
+  window.renderForYouKuppiCards    = function (data) { return KuppiCardFactory.create(data, 'main'); };
 
 })();

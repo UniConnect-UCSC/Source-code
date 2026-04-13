@@ -5,6 +5,9 @@ class UserKuppiFavoriteCategoriesModel {
 
     protected $table = 'user_kuppi_favorite_categories';
 
+    public function getAllKuppiFavoriteCategories () {
+        return $this->findAll();
+    }
     public function isAlreadyMapped($userId , $categoryId) {
         $result = $this->first(['user_id' => $userId, 'category_id' => $categoryId]);
         return $result ? true : false;

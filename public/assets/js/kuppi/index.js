@@ -109,7 +109,7 @@
     window.renderKuppiCategories,
     0,
     5
-  )
+  );
   window.newKuppiCategoryScroll = newKuppiCategoryScroll;
   newKuppiCategoryScroll.loadNextElements();
 
@@ -123,9 +123,37 @@
     }, { passive: true });
   }
 
+  const newForYouPageScroll = new InfinityScroll(
+    'getForYouKuppies',
+    '/kuppi/scrollable',
+    document.getElementById("kuppi-container"),
+    window.renderForYouKuppiCards,
+    0,
+    4
+  );
+  window.newForYouPageScroll = newForYouPageScroll;
+
+  window.onForYouClick = function (event) {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+    }
+
+    const forYouBtn = document.getElementById('for-you-btn');
+    if (forYouBtn) {
+      forYouBtn.classList.add('active');
+    }
+
+    if (typeof newForYouPageScroll.refresh === 'function') {
+      newForYouPageScroll.refresh();
+    }
+  };
+
+
  newMainKuppiScroll.setupAutoLoadOnScroll();
  newMainKuppiScroll.addEventListener('successfulLoad' , () => {
-  lucide.createIcons();
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
  });
 
  newMyHostKuppiScroll.setupAutoLoadOnScroll();
@@ -133,6 +161,13 @@
  newMyParticipationsScroll.setupAutoLoadOnScroll();
  newMyFavoritesScroll.setupAutoLoadOnScroll();
  newFavoriteCategoriesScroll.setupAutoLoadOnScroll();
+ newForYouPageScroll.setupAutoLoadOnScroll();
+ newForYouPageScroll.addEventListener('successfulLoad', () => {
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    const root = document.getElementById('kuppi-container');
+    window.lucide.createIcons({ root });
+  }
+ });
 
   
 

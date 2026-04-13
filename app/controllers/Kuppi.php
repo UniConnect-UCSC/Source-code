@@ -916,6 +916,19 @@ class Kuppi extends Controller
         return $kuppiCategories ?? [];
     }
 
+    private function fetchForYouKuppiSessions($offset ,$limit) {
+        $fvKuppiCategoriesModel = new UserKuppiFavoriteCategoriesModel();
+        $categories = $fvKuppiCategoriesModel->getAllKuppiFavoriteCategories() ?? [];
+       // $categories = (array)$categories;
+        $categories = array_values(array_unique(array_filter(array_map(
+    static fn($c) => (int) (is_object($c) ? ($c->category_id ?? $c->id ?? 0) : (is_array($c) ? ($c['category_id'] ?? $c['id'] ?? 0) : $c)),
+    (array)$categories
+), static fn($id) => $id > 0)));
+        $kuppiModel = new KuppiModel();
+
+        return $kuppiModel->getKuppi($offset, $limit, $categories);
+    }
+
     public function scrollable(){
         $data = parseRequestData();
         header('Content-Type: application/json');
@@ -956,6 +969,10 @@ class Kuppi extends Controller
                 break;
             case 'getKuppiCategories':
                 $response = $this->fetchKuppiCategories($data['offset'], $data['limit']);
+                echo json_encode($response);
+                break;
+            case 'getForYouKuppies':
+                $response = $this->fetchForYouKuppiSessions($data['offset'], $data['limit']);
                 echo json_encode($response);
                 break;
             default:

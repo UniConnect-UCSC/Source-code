@@ -49,6 +49,12 @@
       }
 
       window.selectedKuppiFilterCategories = selectedCategory;
+
+      var forYouBtn = document.getElementById('for-you-btn');
+      if (forYouBtn) {
+        forYouBtn.classList.remove('active');
+      }
+
       if (window.newMainKuppiScroll && typeof window.newMainKuppiScroll.refresh === 'function') {
         window.newMainKuppiScroll.refresh();
       }
