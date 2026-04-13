@@ -787,11 +787,11 @@ class Kuppi extends Controller
             
         }
     }
-    private function fetchKuppis($offset, $limit){
+    private function fetchKuppis($offset, $limit, $categories = []){
         
         
         $kuppiModel = new KuppiModel();
-        $kuppies = $kuppiModel->getKuppi($offset, $limit) ?? [];
+        $kuppies = $kuppiModel->getKuppi($offset, $limit, $categories) ?? [];
 
         foreach ($kuppies as $item){
             $item->host_name = $item->host_f_name." ".$item->host_l_name;
@@ -909,13 +909,21 @@ class Kuppi extends Controller
         return $favorites;
     }
 
+    private function fetchKuppiCategories($offset, $limit) {
+        $kuppiCategoryModel = new KuppiCategoryModel();
+        $kuppiCategories = $kuppiCategoryModel->getKuppiCategories($offset ,$limit);
+
+        return $kuppiCategories ?? [];
+    }
+
     public function scrollable(){
         $data = parseRequestData();
         header('Content-Type: application/json');
     
         switch ($data['scrollIdentifier']) {
             case 'getAllKuppies':
-                $response = $this->fetchKuppis($data['offset'], $data['limit']);
+                $categories = $data['context']['categories'] ?? [];
+                $response = $this->fetchKuppis($data['offset'], $data['limit'], $categories);
                 echo json_encode($response);
                 break;
             case 'getMyHostKuppies':
@@ -944,6 +952,10 @@ class Kuppi extends Controller
                 break;
             case 'getMyFavoriteCategories':
                 $response = $this->fetchMyFavoriteCategories($data['offset'], $data['limit']);
+                echo json_encode($response);
+                break;
+            case 'getKuppiCategories':
+                $response = $this->fetchKuppiCategories($data['offset'], $data['limit']);
                 echo json_encode($response);
                 break;
             default:

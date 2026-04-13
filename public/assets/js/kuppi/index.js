@@ -7,6 +7,14 @@
     0,
     4
   );
+  window.newMainKuppiScroll = newMainKuppiScroll;
+  newMainKuppiScroll.setContextProvider(() => {
+    return {
+      categories: Array.isArray(window.selectedKuppiFilterCategories)
+        ? window.selectedKuppiFilterCategories
+        : []
+    };
+  });
   newMainKuppiScroll.loadNextElements();
 
   const newMyHostKuppiScroll = new InfinityScroll(
@@ -93,6 +101,27 @@
     6
   );
   window.newFavoriteCategoriesScroll = newFavoriteCategoriesScroll;
+
+  const newKuppiCategoryScroll = new InfinityScroll(
+    'getKuppiCategories',
+    '/kuppi/scrollable',
+    document.getElementById("categoriesSection"),
+    window.renderKuppiCategories,
+    0,
+    5
+  )
+  window.newKuppiCategoryScroll = newKuppiCategoryScroll;
+  newKuppiCategoryScroll.loadNextElements();
+
+  const categoriesSection = document.getElementById("categoriesSection");
+  if (categoriesSection) {
+    categoriesSection.addEventListener('scroll', () => {
+      const nearRightEdge = categoriesSection.scrollLeft + categoriesSection.clientWidth >= categoriesSection.scrollWidth - 40;
+      if (nearRightEdge) {
+        newKuppiCategoryScroll.loadNextElements();
+      }
+    }, { passive: true });
+  }
 
  newMainKuppiScroll.setupAutoLoadOnScroll();
  newMainKuppiScroll.addEventListener('successfulLoad' , () => {

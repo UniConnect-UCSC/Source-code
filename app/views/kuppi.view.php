@@ -20,10 +20,27 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
             <h1>Kuppi Sessions</h1>
             <div class="subtitle">Discover and join peer-led study sessions</div>
         </header>
-        <div class="search-wrapper">
-            <i data-lucide="search" class="search-icon" aria-hidden="true"></i>
-            <input type="search" id="search-bar" data-search class="search" placeholder="Search Kuppi" aria-label="Search" />
-        </div> 
+        <div class="controls-top">
+            <div class="search-container">
+                <div class="search-input-wrapper active" id="searchInputWrapper">
+                    <button class="search-btn" id="searchToggleBtn" type="button" aria-label="Search">
+                        <i data-lucide="search"></i>
+                    </button>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search Kuppi Sessions">
+                    <div class="search-suggestions" id="searchSuggestions"></div>
+                </div>
+                <script>lucide.createIcons();</script>
+            </div>
+                <div class="filter-buttons" id="filterButtons">
+                    <button class="btn active" data-filter="for-you">For You</button>
+            </div>
+
+        </div>
+        <div class="categories-wrapper" id="categoryWrapper">
+            <button class="category-btn active" id="allCategoriesBtn">All</button>
+            <div class="categories-section" id="categoriesSection">
+            </div>
+        </div>
         <div class="kuppi-feed-actions">
             <a href="javascript:void(0);" class="btn" onclick="openRequestKuppiModal(kuppiCategories)">Request a Kuppi</a>
             <a href="javascript:void(0);" class="btn" onclick="openHostKuppiModal(kuppiCategories)">Host Kuppi</a>
@@ -135,6 +152,7 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
 <script src="/assets/js/kuppi/openChangeStatusModal.js"></script>
 <script src="/assets/js/kuppi/openReviewModal.js"></script>
 <script src="/assets/js/kuppi/renderKuppiCard.js"></script>
+<script src="/assets/js/kuppi/renderKuppiCategories.js"></script>
 <script src="/assets/js/kuppi/searchBar.js" defer></script>
 <script src="/assets/js/kuppi/index.js"></script>
 <script src="/assets/js/kuppi/kuppiCardActions.js"></script>

@@ -31,24 +31,198 @@ body {
   font-weight: 400;
 }
 
-.feed .search-wrapper {
-  margin: 0 var(--spacing-3) var(--spacing-2);
+/* Kuppi controls: search + categories */
+
+.feed .controls-top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 22px;
+  margin-bottom: var(--spacing-4, 16px);
+  padding: 0 6px;
+  flex-wrap: wrap;
 }
 
-.feed .search {
-  width: 320px; /* slightly shorter for better fit */
-  background: #ffffff;
-  border: 2px solid var(--color-brand-50, #c8c3ff);
-  box-shadow: #d1d5db;
-  font-family: var(--font-sans);
+.feed .search-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
 }
 
-.feed .search::placeholder {
-  font-weight: 100;
+.feed .search-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-brand-700);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.12s ease;
 }
 
-.feed .search-icon {
-  color: var(--color-brand-400, #4b3fbf);
+.feed .search-btn i {
+  width: 16px;
+  height: 16px;
+}
+
+.feed .search-btn:hover {
+  background: var(--color-brand-50);
+  color: var(--color-brand-700);
+}
+
+.feed .search-btn:active {
+  transform: translateY(calc(-50% + 1px));
+}
+
+.feed .search-input-wrapper {
+  position: relative;
+}
+
+.feed .search-input-wrapper.active {
+  width: min(230px, 52vw);
+  overflow: visible;
+}
+
+.feed .search-input {
+  border: 2px solid var(--color-primary-gray);
+  background: var(--color-secondary-white);
+  color: #0f2742;
+  border-radius: 999px;
+  padding: 8px 14px 8px 44px;
+  min-width: 150px;
+}
+
+.feed .search-input:focus {
+  border-color: var(--color-brand-300);
+  background: var(--color-primary-white);
+  box-shadow: 0 0 0 3px var(--color-brand-100);
+}
+
+.feed .filter-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+}
+
+.feed .filter-buttons .btn {
+  padding: 8px 16px;
+  border: 2px solid var(--color-primary-gray);
+  border-radius: 999px;
+  background: var(--color-secondary-white);
+  color: #0f2742;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+}
+
+.feed .filter-buttons .btn:hover {
+  background: var(--color-brand-50);
+  border-color: var(--color-brand-200);
+}
+
+.feed .filter-buttons .btn.active {
+  background: var(--color-brand-100);
+  border-color: var(--color-brand-300);
+  color: var(--color-brand-800);
+}
+
+.feed .filter-buttons #viewFavoritesBtn {
+  margin-left: auto;
+  background: var(--color-primary-white);
+  border-color: var(--color-brand-300);
+  color: var(--color-brand-700);
+}
+
+.feed .categories-wrapper {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 70%;
+  max-width: 700px;
+  flex-wrap: nowrap;
+  margin-bottom: var(--spacing-5, 20px);
+  padding: 0 6px;
+  gap: 8px;
+}
+
+.feed .categories-section {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  flex: 1;
+  padding-right: var(--spacing-4);
+  gap: 8px;
+  padding-bottom: 2px;
+}
+
+.feed .categories-section::-webkit-scrollbar {
+  display: none;
+}
+
+.feed .category-btn {
+  border: 2px solid var(--color-primary-gray);
+  background: var(--color-secondary-white);
+  color: #20354f;
+  font-weight: 600;
+  font-size: 0.92rem;
+  border-radius: 999px;
+  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: none;
+}
+
+.feed .category-btn:hover {
+  background: var(--color-brand-50);
+  border-color: var(--color-brand-200);
+  color: #1f334a;
+}
+
+.feed .category-btn.active {
+  background: var(--color-brand-100);
+  color: var(--color-brand-800);
+  border-color: var(--color-brand-300);
+}
+
+@media (max-width: 768px) {
+  .feed .controls-top {
+    padding: 0;
+  }
+
+  .feed .categories-wrapper {
+    padding: 0;
+  }
+
+  .feed .search-input-wrapper.active {
+    width: min(240px, 72vw);
+  }
+
+  .feed .filter-buttons #viewFavoritesBtn {
+    margin-left: 0;
+  }
 }
 
 

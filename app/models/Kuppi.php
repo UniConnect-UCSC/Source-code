@@ -3,10 +3,14 @@ class KuppiModel {
     use Model;
     protected $table = 'kuppi';
 
-    public function getKuppi($offset, $limit){
+    public function getKuppi($offset, $limit, $categories = []){
        $conditions = [
         ['m.status','=','In Progress']
         ];
+
+        if (!empty($categories)) {
+            $conditions[] = ['m.category_id', 'IN', $categories];
+        }
     
         $join = [
             ["universities", "m.university_id = u.id", "INNER", "u"],
@@ -22,6 +26,7 @@ class KuppiModel {
 
         $selected = [
             "m.*",
+            ["c.category_name", "category"],
             ["u.name", "university"],
             ["h.f_name", "host_f_name"],
             ["h.l_name", "host_l_name"],
