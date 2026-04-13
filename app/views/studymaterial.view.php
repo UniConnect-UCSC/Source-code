@@ -1,5 +1,5 @@
 <?php //component('formStudyMaterialModal'); ?>
-<?php //component('manageStudyMaterialsModal'); ?>
+<?php component('manageStudyMaterialsModal'); ?>
 
 <?php component("navbar"); ?>
 
