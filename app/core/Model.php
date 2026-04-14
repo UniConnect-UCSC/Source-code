@@ -25,7 +25,10 @@ trait Model
     }
 
     /**
-     * @param array $conditions Array of conditions in format [field ,operator, value]] 
+     * @param array $conditions Array of conditions in format [field ,operator, value, next_logical_operator(AND/OR, default AND)]] 
+     * next_logical_operator. For example: [ ["field1", "=", "value1", "OR"], ["field2", ">", "value2"] ] translates to "WHERE field1 = value1 OR field2 > value2"
+     * WARNING!! Do not use next_logical_operator for the last condition!
+     * 
      * When passing array values for IN/NOT IN operators, use: normal array for value
      * @param int $limit [DEFAULT: queries EVERYTHING]
      * @param int $offset [DEFAULT: 0]
@@ -118,14 +121,21 @@ trait Model
                 $conditions[] = [$joined ? "{$mainTableAlias}.{$softDeleteColumn}" : $softDeleteColumn, 'IS', 'NULL'];
             }
 
+            $lastIndex = count($conditions) - 1;
             foreach ($conditions as $index => $condition) {
 
-                if (is_array($condition) && count($condition) == 3 && in_array($condition[1], $operators)) {
+                if (is_array($condition) && count($condition) >= 3 && in_array($condition[1], $operators)) {
+
+                    if(!empty($condition[3]) && in_array(strtoupper($condition[3]), ['AND', 'OR']) && $index !== $lastIndex){
+                        $logicalOperator = strtoupper($condition[3]);
+                    }else{
+                        $logicalOperator = 'AND';
+                    }
 
                     switch ($condition[1]) {
                         case 'IS':
                             if(in_array($condition[2],$allowedIsValues)){
-                                $sql .= "$condition[0] $condition[1] $condition[2] AND ";
+                                $sql .= "$condition[0] $condition[1] $condition[2] $logicalOperator ";
 
                             }else{
                                 throw new Error("Invalid IS operator value {$condition[2]}");
@@ -145,7 +155,7 @@ trait Model
                                $placeholder[] = ":$key";
                             }
 
-                            $sql .= "{$condition[0]} {$condition[1]} (". implode(', ', $placeholder) . ") AND ";
+                            $sql .= "{$condition[0]} {$condition[1]} (". implode(', ', $placeholder) . ") $logicalOperator ";
 
                             break;
                         
@@ -160,7 +170,7 @@ trait Model
                                 }
                             }
 
-                            $sql .= "{$condition[0]} {$condition[1]} :{$affectedCol} AND ";
+                            $sql .= "{$condition[0]} {$condition[1]} :{$affectedCol} $logicalOperator ";
                             $data[$affectedCol] = $condition[2];
                             break;
                     }
@@ -168,7 +178,7 @@ trait Model
                 } else {
 
                     // Handle invalid condition format
-                    return false;
+                    error_log("Invalid condition format: " . json_encode($condition));
                 }
             
             }
@@ -188,7 +198,7 @@ trait Model
             // Build the ORDER BY clause
             foreach ($orderBy as $field => $direction) {
                 if (!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
-                    return false; // Invalid direction
+                    error_log("Invalid ORDER BY direction: $direction for field: $field");
                 }
 
                 $sql .= " ORDER BY $field $direction ";
