@@ -1,8 +1,10 @@
 <?php
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/Friendship.php';
 
 class Search extends Controller
 {
+
     public function index()
     {
         $query = trim($_GET['q'] ?? '');
@@ -12,10 +14,15 @@ class Search extends Controller
             $userModel = new User();
             $users = $userModel->searchUsers($query, $_SESSION['user_id']);
 
+
             foreach ($users as $u) {
+                $friendshipModel = new Friendship();
+                $friendshipStatus = $friendshipModel->getFriendshipStatus($_SESSION['user_id'], $u->id);
+
                 $results[] = [
                     'type' => 'user',
                     'data' => $u,
+                    'friendshipStatus' => $friendshipStatus,
                 ];
             }
         }
@@ -34,5 +41,30 @@ class Search extends Controller
             'results' => $results,
             'query' => $query,
         ]);
+    }
+
+
+
+    public function sendFriendRequest()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $targetUserId = $_POST['user_id'] ?? null;
+            $currentUserId = $_SESSION['user_id'] ?? null;
+
+            if ($targetUserId && $currentUserId) {
+                $friendshipModel = new Friendship();
+                $result = $friendshipModel->sendFriendRequest($currentUserId, $targetUserId);
+
+                if ($result) {
+                    echo json_encode(['success' => true, 'message' => 'Friend request sent.']);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Failed to send friend request.']);
+                }
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Invalid user ID.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+        }
     }
 }

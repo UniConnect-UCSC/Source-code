@@ -7,11 +7,11 @@ $results = $results ?? [];
 
     <div class="search-results">
         <?php if (empty($results)): ?>
-            <p class="no-results-message">No results found.</p>
+        <p class="no-results-message">No results found.</p>
         <?php else: ?>
-            <div class="user-search-results">
-                <?php foreach ($results as $result): ?>
-                    <?php
+        <div class="user-search-results">
+            <?php foreach ($results as $result): ?>
+            <?php
                     if ($result['type'] === 'post') {
                         component("post", [
                             "postId" => $result['id'],
@@ -31,12 +31,13 @@ $results = $results ?? [];
                             "email" => $result['data']->email,
                             "profilePicUrl" => $result['data']->profile_picture,
                             "universityName" => $result['data']->university_name ?? "University not set",
+                            "friendshipStatus" => $result['friendshipStatus'] ?? null,
 
                         ]);
                     }
                     ?>
-                <?php endforeach; ?>
-            </div>
+            <?php endforeach; ?>
+        </div>
         <?php endif; ?>
     </div>
 </div>

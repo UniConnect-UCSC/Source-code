@@ -50,6 +50,26 @@
   text-align: center;
 }
 
+.send-friend-request:hover {
+  background-color: var(--color-brand-800);
+}
+
+.pending-friend-request {
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+  border: none;
+  border-radius: var(--rounded-md);
+  padding: var(--spacing-1) var(--spacing-2);
+  cursor: pointer;
+  margin-top: var(--spacing-2);
+  width: 100%;
+  text-align: center;
+}
+
+.pending-friend-request:hover {
+  background-color: var(--color-brand-800);
+}
+
 .view-profile {
   background-color: var(--color-primary-gray);
   border: none;
