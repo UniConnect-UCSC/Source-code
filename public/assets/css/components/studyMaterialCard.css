@@ -70,8 +70,8 @@
 	line-height: 1.4;
 }
 
-/* Subject Tag */
-.sm-subject-tag {
+/* category Tag */
+.sm-category-tag {
 	display: inline-block;
 	padding: var(--spacing-1) var(--spacing-3);
 	background: var(--color-brand-50);
