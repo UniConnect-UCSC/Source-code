@@ -37,7 +37,7 @@ class StudyMaterialModel{
         }
 
         error_log("Fetching study materials with orderBy: $orderBy, searchTerm: $searchTerm, limit: $limit, offset: $offset");
-        return $this->where(
+        $data = $this->where(
             conditions: $conditions,
             limit: $limit,
             offset: $offset,
@@ -45,6 +45,8 @@ class StudyMaterialModel{
             join: $join,
             selected: $selected
         );
+
+        return $data ? $data : [];
     }
 
     public function createSM($data){
