@@ -21,8 +21,7 @@ class MarketplaceItem
     }
     public function getStatusOptions()
     {
-
-        return ['Available', 'Sold', 'Reserved', 'Not Available'];
+        return ['available', 'sold', 'reserved'];
     }
 
     public function create($data)

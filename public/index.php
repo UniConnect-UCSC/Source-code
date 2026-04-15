@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 ob_start();
 
 
+
 // Session setup
 $sessionPath = __DIR__ . "/../storage/sessions";
 if (!is_dir($sessionPath)) mkdir($sessionPath, 0777, true);
@@ -19,3 +20,4 @@ handleAuth();
 // Load controllers
 $app = new App;
 $app->loadController();
+

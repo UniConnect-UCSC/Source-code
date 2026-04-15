@@ -1,0 +1,238 @@
+.boarding-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--rounded-lg);
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+
+.boarding-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.boarding-details {
+  padding: var(--spacing-3);
+}
+
+.boarding-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--rounded-lg);
+  margin-bottom: var(--rounded-none);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.boarding-image-gallery {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow-x: auto;
+  gap: 0;
+  scroll-snap-type: x mandatory;
+}
+
+.boarding-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.boarding-gallery-image {
+  flex: 0 0 100%;
+  min-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scroll-snap-align: start;
+}
+
+.boarding-no-image {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.boarding-details h3 {
+  margin: var(--spacing-2) var(--spacing-2);
+  font-size: 18px;
+  font-weight: 500;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.boarding-rent {
+  color: var(--color-brand-600);
+  font-weight: 600;
+  font-size: var(--text-2xl);
+  margin: 8px 0;
+}
+
+.boarding-occupancy,
+.boarding-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4b5563;
+  font-size: 14px;
+  margin: 6px 0;
+}
+
+.boarding-occupancy i,
+.boarding-location i {
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+}
+.boarding-facilities,
+.boarding-category {
+  background-color: var(--color-brand-100);
+  color: var(--color-brand-600);
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 8px 0;
+  text-transform: capitalize;
+}
+
+.boarding-facilities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.boarding-facility-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #e8edf8;
+  color: #2f45a0;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.boarding-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 8px 0;
+  text-transform: capitalize;
+}
+
+.boarding-status.available {
+  background: #6861df;
+  color: #ffffff;
+}
+
+.boarding-status.occupied {
+  background: #6861df;
+  color: #ffffff;
+}
+
+.boarding-status.closed {
+  background: #6861df;
+  color: #ffffff;
+}
+
+.boarding-date {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.boarding-description {
+  margin: 6px 0;
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.my-listings-options {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1/1;
+  border-radius: var(--rounded-full);
+  top: var(--spacing-4);
+  right: var(--spacing-2);
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.my-listings-options:hover {
+  background-color: var(--color-brand-700);
+}
+
+.my-listings-options-dropdown {
+  position: absolute;
+  top: var(--spacing-12);
+  right: var(--spacing-2);
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--rounded-md);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: black;
+  width: 150px;
+  padding: var(--spacing-2) var(--spacing-2);
+  background-color: var(--color-primary-white);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid var(--color-primary-gray);
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, z-index 0s 0.2s;
+}
+
+.my-listings-options-dropdown.active {
+  z-index: 10;
+  opacity: 1;
+  pointer-events: all;
+  transition: opacity 0.2s ease;
+}
+
+.my-listings-options-dropdown div {
+  padding: var(--spacing-2) var(--spacing-4);
+  cursor: pointer;
+  border-radius: var(--rounded-lg);
+  user-select: none;
+  border-bottom: 1px solid var(--color-primary-gray);
+  transition: background-color 0.2s ease;
+}
+
+.my-listings-options-dropdown div:last-child {
+  border-bottom: none;
+}
+
+.my-listings-options-dropdown div:hover {
+  background-color: var(--color-brand-100);
+}
+
+.edit-listing-btn {
+  color: #059669;
+}
+
+.delete-listing-btn {
+  color: #dc2626;
+}
+
