@@ -6,10 +6,11 @@ require_once(__DIR__ . "/../core/functions.php");
 
 class StudyMaterial extends Controller
 {
+	private $allowedOrderBy = ['recent', 'popular', 'title'];
+	private $allowedTypes = ['document', 'video', 'link'];
 
 	private function getStudyMaterials($limit, $offset,$orderBy = 'recent', $searchTerm = '') {
-		$allowedOrderBy = ['recent', 'popular', 'title'];
-		if (!in_array($orderBy, $allowedOrderBy)) {
+		if (!in_array($orderBy, $this->allowedOrderBy)) {
 			$orderBy = 'recent';
 		}
 	
@@ -17,6 +18,92 @@ class StudyMaterial extends Controller
 		$studyMaterialsData = $studyMaterialModel->getStudyMaterials($limit, $offset, $orderBy, $searchTerm);
 
 		return $studyMaterialsData;
+	}
+
+	private function getCategories($limit, $offset, $searchTerm = '') {
+		require_once(__DIR__ . "/../models/studyCategory.php");
+		$studyCategoryModel = new StudyCategoryModel();
+		$categories = $studyCategoryModel->getAllCategories($searchTerm, $limit, $offset);
+		return $categories;
+	}
+
+	private function createVolunteerRecord($userId){
+		require_once(__DIR__ . "/../models/studyMaterialVolunteer.php");
+		$smVolunteerModel = new SMVolunteerModel();
+		return $smVolunteerModel->createVolunteer($userId);
+	}
+
+	private function isVolunteer($userId){
+		require_once(__DIR__ . "/../models/studyMaterialVolunteer.php");
+		$smVolunteerModel = new SMVolunteerModel();
+		return $smVolunteerModel->isVolunteer($userId);
+	}
+
+	public function createNewSM(){
+		if($_SERVER['REQUEST_METHOD'] === 'POST') {
+			$data = parseRequestData();
+
+			header('Content-Type: application/json');
+
+			$title = $data['title'] ?? '';
+			$description = $data['description'] ?? '';
+			$category = $data['category'] ?? '';
+			$link = $data['link'] ?? '';
+			$type = $data['type'] ?? '';
+			$files = $data['FILES'] ?? null;
+
+			if(!in_array($type, $this->allowedTypes)){
+				http_response_code(400);
+				echo json_encode(['error' => 'Invalid type specified']);
+				return;
+			}
+
+			if($type == 'link' && empty($link)){
+					http_response_code(400);
+					echo json_encode(['error' => 'Link is required for type "link"']);
+					return;
+			}
+
+			if($type != 'link'){
+				$link = uploadImageToCloudinary($files['file'], 'study_materials');
+			}
+
+			if($link === null){
+				http_response_code(500);
+				echo json_encode(['error' => 'File upload failed']);
+				return;
+			}
+
+			$data = [
+				'title' => $title,
+				'description' => $description,
+				'volunteer_id' => $_SESSION['user_id'],
+				'url' => $link,
+				'category_id' => $category,
+				'type' => $type
+			];
+			
+			// Would be prefered let the sql handle this through just an insert but our current design stops when sql error occurs
+			if(!$this->isVolunteer($_SESSION['user_id'])) {
+				$this->createVolunteerRecord($_SESSION['user_id']);
+			}
+
+			$studyMaterialModel = new StudyMaterialModel();
+			$response = $studyMaterialModel->createSM($data);
+
+			if(!$response){
+				http_response_code(500);
+				echo json_encode(['error' => 'Failed to create study material']);
+				return;
+			}
+
+			echo json_encode([
+				'success' => true,
+			]);
+		} else {
+			http_response_code(405);
+			echo json_encode(['error' => 'Method not allowed']);
+		}
 	}
 
 	public function scrollable(){
@@ -33,6 +120,12 @@ class StudyMaterial extends Controller
 					$orderBy = $data['context']['orderBy'] ?? '';
 					$studyMaterials = $this->getStudyMaterials($data['limit'], $data['offset'], $orderBy, $searchTerm);
 					echo json_encode($studyMaterials);
+					break;
+
+				case 'getCategories':
+					$searchTerm = $data['context']['query'] ?? '';
+					$categories = $this->getCategories($data['limit'], $data['offset'], $searchTerm);
+					echo json_encode($categories);
 					break;
 
 				default:

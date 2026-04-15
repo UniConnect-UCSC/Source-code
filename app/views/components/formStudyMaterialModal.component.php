@@ -11,10 +11,11 @@
                 <input type="text" id="sm-title" name="title" placeholder="e.g., Introduction to Machine Learning" required>
             </div>
 
-            <!-- This should be handled through a scroll element with a table with current subjects available -->
             <div class="form-group">
-                <label for="sm-subject">Subject / Course</label>
-                <input type="text" id="sm-subject" name="subject" placeholder="e.g., CS3100 Machine Learning">
+                <label for="sm-category">Subject</label>
+                <input type="hidden" id="sm-category-confirmed" name="category" value="">
+                <input type="text" id="sm-category" placeholder="e.g., Computer Science - DSA" required>
+                <div id="categorySuggestion" class="suggestions-list"></div>
             </div>
 
             <div class="form-group">

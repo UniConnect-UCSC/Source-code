@@ -1,6 +1,12 @@
+(function() {
 const smFormModal = document.getElementById('formStudyMaterialModal');
+const smFormClose = document.getElementById('closeFromModalBtn');
+const categorySuggestionContainer = document.getElementById('categorySuggestion');
+
+const hiddenCategoryInput = document.getElementById('sm-category-confirmed');
+const displayedCategoryInput = document.getElementById('sm-category');
+
 const smUploadForm = document.getElementById('sm-upload-form');
-const smClearBtn = document.getElementById('sm-clear-btn');
 const smTypeSelect = document.getElementById('sm-type');
 const smFileField = document.getElementById('sm-file-field');
 const smLinkField = document.getElementById('sm-link-field');
@@ -8,10 +14,8 @@ const smFileInput = document.getElementById('sm-file');
 const smLinkInput = document.getElementById('sm-link');
 
 // Close modal handlers
-document.querySelectorAll('[data-close-modal]').forEach(btn => {
-    btn.addEventListener('click', () => {
-        resetStudyMaterialModal();
-    });
+smFormClose.addEventListener('click', () => {
+    resetStudyMaterialModal();
 });
 
 // Form submission
@@ -23,9 +27,9 @@ smUploadForm.addEventListener('submit', async (e) => {
     var url = '';
     if (smUploadForm.getAttribute('type') === 'update') {
         formData.append('study_material_id', smUploadForm.getAttribute('data-id'));
-        url = '/studyMaterial/updateStudyMaterial';
+        url = '/studyMaterial/updateSM';
     } else if (smUploadForm.getAttribute('type') === 'create') {
-        url = '/studyMaterial/createNewStudyMaterial';
+        url = '/studyMaterial/createNewSM';
     }
 
     console.log('Study Material form data being sent:', ...formData.entries());
@@ -42,7 +46,7 @@ smUploadForm.addEventListener('submit', async (e) => {
     resetStudyMaterialModal();
 });
 
-// Handle file/link toggle based on type selection
+// Handle file link toggle 
 smTypeSelect.addEventListener('change', () => {
     const type = smTypeSelect.value;
     
@@ -50,34 +54,75 @@ smTypeSelect.addEventListener('change', () => {
         smFileField.classList.add('hidden');
         smLinkField.classList.remove('hidden');
         smFileInput.removeAttribute('required');
+        smFileInput.value = ''; 
         smLinkInput.setAttribute('required', 'required');
     } else {
         smFileField.classList.remove('hidden');
         smLinkField.classList.add('hidden');
         smFileInput.setAttribute('required', 'required');
         smLinkInput.removeAttribute('required');
+        smLinkInput.value = ''; 
     }
 });
 
-// Clear form button
-smClearBtn.addEventListener('click', () => {
-    smUploadForm.reset();
-    clearStudyMaterialImage();
+categorySuggestionContainer.addEventListener('sm:category-suggestion-click', (e) => {
+
+    const clickedElement = e.detail.element;
+    const categoryId = clickedElement.getAttribute('data-id');
+    const categoryText = clickedElement.textContent;
+
+    hiddenCategoryInput.value = categoryId;
+    hiddenCategoryInput.setAttribute('data-text', categoryText);
+    displayedCategoryInput.value = categoryText;
+
+    smFormCategoryScroll.abort();
+    smFormCategoryScroll.resetScroll();
+
 });
 
-// Image preview handling
-const smFileImageInput = document.getElementById('sm-file'); // Make sure this is the file input, not link
-// For study materials, assuming there might be thumbnail upload, adjust as needed
+var categorySuggestionTimeout;
+function filterAndRender() {
+    const debounceDelay = 300;
+    if(categorySuggestionTimeout){
+        clearTimeout(categorySuggestionTimeout);
+    }
 
-// Additional helper function if needed for thumbnails
-function clearStudyMaterialImage() {
-    // Placeholder for future image preview clearing if implemented
-    // For now, study materials don't have image preview like events
+    smFormCategoryScroll.abort();
+    smFormCategoryScroll.resetScroll();
+ 
+    if(displayedCategoryInput.value === ''){return;}
+
+    categorySuggestionTimeout = setTimeout(async () => {
+        smFormCategoryScroll.loadNextElements();
+    }, debounceDelay);
 }
+
+displayedCategoryInput.addEventListener('focus', filterAndRender);
+displayedCategoryInput.addEventListener('input', filterAndRender);
+
+// This race condition is handled strictly by mouse down event disabling default behavior
+displayedCategoryInput.addEventListener('blur', () => {
+
+    smFormCategoryScroll.abort();
+    smFormCategoryScroll.resetScroll();
+    
+    // Revert back to last confirmed category on blur
+    if (hiddenCategoryInput.value) {
+        displayedCategoryInput.value = hiddenCategoryInput.getAttribute('data-text') || '';
+    } else {
+        displayedCategoryInput.value = '';
+    }
+});
+
+smFormCategoryScroll.setupAutoLoadOnScroll();
+smFormCategoryScroll.setContextProvider(() => {
+    return {
+        query: displayedCategoryInput.value
+    };
+});
 
 function resetStudyMaterialModal() {
     smUploadForm.reset();
-    clearStudyMaterialImage();
 
     // Reset form type
     smUploadForm.removeAttribute('type');
@@ -85,11 +130,9 @@ function resetStudyMaterialModal() {
 
     // Reset to default type (document)
     smTypeSelect.value = 'document';
-    smFileField.classList.remove('hidden');
-    smLinkField.classList.add('hidden');
-    smFileInput.setAttribute('required', 'required');
-    smLinkInput.removeAttribute('required');
+    smTypeSelect.dispatchEvent(new Event('change')); 
 
     // Close modal
     smFormModal.classList.remove('active');
 }
+})();

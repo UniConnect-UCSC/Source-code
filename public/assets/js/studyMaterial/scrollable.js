@@ -6,3 +6,12 @@ const mainStudyMaterialScroll = new InfinityScroll(
     0,
     10 
 );
+
+const smFormCategoryScroll = new InfinityScroll(
+    'getCategories',
+    '/studymaterial/scrollable',
+    document.getElementById('categorySuggestion'),
+    smFormSuggestionRenderer,
+    0,
+    5 
+);

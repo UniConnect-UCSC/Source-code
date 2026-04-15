@@ -128,3 +128,27 @@ function smCardRenderer(data){
 
     return article;
 }
+
+function smFormSuggestionRenderer(data){
+    const id = data.id || '';
+    const name = data.name || '';
+    
+    const suggestionItem = document.createElement('div');
+    suggestionItem.className = 'suggestion-item';
+    suggestionItem.setAttribute('data-id', id);
+    suggestionItem.textContent = name;
+
+    suggestionItem.addEventListener('mousedown', (e) => {
+        e.preventDefault(); // Prevents the input from losing focus
+
+        const ev = new CustomEvent('sm:category-suggestion-click', {
+            bubbles: true,
+            detail: {
+                element: suggestionItem
+            }
+        });
+        suggestionItem.dispatchEvent(ev);
+    });
+
+    return suggestionItem;
+}

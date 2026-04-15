@@ -46,4 +46,8 @@ class StudyMaterialModel{
             selected: $selected
         );
     }
+
+    public function createSM($data){
+        return $this->insert(array_keys($data), array_values($data));
+    }
 }
