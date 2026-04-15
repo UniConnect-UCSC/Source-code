@@ -50,4 +50,17 @@ class StudyMaterialModel{
     public function createSM($data){
         return $this->insert(array_keys($data), array_values($data));
     }
+
+    public function getStudyMaterialUrl($id){
+        $result = $this->where(
+            conditions: [['id', '=', $id]],
+            selected: ['url']
+        );
+
+        return $result[0]->url ?? null;
+    }
+
+    public function incrementViewCount($id){
+        return $this->increment($id, 'view_count', 1, 'id') ? true : false; 
+    }
 }

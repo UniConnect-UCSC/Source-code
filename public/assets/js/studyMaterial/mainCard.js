@@ -11,8 +11,21 @@
 
     smGrid.addEventListener('sm:view-click', (e) => {
         const { id } = e.detail;
-        console.log(`View button clicked for study material ID: ${id}`);
-        // Implement the logic to open the study material detail view or perform any desired action
+
+        window.location.href = `/studymaterial/${id}`;
+    });
+
+    smGrid.addEventListener('sm:share-click', async (e) => {
+        const { id } = e.detail;
+        const url = `${window.location.origin}/studymaterial/${id}`;
+
+        try {
+            await navigator.clipboard.writeText(url);
+            alert('Link copied to clipboard!');
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+            alert('Failed to copy link');
+        }
     });
 
     mainStudyMaterialScroll.addEventListener('successfulLoad', () => {

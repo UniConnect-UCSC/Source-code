@@ -8,6 +8,7 @@ class StudyMaterial extends Controller
 {
 	private $allowedOrderBy = ['recent', 'popular', 'title'];
 	private $allowedTypes = ['document', 'video', 'link'];
+	private $mediaExpireTime = 300;
 
 	private function getStudyMaterials($limit, $offset,$orderBy = 'recent', $searchTerm = '') {
 		if (!in_array($orderBy, $this->allowedOrderBy)) {
@@ -37,6 +38,18 @@ class StudyMaterial extends Controller
 		require_once(__DIR__ . "/../models/studyMaterialVolunteer.php");
 		$smVolunteerModel = new SMVolunteerModel();
 		return $smVolunteerModel->isVolunteer($userId);
+	}
+
+	private function getSignedUrl($id){
+		$studyMaterialModel = new StudyMaterialModel();
+		$studyMaterialSK = $studyMaterialModel->getStudyMaterialUrl($id);
+
+		return getCloudinarySignedURL($studyMaterialSK, $this->mediaExpireTime) ?? false;
+	}
+
+	private function incrementViewCount($id){
+		$studyMaterialModel = new StudyMaterialModel();
+		return $studyMaterialModel->incrementViewCount($id);
 	}
 
 	public function createNewSM(){
@@ -105,6 +118,21 @@ class StudyMaterial extends Controller
 			echo json_encode(['error' => 'Method not allowed']);
 		}
 	}
+
+	public function show($id){
+		$studyMaterialUrl = $this->getSignedUrl($id);
+		if(!$studyMaterialUrl){
+			http_response_code(404);
+			echo json_encode(['error' => 'Study material not found']);
+			return;
+		}
+
+		$this->incrementViewCount($id);
+		header('Location: ' . $studyMaterialUrl);
+		exit;
+	}
+
+
 
 	public function scrollable(){
 		

@@ -54,6 +54,28 @@ function smCardRenderer(data){
     typeBadge.textContent = badge;
     header.appendChild(typeBadge);
 
+    // Share button
+    const shareBtn = document.createElement('button');
+    shareBtn.className = 'sm-share-btn';
+    shareBtn.type = 'button';
+    shareBtn.setAttribute('aria-label', 'Share');
+    const shareIcon = document.createElement('i');
+    shareIcon.setAttribute('data-lucide', 'share-2');
+    shareIcon.className = 'sm-share-icon';
+    shareBtn.appendChild(shareIcon);
+    header.appendChild(shareBtn);
+
+    shareBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const ev = new CustomEvent('sm:share-click', {
+            bubbles: true,
+            detail: {
+                id: id,
+            }
+        });
+        shareBtn.dispatchEvent(ev);
+    });
+
     // Body
     const body = document.createElement('div');
     body.className = 'sm-material-body';
