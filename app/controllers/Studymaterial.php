@@ -305,6 +305,7 @@ class StudyMaterial extends Controller
 			<link rel="stylesheet" href="/assets/css/components/navbar.css">
 			<link rel="stylesheet" href="/assets/css/components/navPanel.css">
 			<link rel="stylesheet" href="/assets/css/components/widgetPanel.css">
+			<link rel="stylesheet" href="/assets/css/components/eventsWidget.css">
 			<link rel="stylesheet" href="/assets/css/pages/studyMaterial.css">
 			',
 		]);
