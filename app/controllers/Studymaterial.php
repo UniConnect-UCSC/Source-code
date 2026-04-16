@@ -40,10 +40,12 @@ class StudyMaterial extends Controller
 		return $smVolunteerModel->isVolunteer($userId);
 	}
 
-	private function getSignedUrl($id){
+	private function getLinkAndType($id){
 		$studyMaterialModel = new StudyMaterialModel();
-		$studyMaterialSK = $studyMaterialModel->getStudyMaterialUrl($id);
+		return $studyMaterialModel->getLinkAndType($id);
+	}
 
+	private function getSignedUrl($studyMaterialSK){
 		return getCloudinarySignedURL($studyMaterialSK, $this->mediaExpireTime) ?? false;
 	}
 
@@ -78,7 +80,7 @@ class StudyMaterial extends Controller
 			}
 
 			if($type != 'link'){
-				$link = uploadImageToCloudinary($files['file'], 'study_materials');
+				$link = uploadImageToCloudinary($files['file'], 'study_materials', true);
 			}
 
 			if($link === null){
@@ -120,15 +122,35 @@ class StudyMaterial extends Controller
 	}
 
 	public function show($id){
-		$studyMaterialUrl = $this->getSignedUrl($id);
-		if(!$studyMaterialUrl){
+
+		$smData = $this->getLinkAndType($id);
+		if(!$smData){
 			http_response_code(404);
 			echo json_encode(['error' => 'Study material not found']);
 			return;
 		}
 
+		$type = $smData['type'];
+		$url = $smData['url'];
+		$finalUrl = '';
+
+		switch($type){
+			case 'link':
+				$finalUrl = $url;
+				break;
+
+			case 'document':
+			case 'video':
+				$finalUrl = $this->getSignedUrl($url);
+				if($finalUrl){break;}
+
+			default:
+				http_response_code(404);
+				echo json_encode(['error' => 'Study material not found']);
+		}
+
 		$this->incrementViewCount($id);
-		header('Location: ' . $studyMaterialUrl);
+		header('Location: ' . $finalUrl);
 		exit;
 	}
 

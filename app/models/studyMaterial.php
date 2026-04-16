@@ -53,13 +53,20 @@ class StudyMaterialModel{
         return $this->insert(array_keys($data), array_values($data));
     }
 
-    public function getStudyMaterialUrl($id){
+    public function getLinkAndType($id){
         $result = $this->where(
             conditions: [['id', '=', $id]],
-            selected: ['url']
+            selected: ['url', 'type']
         );
 
-        return $result[0]->url ?? null;
+        if(!$result || empty($result[0])) {return null;}
+
+         $data = [
+            'url' => $result[0]->url ?? null,
+            'type' => $result[0]->type ?? null
+        ];
+
+        return $data;
     }
 
     public function incrementViewCount($id){
