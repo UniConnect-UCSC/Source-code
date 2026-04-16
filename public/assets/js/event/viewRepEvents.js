@@ -7,14 +7,11 @@ closeViewEventsModalBtn.addEventListener('click', () => {
         viewEventModal.classList.remove('active');
 });
 
-/*
-viewEventModal.addEventListener('click', (e) => {
-    if (e.target === viewEventModal) {
-        repEventListDiv.innerHTML = ''; // Clear list on close
-        viewEventModal.classList.remove('active');
-    }
+repEventScroll.setupAutoLoadOnScroll();
+
+repEventScroll.addEventListener('successfulLoad', () => {
+    lucide.createIcons(); 
 });
-*/
 
 repEventListDiv.addEventListener('click', function(e) {
     const editBtn = e.target.closest('.edit-btn');
