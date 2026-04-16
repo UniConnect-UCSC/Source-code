@@ -28,6 +28,12 @@
   let requestsStatusFilter = '';
 
   /** Client-side filter: show / hide cards in #my-kuppi-content */
+  function setReviewedLayout(enabled) {
+    const container = document.getElementById('my-kuppi-content');
+    if (!container) return;
+    container.classList.toggle('reviewed-table-list', !!enabled);
+  }
+
   function applyStatusFilter(selectedStatus) {
     const container = document.getElementById('my-kuppi-content');
     if (!container) return;
@@ -37,6 +43,7 @@
     });
   }
   function fetchHostsWithStatus(status) {
+    setReviewedLayout(false);
     hostsStatusFilter = status ;
     const scroll = window.newMyHostKuppiScroll;
     if(!scroll) return;
@@ -45,6 +52,7 @@
   }
 
   function fetchRequestsWithStatus(status) {
+    setReviewedLayout(false);
     requestsStatusFilter = status;
     const scroll = window.newMyRequestsScroll;
     if(!scroll) return;
@@ -52,13 +60,25 @@
     scroll.loadNextElements();
   }
   function fetchAttendsWithStatus(status) {
-    attendsStatusFilter = status;
-    const scroll = window.newMyParticipationsScroll;
-    if (!scroll) return;
-    scroll.resetScroll();
-    scroll.loadNextElements();
+    if(status != 'Reviewed') {
+      setReviewedLayout(false);
+      attendsStatusFilter = status;
+      const scroll = window.newMyParticipationsScroll;
+      if (!scroll) return;
+      scroll.resetScroll();
+      scroll.loadNextElements();
+
+    } else {
+      setReviewedLayout(true);
+      const scroll = window.newReviewedKuppiScroll;
+      if (!scroll) return;
+      scroll.resetScroll();
+      scroll.loadNextElements();
+
+    }
   } 
   function fetchFavoriteKuppiCategories() {
+    setReviewedLayout(false);
     const scroll = window.newFavoriteCategoriesScroll;
     if (!scroll) return;
     scroll.resetScroll();
@@ -149,11 +169,31 @@
 
     // Centralized loaders per tab
     const loaders = {
-      myHosts:      () => { window.newMyHostKuppiScroll?.resetScroll?.();      window.newMyHostKuppiScroll?.loadNextElements?.(); },
-      myRequests:   () => { window.newMyRequestsScroll?.resetScroll?.();      window.newMyRequestsScroll?.loadNextElements?.(); },
-      reports:      () => { window.newReportsKuppiScroll?.resetScroll?.();    window.newReportsKuppiScroll?.loadNextElements?.(); },
-      myAttends:    () => { window.newMyParticipationsScroll?.resetScroll?.();  window.newMyParticipationsScroll?.loadNextElements?.(); },
-      myFavourites: () => { window.newMyFavoritesScroll?.resetScroll?.(); window.newMyFavoritesScroll?.loadNextElements?.(); }
+      myHosts: () => {
+        setReviewedLayout(false);
+        window.newMyHostKuppiScroll?.resetScroll?.();
+        window.newMyHostKuppiScroll?.loadNextElements?.();
+      },
+      myRequests: () => {
+        setReviewedLayout(false);
+        window.newMyRequestsScroll?.resetScroll?.();
+        window.newMyRequestsScroll?.loadNextElements?.();
+      },
+      reports: () => {
+        setReviewedLayout(false);
+        window.newReportsKuppiScroll?.resetScroll?.();
+        window.newReportsKuppiScroll?.loadNextElements?.();
+      },
+      myAttends: () => {
+        const activeBtn = document.querySelector('#my-attends-filters button.active[data-status-filter]');
+        const status = activeBtn ? (activeBtn.getAttribute('data-status-filter') || '') : '';
+        fetchAttendsWithStatus(status);
+      },
+      myFavourites: () => {
+        setReviewedLayout(false);
+        window.newMyFavoritesScroll?.resetScroll?.();
+        window.newMyFavoritesScroll?.loadNextElements?.();
+      }
     };
 
     if (!listenersBound) {

@@ -152,6 +152,7 @@ const kuppiCategories = <?php echo json_encode(array_values((array)($kuppiCatego
 <script src="/assets/js/kuppi/openChangeStatusModal.js"></script>
 <script src="/assets/js/kuppi/openReviewModal.js"></script>
 <script src="/assets/js/kuppi/renderKuppiCard.js"></script>
+<script src="/assets/js/kuppi/renderReviewedKuppiSessions.js"></script>
 <script src="/assets/js/kuppi/renderKuppiCategories.js"></script>
 <script src="/assets/js/kuppi/searchBar.js" defer></script>
 <script src="/assets/js/kuppi/kuppiCardActions.js"></script>

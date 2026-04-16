@@ -148,6 +148,15 @@
     }
   };
 
+  const newReviewedKuppiScroll = new InfinityScroll(
+    'getReviewedKuppiSessions',
+    '/kuppi/scrollable',
+    document.getElementById("my-kuppi-content"),
+    window.renderReviewedKuppiCards,
+    0,
+    6
+  );
+  window.newReviewedKuppiScroll = newReviewedKuppiScroll;
 
  newMainKuppiScroll.setupAutoLoadOnScroll();
  newMainKuppiScroll.addEventListener('successfulLoad' , () => {
@@ -168,6 +177,12 @@
     window.lucide.createIcons({ root });
   }
  });
-
+newReviewedKuppiScroll.setupAutoLoadOnScroll();
+newReviewedKuppiScroll.addEventListener('successfulLoad', () => {
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    const root = document.getElementById('my-kuppi-content');
+    window.lucide.createIcons({ root });
+  }
+});
   
 

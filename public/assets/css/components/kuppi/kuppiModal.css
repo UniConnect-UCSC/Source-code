@@ -236,8 +236,91 @@
   grid-template-columns: repeat(2, minmax(0,1fr)); 
   gap: 16px; 
 }
+
+.kuppi-modal-list.reviewed-table-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.reviewed-kuppi-header,
+.reviewed-kuppi-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 2fr 1fr;
+  gap: var(--spacing-3);
+  align-items: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 2px solid var(--color-primary-gray);
+  border-radius: var(--rounded-lg);
+}
+
+.reviewed-kuppi-header {
+  background: var(--color-secondary-white);
+  color: #374151;
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
+.reviewed-kuppi-row {
+  background: var(--color-primary-white);
+}
+
+.reviewed-kuppi-cell-title,
+.reviewed-kuppi-cell-review {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reviewed-kuppi-rating {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reviewed-kuppi-rating-stars {
+  color: #f59e0b;
+  letter-spacing: 1px;
+}
+
+.reviewed-kuppi-rating-value {
+  color: #6b7280;
+  font-size: var(--text-xs);
+}
+
+.reviewed-kuppi-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-2);
+}
+
+.reviewed-action-btn.delete-btn i {
+  color: #b91c1c;
+}
+
+.reviewed-action-btn.edit-btn i {
+  color: var(--color-brand-700);
+}
+
+.reviewed-kuppi-header .text-right {
+  text-align: right;
+}
+
 @media (max-width: 760px){ 
   .kuppi-modal-list { grid-template-columns: 1fr; } 
+
+  .reviewed-kuppi-header {
+    display: none;
+  }
+
+  .reviewed-kuppi-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2);
+  }
+
+  .reviewed-kuppi-actions {
+    justify-content: flex-start;
+  }
 }
 
 #kuppiModalBody img { 

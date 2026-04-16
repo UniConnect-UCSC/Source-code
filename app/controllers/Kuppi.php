@@ -937,6 +937,103 @@ class Kuppi extends Controller
         return $kuppiModel->getKuppi($offset, $limit, $categories);
     }
 
+    private function fetchReviewedKuppiSessions($offset ,$limit) {
+        $reviewModel = new KuppiVolunteerReviewModel();
+        $reviewedKuppiSessions = $reviewModel->getReviewsWithKuppiSessions($_SESSION['user_id'] ,$offset ,$limit); 
+
+        return $reviewedKuppiSessions;
+    }
+
+    public function updateReview() {
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+            return;
+        }
+
+        try {
+            $payload = parseRequestData();
+            $reviewId = trim((string)($payload['review_id'] ?? ''));
+            $hostId = trim((string)($payload['host_id'] ?? ''));
+            $rating = isset($payload['rating']) ? (int)$payload['rating'] : 0;
+            $comment = trim((string)($payload['comment'] ?? ''));
+
+            if ($reviewId === '' || $rating < 1 || $rating > 5) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Invalid review id or rating']);
+                return;
+            }
+
+            $reviewModel = new KuppiVolunteerReviewModel();
+            $updated = $reviewModel->updateReviewById($reviewId, (string)$_SESSION['user_id'], $rating, $comment);
+
+            if (!$updated) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Review not found or access denied']);
+                return;
+            }
+
+            if ($hostId !== '') {
+                $this->tabulateVolunteer('reviewed', $hostId);
+            }
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Review updated successfully'
+            ]);
+        } catch (Throwable $e) {
+            error_log('updateReview error: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Server error']);
+        }
+    }
+
+    public function deleteReview() {
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+            return;
+        }
+
+        try {
+            $payload = parseRequestData();
+            $reviewId = trim((string)($payload['review_id'] ?? ''));
+            $hostId = trim((string)($payload['host_id'] ?? ''));
+
+            if ($reviewId === '') {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Invalid review id']);
+                return;
+            }
+
+            $reviewModel = new KuppiVolunteerReviewModel();
+            $deleted = $reviewModel->deleteReviewById($reviewId, (string)$_SESSION['user_id']);
+
+            if (!$deleted) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Review not found or access denied']);
+                return;
+            }
+
+            if ($hostId !== '') {
+                $this->tabulateVolunteer('reviewed', $hostId);
+            }
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Review deleted successfully'
+            ]);
+        } catch (Throwable $e) {
+            error_log('deleteReview error: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Server error']);
+        }
+    }
+
     public function scrollable(){
         $data = parseRequestData();
         header('Content-Type: application/json');
@@ -981,6 +1078,10 @@ class Kuppi extends Controller
                 break;
             case 'getForYouKuppies':
                 $response = $this->fetchForYouKuppiSessions($data['offset'], $data['limit']);
+                echo json_encode($response);
+                break;
+            case 'getReviewedKuppiSessions':
+                $response = $this->fetchReviewedKuppiSessions($data['offset'], $data['limit']);
                 echo json_encode($response);
                 break;
             default:
