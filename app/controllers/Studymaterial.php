@@ -21,6 +21,15 @@ class StudyMaterial extends Controller
 		return $studyMaterialsData;
 	}
 
+	private function getMyStudyMaterials($limit, $offset) {
+
+		$userId = $_SESSION['user_id'];
+		$studyMaterialModel = new StudyMaterialModel();
+		$studyMaterialsData = $studyMaterialModel->getMyStudyMaterials($limit, $offset, $userId);
+
+		return $studyMaterialsData;
+	}
+
 	private function getCategories($limit, $offset, $searchTerm = '') {
 		require_once(__DIR__ . "/../models/studyCategory.php");
 		$studyCategoryModel = new StudyCategoryModel();
@@ -52,6 +61,12 @@ class StudyMaterial extends Controller
 	private function incrementViewCount($id){
 		$studyMaterialModel = new StudyMaterialModel();
 		return $studyMaterialModel->incrementViewCount($id);
+	}
+
+	private function isOwnerOfSM($userId,$id){
+		$studyMaterialModel = new StudyMaterialModel();
+		$ownerId = $studyMaterialModel->getOwnerId($id);
+		return $ownerId === $userId;
 	}
 
 	public function createNewSM(){
@@ -121,6 +136,92 @@ class StudyMaterial extends Controller
 		}
 	}
 
+	public function updateSM(){
+		if($_SERVER['REQUEST_METHOD'] === 'POST') {
+			$data = parseRequestData();
+
+			header('Content-Type: application/json');
+
+			$id = $data['id'] ?? null;
+			$title = $data['title'] ?? '';
+			$description = $data['description'] ?? '';
+			$category = $data['category'] ?? '';
+
+			if(!$id){
+				http_response_code(400);
+				echo json_encode(['error' => 'Study material ID is required']);
+				return;
+			}
+
+			if(!$this->isOwnerOfSM($_SESSION['user_id'], $id)){
+				http_response_code(403);
+				echo json_encode(['error' => 'You do not have permission to edit this study material']);
+				return;
+			}
+
+			$updateData = [
+				'title' => $title,
+				'description' => $description,
+				'category_id' => $category,
+				'is_updated' => true
+			];
+
+			$studyMaterialModel = new StudyMaterialModel();
+			$response = $studyMaterialModel->updateSM($id, $updateData);
+
+			if(!$response){
+				http_response_code(500);
+				echo json_encode(['error' => 'Failed to update study material']);
+				return;
+			}
+
+			echo json_encode([
+				'success' => true,
+			]);
+		} else {
+			http_response_code(405);
+			echo json_encode(['error' => 'Method not allowed']);
+		}
+	}
+
+	public function deleteSM(){
+		if($_SERVER['REQUEST_METHOD'] === 'POST') {
+			$data = parseRequestData();
+
+			header('Content-Type: application/json');
+
+			$id = $data['id'] ?? null;
+
+			if(!$id){
+				http_response_code(400);
+				echo json_encode(['error' => 'Study material ID is required']);
+				return;
+			}
+
+			if(!$this->isOwnerOfSM($_SESSION['user_id'], $id)){
+				http_response_code(403);
+				echo json_encode(['error' => 'You do not have permission to delete this study material']);
+				return;
+			}
+
+			$studyMaterialModel = new StudyMaterialModel();
+			$response = $studyMaterialModel->deleteSM($id);
+
+			if(!$response){
+				http_response_code(500);
+				echo json_encode(['error' => 'Failed to delete study material']);
+				return;
+			}
+
+			echo json_encode([
+				'success' => true,
+			]);
+		} else {
+			http_response_code(405);
+			echo json_encode(['error' => 'Method not allowed']);
+		}
+	}
+
 	public function show($id){
 
 		$smData = $this->getLinkAndType($id);
@@ -169,6 +270,11 @@ class StudyMaterial extends Controller
 					$searchTerm = $data['context']['searchTerm'] ?? '';
 					$orderBy = $data['context']['orderBy'] ?? '';
 					$studyMaterials = $this->getStudyMaterials($data['limit'], $data['offset'], $orderBy, $searchTerm);
+					echo json_encode($studyMaterials);
+					break;
+
+				case 'getMyStudyMaterials':
+					$studyMaterials = $this->getMyStudyMaterials($data['limit'], $data['offset']);
 					echo json_encode($studyMaterials);
 					break;
 

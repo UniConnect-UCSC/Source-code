@@ -26,7 +26,7 @@ smUploadForm.addEventListener('submit', async (e) => {
 
     var url = '';
     if (smUploadForm.getAttribute('type') === 'update') {
-        formData.append('study_material_id', smUploadForm.getAttribute('data-id'));
+        formData.append('id', smUploadForm.getAttribute('data-id'));
         url = '/studyMaterial/updateSM';
     } else if (smUploadForm.getAttribute('type') === 'create') {
         url = '/studyMaterial/createNewSM';
@@ -102,7 +102,14 @@ displayedCategoryInput.addEventListener('input', filterAndRender);
 
 // This race condition is handled strictly by mouse down event disabling default behavior
 displayedCategoryInput.addEventListener('blur', () => {
+    fallbackCategorySuggestion();
+});
+displayedCategoryInput.addEventListener('sm:category-refresh', () => {
+    fallbackCategorySuggestion();
+});
 
+
+function fallbackCategorySuggestion() {
     smFormCategoryScroll.abort();
     smFormCategoryScroll.resetScroll();
     
@@ -112,7 +119,7 @@ displayedCategoryInput.addEventListener('blur', () => {
     } else {
         displayedCategoryInput.value = '';
     }
-});
+}
 
 smFormCategoryScroll.setupAutoLoadOnScroll();
 smFormCategoryScroll.setContextProvider(() => {

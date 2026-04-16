@@ -1,13 +1,20 @@
 const manageStudyMaterialsModal = document.getElementById('manageStudyMaterialsModal');
-const closeManageBtn = document.getElementById('manageStudyMaterialsModal')?.querySelector('[data-close-modal]');
+const closeManageBtn = document.getElementById('closeStudyMaterialModalBtn');
 const smManageList = document.getElementById('sm-manage-list');
 
 if (closeManageBtn) {
     closeManageBtn.addEventListener('click', () => {
-        // Use the scroll to reset scroll.reset();
         manageStudyMaterialsModal.classList.remove('active');
     });
 }
+
+myStudyMaterialScroll.setupAutoLoadOnScroll();
+
+myStudyMaterialScroll.addEventListener('successfulLoad', () => {
+    lucide.createIcons(); 
+});
+
+
 
 // Edit and delete button handlers
 if (smManageList) {
@@ -17,79 +24,46 @@ if (smManageList) {
 
         if (editBtn) {
             const row = editBtn.closest('.sm-manage-row');
-            const materialId = row.getAttribute('data-id');
+            const id = row.getAttribute('data-id');
+            const title = row.getAttribute('data-title');
+            const category = row.getAttribute('data-category');
+            const categoryId = row.getAttribute('data-category-id');
+            const description = row.getAttribute('data-description');
 
-            // Fetch all data for this study material
-            Ajax.jsonPost('/studyMaterial/getStudyMaterialData', { study_material_id: materialId }).then(
-                (response) => {
-                    if (response.success) {
-                        // Populate form fields with material data
-                        document.getElementById('sm-title').value = response.data.title || '';
-                        document.getElementById('sm-subject').value = response.data.subject || '';
-                        document.getElementById('sm-topic').value = response.data.topic || '';
-                        document.getElementById('sm-type').value = response.data.type || 'document';
-                        document.getElementById('sm-description').value = response.data.description || '';
-                        document.getElementById('sm-tags').value = response.data.tags || '';
+            // Populate form fields with material data
+            document.getElementById('sm-title').value = title;
+            document.getElementById('sm-description').value = description;
 
-                        // Handle file/link based on type
-                        const type = response.data.type || 'document';
-                        const smFileField = document.getElementById('sm-file-field');
-                        const smLinkField = document.getElementById('sm-link-field');
-                        const smFileInput = document.getElementById('sm-file');
-                        const smLinkInput = document.getElementById('sm-link');
+            const categoryHidden = document.getElementById('sm-category-confirmed');
+            categoryHidden.value = categoryId;
+            categoryHidden.setAttribute('data-text', category);
+            document.getElementById('sm-category').dispatchEvent(new CustomEvent('sm:category-refresh')); 
 
-                        if (type === 'link') {
-                            smFileField.classList.add('hidden');
-                            smLinkField.classList.remove('hidden');
-                            smFileInput.removeAttribute('required');
-                            smLinkInput.setAttribute('required', 'required');
-                            smLinkInput.value = response.data.file_link || '';
-                        } else {
-                            smFileField.classList.remove('hidden');
-                            smLinkField.classList.add('hidden');
-                            smFileInput.setAttribute('required', 'required');
-                            smLinkInput.removeAttribute('required');
-                            smFileInput.value = ''; // Reset file input (can't preset file)
-                        }
+            //Disabled editing the file
+            document.getElementById('sm-type').disabled = true;
+            document.getElementById('sm-file').disabled = true;
+            document.getElementById('sm-link').disabled = true;
 
-                        // Set form to update mode
-                        const smUploadForm = document.getElementById('sm-upload-form');
-                        smUploadForm.setAttribute('type', 'update');
-                        smUploadForm.setAttribute('data-id', materialId);
+            // Set form to update mode
+            const smUploadForm = document.getElementById('sm-upload-form');
+            smUploadForm.setAttribute('type', 'update');
+            smUploadForm.setAttribute('data-id', id);
 
-                        // Update modal header and button text
-                        document.querySelector('#formStudyMaterialModal .sm-modal-header h3').innerText = 'Edit Study Material';
-                        document.getElementById('sm-upload-btn').innerText = 'Save Changes';
+            // Update modal header and button text
+            document.getElementById("sm-add-title").innerText = 'Edit Study Material';
 
-                        // Close manage modal and open form modal
-                        manageStudyMaterialsModal.classList.remove('active');
-                        document.getElementById('formStudyMaterialModal').classList.add('active');
-                    } else {
-                        console.error('Failed to fetch study material data:', response.message);
-                    }
-                }
-            ).catch(err => {
-                console.error('Error fetching study material:', err);
-            });
+            // Close manage modal and open form modal
+            manageStudyMaterialsModal.classList.remove('active');
+            document.getElementById('formStudyMaterialModal').classList.add('active');
 
         } else if (deleteBtn) {
+
             const row = deleteBtn.closest('.sm-manage-row');
-            const materialId = row.getAttribute('data-id');
+            const id = row.getAttribute('data-id');
 
             if (confirm('Are you sure you want to delete this study material?')) {
-                Ajax.jsonPost('/studyMaterial/deleteStudyMaterial', { study_material_id: materialId })
-                    .then(response => {
-                        if (response.success) {
-                            console.log('Study material deleted successfully');
-                            // Refresh the list
-                            location.reload(); // Or implement a better refresh mechanism
-                        } else {
-                            console.error('Failed to delete study material:', response.message);
-                        }
-                    })
-                    .catch(err => {
-                        console.error('Error deleting study material:', err);
-                    });
+                Ajax.jsonPost('/studyMaterial/deleteSM', { id: id });
+                manageStudyMaterialsModal.classList.remove('active');
             }
         }
     });

@@ -7,7 +7,7 @@ class StudyMaterialModel{
 
     public function getStudyMaterials($limit, $offset, $orderBy, $searchTerm = ''): array{
 
-        $selected = ['m.id', 'm.title', 'm.description', ["t.name", "category"], 'm.type', 'm.view_count', 'm.created_at'];
+        $selected = ['m.id', 'm.title', 'm.description', ["t.name", "category"], 'm.type', 'm.view_count', 'm.created_at', 'm.is_updated'];
 
         $conditions = [];
 
@@ -49,8 +49,39 @@ class StudyMaterialModel{
         return $data ? $data : [];
     }
 
+    public function getMyStudyMaterials($limit, $offset, $userId) {
+        $selected = ['m.id', 'm.title', 'm.description', 'm.category_id', ["t.name", "category"], 'm.type', 'm.created_at'];
+
+        $conditions = [
+            ['m.volunteer_id', '=', $userId]
+        ];
+
+        $join = [
+            ["study_categories", ["m.category_id = t.id"], "INNER", "t"],
+        ];
+
+         $data = $this->where(
+            conditions: $conditions,
+            limit: $limit,
+            offset: $offset,
+            orderBy: ['m.created_at' => 'DESC'],
+            join: $join,
+            selected: $selected
+        );
+
+        return $data ? $data : [];
+    }
+
     public function createSM($data){
         return $this->insert(array_keys($data), array_values($data));
+    }
+
+    public function updateSM($id, $data){
+            return $this->update($id, $data, 'id');
+    }
+
+    public function deleteSM($id){
+        return $this->delete([['id', '=', $id]]);
     }
 
     public function getLinkAndType($id){
@@ -71,5 +102,14 @@ class StudyMaterialModel{
 
     public function incrementViewCount($id){
         return $this->increment($id, 'view_count', 1, 'id') ? true : false; 
+    }
+
+    public function getOwnerId($id){
+        $result = $this->where(
+            conditions: [['id', '=', $id]],
+            selected: ['volunteer_id']
+        );
+
+        return $result[0]->volunteer_id ?? '';
     }
 }

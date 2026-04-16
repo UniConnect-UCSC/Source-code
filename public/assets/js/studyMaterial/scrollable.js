@@ -15,3 +15,12 @@ const smFormCategoryScroll = new InfinityScroll(
     0,
     5 
 );
+
+const myStudyMaterialScroll = new InfinityScroll(
+    'getMyStudyMaterials',
+    '/studymaterial/scrollable',
+    document.getElementById('sm-manage-list'),
+    mySMRecordRenderer,
+    0,
+    5 
+);

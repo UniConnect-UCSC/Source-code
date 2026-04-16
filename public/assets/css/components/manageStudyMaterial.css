@@ -59,6 +59,8 @@
 .sm-manage-cell.material-info {
   align-items: center;
   gap: var(--spacing-2);
+  overflow: hidden;
+  min-width: 0;
 }
 
 .sm-item-icon {
@@ -85,6 +87,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
 }
 
 .sm-manage-cell.text-right {
