@@ -3,8 +3,8 @@
 <div class="friends-layout">
     <?php
     component("navPanel");
-    component("friends");
+    component("friends", ['friends' => $friends ?? []]);
     // component("friendSuggestions");
-    component("friendRequests");
+    component("friendRequests", ['friendRequests' => $friendRequests ?? []]);
     ?>
 </div>

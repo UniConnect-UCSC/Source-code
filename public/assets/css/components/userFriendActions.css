@@ -1,0 +1,67 @@
+.friend-actions-container {
+  padding: var(--spacing-3);
+  width: 100%;
+}
+
+.friend-actions-container button {
+  border: none;
+  border-radius: var(--rounded-md);
+  padding: var(--spacing-1) var(--spacing-4);
+  cursor: pointer;
+  width: fit-content;
+  text-align: center;
+  font-weight: 500;
+}
+
+.friend-actions-container div {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.send-friend-request-actions button {
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+}
+
+.send-friend-request-actions button:hover {
+  background-color: var(--color-brand-800);
+}
+
+.unfriend-actions button {
+  background-color: var(--color-brand-100);
+}
+
+.unfriend-actions button:hover {
+  background-color: var(--color-brand-300);
+}
+
+.friend-request-actions button {
+  background-color: var(--color-brand-100);
+}
+
+.friend-request-actions button:hover {
+  background-color: var(--color-brand-300);
+}
+
+.accept-friend-request-actions {
+  display: flex;
+  gap: var(--spacing-3);
+}
+
+.accept-button {
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+}
+
+.accept-button:hover {
+  background-color: var(--color-brand-800);
+}
+
+.decline-button {
+  background-color: var(--color-brand-100);
+}
+
+.decline-button:hover {
+  background-color: var(--color-brand-300);
+}

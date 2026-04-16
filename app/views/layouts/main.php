@@ -44,6 +44,8 @@
     <script src="/assets/js/marketplace.js"></script>
     <script src="/assets/js/marketplaceCard.js"></script>
 
+    <script src="/assets/js/friends.js"></script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

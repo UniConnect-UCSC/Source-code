@@ -6,7 +6,8 @@
     ?>
     <div class="profile-content">
         <?php component("userBanner", [
-            "profileUser" => $profileUser
+            "profileUser" => $profileUser,
+            "relationshipState" => $relationshipState ?? 'none'
         ]); ?>
 
         <?php component("feedType"); ?>
