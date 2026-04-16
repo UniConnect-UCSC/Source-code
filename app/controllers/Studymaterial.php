@@ -69,6 +69,45 @@ class StudyMaterial extends Controller
 		return $ownerId === $userId;
 	}
 
+	private function verifyFileType($file, $expectedType){
+		if (empty($file) || $file['error'] !== UPLOAD_ERR_OK) {
+			return false;
+		}
+	
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$mimeType = finfo_file($finfo, $file['tmp_name']);
+		finfo_close($finfo);
+	
+		$allowedMimeTypes = [];
+		switch($expectedType){
+			case 'document':
+				$allowedMimeTypes = [
+					'application/pdf',
+					'application/vnd.ms-powerpoint',
+					'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+					'application/msword',
+					'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+				];
+				break;
+			case 'video':
+				$allowedMimeTypes = [
+					'video/mp4', 
+					'video/mpeg', 
+					'video/quicktime', 
+					'video/x-ms-video', 
+					'video/x-msvideo', 
+					'video/avi', 
+					'video/webm',
+					'video/quicktime' // for .mov
+				];
+				break;
+			default:
+				return false;
+		}
+	
+		return in_array($mimeType, $allowedMimeTypes);
+	}
+
 	public function createNewSM(){
 		if($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$data = parseRequestData();
@@ -95,6 +134,11 @@ class StudyMaterial extends Controller
 			}
 
 			if($type != 'link'){
+				if(!$this->verifyFileType($files['file'], $type)){
+					http_response_code(400);
+					echo json_encode(['error' => 'Uploaded file type does not match the specified type.']);
+					return;
+				}
 				$link = uploadImageToCloudinary($files['file'], 'study_materials', true);
 			}
 

@@ -28,7 +28,7 @@
             </div>
             <div class="form-group" id="sm-file-field">
                 <label for="sm-file">File</label>
-                <input type="file" id="sm-file" name="file" accept=".pdf,.ppt,.pptx,.doc,.docx,.zip,.rar,.mp4,.mov">
+                <input type="file" id="sm-file" name="file" accept=".pdf,.ppt,.pptx,.doc,.docx">
                 <small class="help-text">Max 50MB. PDF/PPT/DOC or MP4/MOV for videos</small>
             </div>
             <div class="form-group hidden" id="sm-link-field">

@@ -62,6 +62,12 @@ smTypeSelect.addEventListener('change', () => {
         smFileInput.setAttribute('required', 'required');
         smLinkInput.removeAttribute('required');
         smLinkInput.value = ''; 
+        
+        if(type === 'video'){
+            smFileInput.setAttribute('accept', '.mp4,.mov');
+        } else {
+            smFileInput.setAttribute('accept', '.pdf,.ppt,.pptx,.doc,.docx');
+        }
     }
 });
 
