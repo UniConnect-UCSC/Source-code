@@ -67,4 +67,41 @@ class User
 
         return $rows ?: [];
     }
+
+    public function editUserName($userId, $firstName, $lastName)
+    {
+        return $this->update($userId, [
+            'f_name' => $firstName,
+            'l_name' => $lastName,
+        ]);
+    }
+
+    public function editProfilePicture($userId, $profilePictureUrl)
+    {
+        return $this->update($userId, [
+            'profile_picture' => $profilePictureUrl,
+        ]);
+    }
+
+    public function editBio($userId, $bio)
+    {
+        return $this->update($userId, [
+            'bio' => $bio,
+        ]);
+    }
+
+    public function editBirthday($userId, $birthday)
+    {
+        return $this->update($userId, [
+            'birthday' => $birthday,
+        ]);
+    }
+
+    public function updatePassword($userId, $newPassword)
+    {
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        return $this->update($userId, [
+            'password' => $hashedPassword,
+        ]);
+    }
 }

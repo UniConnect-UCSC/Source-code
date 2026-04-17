@@ -143,3 +143,17 @@
   background-color: var(--color-primary-red);
   color: var(--color-primary-white);
 }
+
+.user__settings {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-4);
+  border-radius: var(--rounded-xl);
+  font-weight: 500;
+  margin-top: var(--spacing-2);
+}
+
+.user__settings:hover {
+  background-color: var(--color-brand-100);
+}

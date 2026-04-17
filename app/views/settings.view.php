@@ -4,4 +4,7 @@
     <?php
     component("navPanel");
     ?>
+
+    <div class="settings-content">
+    </div>
 </div>

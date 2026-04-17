@@ -5,3 +5,10 @@
 
   margin: var(--spacing-24) var(--spacing-4);
 }
+
+.settings-content {
+  grid-column-start: 4;
+  grid-column-end: 13;
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-3) var(--spacing-2);
+}
