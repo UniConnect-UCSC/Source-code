@@ -2,22 +2,6 @@
 if (!isset($postType)) {
     $postType = "";
 }
-
-// Use profileUser if passed and valid, otherwise fall back to session (logged-in user)
-$profileUser = $profileUser ?? null;
-
-if ($profileUser && is_object($profileUser)) {
-    $userEmail = $profileUser->email ?? "";
-    $userFName = $profileUser->f_name ?? "";
-    $userLName = $profileUser->l_name ?? "";
-    $profilePic = $profileUser->profile_picture ?? null;
-} else {
-    // Fallback for logged-in user's own posts
-    $userEmail = $_SESSION['user_email'] ?? "";
-    $userFName = $_SESSION['user_fName'] ?? "";
-    $userLName = $_SESSION['user_lName'] ?? "";
-    $profilePic = $_SESSION['user_profilePicture'] ?? null;
-}
 ?>
 
 <div class="post">
@@ -27,10 +11,6 @@ if ($profileUser && is_object($profileUser)) {
             <!-- User Profile Picture -->
             <div class="profile-section">
                 <?php
-                // $userEmail = $_SESSION['user_email'] ?? "";
-                // $userFName = $_SESSION['user_fName'] ?? "";
-                // $userLName = $_SESSION['user_lName'] ?? "";
-                // $profilePic = $_SESSION['user_profilePicture'] ?? null;
                 ?>
                 <?php if ($profilePic): ?>
                     <a href="/profile">
@@ -87,7 +67,9 @@ if ($profileUser && is_object($profileUser)) {
     <?php endif; ?>
 
     <div class="post-interactions">
-        <div><i data-lucide="thumbs-up"></i> 4</div>
+        <!-- <div class="reaction-count" data-post-id="<?= htmlspecialchars($postId) ?>">
+            <i data-lucide="thumbs-up"></i> <?= htmlspecialchars($reactionCount) ?>
+        </div> -->
         <div class="interaction-counts">
             <div>5 Comments</div>
             <!-- <i data-lucide="dot"></i>
@@ -96,9 +78,16 @@ if ($profileUser && is_object($profileUser)) {
     </div>
 
     <div class="post-actions">
-        <div> <i data-lucide="thumbs-up"></i>Like</div>
-        <div><i data-lucide="message-circle"></i>Comment</div>
-        <!-- <div><i data-lucide="repeat-2"></i>Repost</div> -->
+        <button class="like-btn <?= $userHasReacted ? 'liked' : '' ?>" data-post-id="<?= htmlspecialchars($postId) ?>"
+            onclick="reactOnPost(<?= htmlspecialchars($postId) ?>, '<?= htmlspecialchars($postType) ?>', this)">
+            <i data-lucide="thumbs-up"></i> <?= htmlspecialchars($reactionCount) ?>
+        </button>
+
+        <button onclick="openCommentPanel(<?= htmlspecialchars($postId) ?>)">
+            <i data-lucide="message-circle"></i> Comment
+        </button>
+
+
     </div>
 </div>
 

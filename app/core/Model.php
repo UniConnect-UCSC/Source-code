@@ -30,7 +30,7 @@ trait Model
      * @param int $limit [DEFAULT: queries EVERYTHING]
      * @param int $offset [DEFAULT: 0]
      * @param array $orderBy Array of fields to order by with direction [field => 'ASC|DESC']
-    * @param array|string $groupBy Array or single field (alias.column) to group by
+     * @param array|string $groupBy Array or single field (alias.column) to group by
      * @param array $join Array of join definitions in format [[ <join_table_name>, <join_condition>, <JOIN_TYPE>, <alias> ] , [] ,]
      * @param array $selected Array of field and aliases(not required)  [[<Column_name>, <Alias>], [], ..] OR ["column_","",...]
      * @param bool $showDeleted If true, includes soft-deleted records; if false, excludes them
@@ -55,24 +55,23 @@ trait Model
 
             $data = [];
 
-            $sql = "SELECT "; 
+            $sql = "SELECT ";
 
             //Handle selections
-            if(!empty($selected)){
-                foreach($selected as $column){
-                    
-                    if(is_array($column)){
+            if (!empty($selected)) {
+                foreach ($selected as $column) {
+
+                    if (is_array($column)) {
 
                         $sql .= "$column[0] AS $column[1], ";
-                    }else{
+                    } else {
 
                         $sql .=  "$column, ";
                     }
                 }
                 $sql = substr($sql, 0, -2);
                 $sql .= " ";
-
-            }else{
+            } else {
                 $sql .= "* ";
             }
 
@@ -83,8 +82,8 @@ trait Model
                 $joined = true;
             }
 
-            foreach($join as $joinCount => $joinItem){
-                
+            foreach ($join as $joinCount => $joinItem) {
+
                 $joinType = in_array($joinItem[2], $joinTypes) ? $joinItem[2] : 'INNER';
                 $alias = (isset($joinItem[3]) && !empty($joinItem[3])) ? " AS {$joinItem[3]} " : "";
                 $joinCondition = (isset($joinItem[1]) && !empty($joinItem[1])) ? $joinItem[1] : "{$this->table}.id = {$joinItem[0]}.id";
@@ -92,20 +91,19 @@ trait Model
                 $sql .= "{$joinType} JOIN {$joinItem[0]}{$alias} ON ";
 
                 // ["m.university_id", "=", "u.id"]
-                if(is_array($joinCondition)){
-                    foreach($joinCondition as $joinCondCount => $cond){
-                        
-                        if(is_array($cond)){
+                if (is_array($joinCondition)) {
+                    foreach ($joinCondition as $joinCondCount => $cond) {
+
+                        if (is_array($cond)) {
                             $key = "join_{$joinCount}_cond_{$joinCondCount}";
                             $data[$key] = $cond[2];
                             $sql .= "{$cond[0]} {$cond[1]} :{$key} AND ";
-                        }else{
+                        } else {
                             $sql .= "{$cond} AND ";
                         }
-
                     }
                     $sql = substr($sql, 0, -4);
-                }else{
+                } else {
                     $sql .= "{$joinCondition} ";
                 }
             }
@@ -124,13 +122,12 @@ trait Model
 
                     switch ($condition[1]) {
                         case 'IS':
-                            if(in_array($condition[2],$allowedIsValues)){
+                            if (in_array($condition[2], $allowedIsValues)) {
                                 $sql .= "$condition[0] $condition[1] $condition[2] AND ";
-
-                            }else{
+                            } else {
                                 throw new Error("Invalid IS operator value {$condition[2]}");
                             }
-                            
+
                             break;
 
 
@@ -139,23 +136,23 @@ trait Model
 
                             $placeholder = [];
 
-                            foreach($condition[2] as $k => $v){
-                               $key = "in_{$index}_{$k}";
-                               $data[$key] = $v;
-                               $placeholder[] = ":$key";
+                            foreach ($condition[2] as $k => $v) {
+                                $key = "in_{$index}_{$k}";
+                                $data[$key] = $v;
+                                $placeholder[] = ":$key";
                             }
 
-                            $sql .= "{$condition[0]} {$condition[1]} (". implode(', ', $placeholder) . ") AND ";
+                            $sql .= "{$condition[0]} {$condition[1]} (" . implode(', ', $placeholder) . ") AND ";
 
                             break;
-                        
+
                         default:
 
                             $affectedCol = $condition[0];
 
-                            if ($joined){
+                            if ($joined) {
                                 $result = explode('.', $condition[0]);
-                                if (count($result) == 2){
+                                if (count($result) == 2) {
                                     $affectedCol = $result[0] . '_' . $result[1];
                                 }
                             }
@@ -164,13 +161,11 @@ trait Model
                             $data[$affectedCol] = $condition[2];
                             break;
                     }
-
                 } else {
 
                     // Handle invalid condition format
                     return false;
                 }
-            
             }
 
             // Handle the trailing AND in the previous loop
@@ -193,7 +188,7 @@ trait Model
 
                 $sql .= " ORDER BY $field $direction ";
             }
-            
+
             $sql .= $limit ? " LIMIT $limit " : "";
             $sql .= $offset ? " OFFSET $offset " : "";
 
@@ -224,24 +219,24 @@ trait Model
     public function insert($columns, $data = [])
     {
         try {
-            $sql = "INSERT INTO {$this->table} (". implode(", ", $columns) .") VALUES ";
+            $sql = "INSERT INTO {$this->table} (" . implode(", ", $columns) . ") VALUES ";
 
-            $passedData = [];            
+            $passedData = [];
 
-            if(!is_array($data[0])){
+            if (!is_array($data[0])) {
                 $data = [$data];
             }
 
-            foreach($data as $i => $row){
+            foreach ($data as $i => $row) {
                 $placeholders = [];
-                foreach($row as $j => $value){
+                foreach ($row as $j => $value) {
                     $key = "{$columns[$j]}_{$i}";
                     $placeholders[] = ":$key";
                     $passedData[$key] = $value;
                 }
-                $sql .= "(". implode(", ", $placeholders) ."), ";
+                $sql .= "(" . implode(", ", $placeholders) . "), ";
             }
-            $sql = rtrim($sql, ", "); 
+            $sql = rtrim($sql, ", ");
 
             return $this->query($sql, $passedData);
         } catch (PDOException $e) {
@@ -296,20 +291,20 @@ trait Model
      */
     public function delete($conditionData, $softDelete = false)
     {
-        $softDeleteColumn = $this->softDeleteColumn;        
+        $softDeleteColumn = $this->softDeleteColumn;
         $defaultIdColumn = $this->defaultIdColumn;
 
         // Convenience method to delete by id
-        if (!is_array($conditionData)){
+        if (!is_array($conditionData)) {
             $conditionData = [[$defaultIdColumn, '=', $conditionData]];
         }
 
         try {
             $sql = "";
 
-            if($softDelete){
+            if ($softDelete) {
                 $sql = "UPDATE {$this->table} SET deleted_at = NOW() WHERE ";
-            }else{
+            } else {
                 $sql = "DELETE FROM {$this->table} WHERE ";
             }
 
@@ -356,6 +351,29 @@ trait Model
             return $this->query($sql, $data);
         } catch (PDOException $e) {
             die("JOIN query failed: " . $e->getMessage());
+        }
+    }
+
+    public function count($conditions = [])
+    {
+        try {
+            $sql = "SELECT COUNT(*) as count FROM {$this->table} WHERE ";
+            $data = [];
+
+            if (empty($conditions)) {
+                $sql .= "TRUE";
+            } else {
+                foreach ($conditions as $condition) {
+                    $sql .= "{$condition[0]} {$condition[1]} :{$condition[0]} AND ";
+                    $data[$condition[0]] = $condition[2];
+                }
+                $sql .= "TRUE";
+            }
+
+            $result = $this->get_row($sql, $data);
+            return $result ? (int) $result->count : 0;
+        } catch (PDOException $e) {
+            die("COUNT query failed: " . $e->getMessage());
         }
     }
 }

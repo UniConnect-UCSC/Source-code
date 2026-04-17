@@ -45,6 +45,8 @@
     <script src="/assets/js/marketplaceCard.js"></script>
 
     <script src="/assets/js/friends.js"></script>
+    <script src="/assets/js/post.js"></script>
+    <script src="/assets/js/comment.js"></script>
 
 
     <script>

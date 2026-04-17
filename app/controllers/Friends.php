@@ -35,9 +35,6 @@ class Friends extends Controller
             exit;
         }
 
-        error_log('SESSION: ' . print_r($_SESSION, true));
-        error_log('BODY: ' . file_get_contents('php://input'));
-
         $currentUserId = $_SESSION['user_id'] ?? null;
 
         $body = json_decode(file_get_contents('php://input'), true);
