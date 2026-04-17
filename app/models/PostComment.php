@@ -7,9 +7,21 @@ class PostComment
 
     public function getCommentsForPost($postId)
     {
-        return $this->where([
-            ['post_id', '=', $postId]
-        ], null, null, ['commented_at' => 'ASC']);
+        $sql = "
+        SELECT
+            pc.id,
+            pc.post_id,
+            pc.student_id,
+            pc.comment_text,
+            pc.commented_at,
+            CONCAT(u.f_name, ' ', u.l_name) AS author
+        FROM post_comments pc
+        INNER JOIN users u ON u.id = pc.student_id
+        WHERE pc.post_id = :post_id
+        ORDER BY pc.commented_at ASC
+    ";
+
+        return $this->query($sql, ['post_id' => $postId]) ?: [];
     }
 
     public function addComment($userId, $postId, $commentText)
