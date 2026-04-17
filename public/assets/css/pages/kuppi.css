@@ -490,6 +490,58 @@ body {
   gap: var(--spacing-1);
 }
 
+.kuppi-card-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.kuppi-card-menu-btn {
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.kuppi-card-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 140px;
+  padding: 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--rounded-md);
+  background: var(--color-primary-white);
+  box-shadow: var(--shadow-md);
+  display: none;
+  z-index: 20;
+}
+
+.kuppi-card-menu.is-open .kuppi-card-menu-dropdown {
+  display: block;
+}
+
+.kuppi-card-report-btn {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #b91c1c;
+  text-align: left;
+  font-size: var(--text-sm);
+  border-radius: var(--rounded-sm);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.kuppi-card-report-btn:hover {
+  background: #fee2e2;
+}
+
+.kuppi-card-report-btn:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 1px;
+}
+
 .kuppi-title {
   font-size: var(--text-xl);
   font-weight: 600;
@@ -596,6 +648,13 @@ body {
 .pill-btn .lucide {
   width: 16px;
   height: 16px;
+}
+
+@media (max-width: 480px) {
+  .kuppi-card-menu-dropdown {
+    right: auto;
+    left: 0;
+  }
 }
 
 /* Favorite Categories Table View */

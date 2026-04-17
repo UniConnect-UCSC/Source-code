@@ -181,8 +181,8 @@
       },
       reports: () => {
         setReviewedLayout(false);
-        window.newReportsKuppiScroll?.resetScroll?.();
-        window.newReportsKuppiScroll?.loadNextElements?.();
+        window.newReportedKuppiSessionsScroll?.resetScroll?.();
+        window.newReportedKuppiSessionsScroll?.loadNextElements?.();
       },
       myAttends: () => {
         const activeBtn = document.querySelector('#my-attends-filters button.active[data-status-filter]');

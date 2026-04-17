@@ -10,6 +10,7 @@ require_once(__DIR__ . "/../models/kuppiParticipation.php");
 require_once(__DIR__ . "/../models/kuppiFavorites.php");
 require_once(__DIR__ . "/KuppiNotificationHandler.php");
 require_once(__DIR__ . "/../models/userKuppiFavoriteCategories.php");
+require_once(__DIR__ . "/../models/kuppiReport.php");
 
 class Kuppi extends Controller
 {
@@ -282,7 +283,7 @@ class Kuppi extends Controller
 
         try {
             $data = parseRequestData();
-            $id = $data['id'] ?? null;
+            $id = $data['kuppi_id'];
 
             if (!$id) {
                 http_response_code(400);
@@ -291,6 +292,9 @@ class Kuppi extends Controller
             }
 
             $kuppiModel = new KuppiModel();
+            $kuppiReportModel = new KuppiReportModel();
+
+
 
             $existing = $kuppiModel->first(['id' => $id]);
             if (!$existing) {
@@ -298,12 +302,23 @@ class Kuppi extends Controller
                 echo json_encode(['success' => false, 'message' => 'Kuppi not found']);
                 exit;
             }
+            $data = [
+                'is_reported' => true,
+                'status' => 'Reported'
+            ];
+            $rData = [
+                'kuppi_id' => $id,
+                'reporter_id' => $_SESSION['user_id'],
+                'created_at' => date('Y-m-d H:i:s')
+            ];
 
-            $kuppiModel->update($id, ['is_reported' => true]);
+            $kuppiModel->update($id, $data);
+            $response = $kuppiReportModel->insertAndFetch($rData) ;
 
             $updated = $kuppiModel->first(['id' => $id]);
-            if ($updated && (bool)$updated->is_reported === true) {
-                echo json_encode(['success' => true, 'message' => 'Kuppi reported']);
+            
+            if ($updated && (bool)$updated->is_reported === true && $response) {
+                echo json_encode(['success' => true, 'message' => 'Kuppi reported', 'response' => $response]);
             } else {
                 http_response_code(500);
                 echo json_encode(['success' => false, 'message' => 'Failed to update report flag']);
@@ -944,6 +959,13 @@ class Kuppi extends Controller
         return $reviewedKuppiSessions;
     }
 
+    private function fetchReportedKuppiSessions($offset ,$limit) {
+        $reportedKuppiModdel = new KuppiReportModel();
+        $reportedKuppiSessions = $reportedKuppiModdel->getMyReportedKuppiSessions($_SESSION['user_id'] ,$offset ,$limit);
+
+        return $reportedKuppiSessions;
+    }
+
     public function updateReview() {
         header('Content-Type: application/json');
 
@@ -1082,6 +1104,10 @@ class Kuppi extends Controller
                 break;
             case 'getReviewedKuppiSessions':
                 $response = $this->fetchReviewedKuppiSessions($data['offset'], $data['limit']);
+                echo json_encode($response);
+                break;
+            case 'getReportedKuppiSessions':
+                $response = $this->fetchReportedKuppiSessions($data['offset'] ,$data['limit']);
                 echo json_encode($response);
                 break;
             default:

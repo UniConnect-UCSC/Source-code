@@ -99,6 +99,7 @@
     buildHeader() {
       var header     = el('div', 'kuppi-header');
       var headerLeft = el('div');
+      var headerRight = el('div', 'kuppi-actions');
 
       if (this.item.topic) {
         headerLeft.appendChild(el('h3', 'kuppi-title', this.item.topic));
@@ -109,8 +110,31 @@
         headerLeft.appendChild(el('span', 'kuppi-university', uni));
       }
 
+      // Main card menu: report entry is handled in kuppiCardActions.js.
+      var menuWrap = el('div', 'kuppi-card-menu');
+      var menuBtn = el('button', 'icon-btn kuppi-card-menu-btn');
+      menuBtn.type = 'button';
+      menuBtn.setAttribute('aria-label', 'Open kuppi options');
+      menuBtn.setAttribute('aria-haspopup', 'menu');
+      menuBtn.setAttribute('aria-expanded', 'false');
+
+      menuBtn.textContent = '...';
+
+      var menuDropdown = el('div', 'kuppi-card-menu-dropdown');
+      menuDropdown.setAttribute('role', 'menu');
+
+      var reportBtn = el('button', 'kuppi-card-report-btn', 'Report');
+      reportBtn.type = 'button';
+      reportBtn.setAttribute('role', 'menuitem');
+      reportBtn.setAttribute('aria-label', 'Report this kuppi');
+
+      menuWrap.appendChild(menuBtn);
+      menuWrap.appendChild(menuDropdown);
+      menuDropdown.appendChild(reportBtn);
+      headerRight.appendChild(menuWrap);
+
       header.appendChild(headerLeft);
-      header.appendChild(el('div', 'kuppi-actions'));
+      header.appendChild(headerRight);
       return header;
     }
 
@@ -443,6 +467,37 @@
     }
   }
 
+  class MyReportCard extends ModalKuppiCard {
+    buildContentFields(content) {
+      super.buildContentFields(content);
+
+      var count = Number(this.item.report_count || 0);
+      content.appendChild(el('p', 'post-participants', 'Reports: ' + count));
+    }
+
+    buildActions() {
+      var item = this.item;
+      var actions = el('div', 'kuppi-post-actions');
+
+        var editBtn = el('button', 'btn btn-primary', 'Edit');
+          editBtn.onclick = function (e) {
+            e.stopPropagation();
+            var dt    = String(item.kuppi_date_time || '');
+            var parts = dt.split(' ');
+            window.openEditKuppiModal({
+              id:       item.id,
+              topic:    item.topic    || '',
+              date:     parts[0]     || '',
+              time:     parts[1]     || '',
+              platform: item.platform || '',
+              link:     item.kuppi_url || item.link || ''
+            });
+        };
+        actions.appendChild(editBtn);
+
+        return actions ;
+    }
+  }
   /* ══════════════════════════════════════════════════════
      KuppiCardFactory — creates the right card by context
      ══════════════════════════════════════════════════════ */
@@ -456,6 +511,7 @@
         case 'my-requests':       return new MyRequestCard(data, context).render();
         case 'my-participations': return new MyAttendCard(data, context).render();
         case 'my-favorites':      return new MyFavoriteCard(data, context).render();
+        case 'my-reports' :       return new MyReportCard(data, context).render();
         default:
           console.error('Unknown kuppi card context: ' + context);
           return null;
@@ -473,5 +529,6 @@
   window.renderMyParticipationCards= function (data) { return KuppiCardFactory.create(data, 'my-participations'); };
   window.renderMyFavoriteCards     = function (data) { return KuppiCardFactory.create(data, 'my-favorites'); };
   window.renderForYouKuppiCards    = function (data) { return KuppiCardFactory.create(data, 'main'); };
+  window.renderReportedKuppiCards  = function (data) { return KuppiCardFactory.create(data, 'my-reports'); };
 
 })();

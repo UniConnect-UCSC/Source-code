@@ -16,14 +16,18 @@
 
     const confirmBtn = document.getElementById('confirmReportKuppi');
     if (confirmBtn) {
-      confirmBtn.onclick = async function() {
-        try {
-          if (typeof window.onKuppiReport === 'function') {
-            await window.onKuppiReport(item);
+      confirmBtn.onclick = function (e) {
+        e.stopPropagation();
+
+        Ajax.jsonPost('/kuppi/reportKuppi', { kuppi_id: item.id }).then((response) => {
+          if (response && response.success) {
+            window.newMainKuppiScroll.resetScroll();
+            window.newMainKuppiScroll.loadNextElements();
+            setTimeout(closeReportKuppiModal, 600);
+          } else {
+            console.log(response);
           }
-        } finally {
-          closeReportKuppiModal();
-        }
+        });
       };
     }
 

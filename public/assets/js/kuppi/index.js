@@ -158,6 +158,16 @@
   );
   window.newReviewedKuppiScroll = newReviewedKuppiScroll;
 
+  const newReportedKuppiSessionsScroll = new InfinityScroll(
+    'getReportedKuppiSessions',
+    '/kuppi/scrollable',
+    document.getElementById("my-kuppi-content"),
+    window.renderReportedKuppiCards,
+    0,
+    4
+  );
+  window.newReportedKuppiSessionsScroll = newReportedKuppiSessionsScroll;
+
  newMainKuppiScroll.setupAutoLoadOnScroll();
  newMainKuppiScroll.addEventListener('successfulLoad' , () => {
   if (window.lucide && typeof window.lucide.createIcons === 'function') {
