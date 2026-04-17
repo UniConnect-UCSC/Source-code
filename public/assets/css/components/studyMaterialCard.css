@@ -1,0 +1,194 @@
+/* Study Material Card Component Styles */
+
+/* Feed grid */
+.sm-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: var(--spacing-6);
+	margin-top: var(--spacing-2);
+}
+
+/* Material Card */
+.sm-material-card {
+	display: flex;
+	flex-direction: column;
+	background: var(--color-primary-white);
+	border: 2px solid var(--color-primary-gray);
+	border-radius: var(--rounded-xl);
+	overflow: hidden;
+	box-shadow: var(--shadow-sm);
+	transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+	cursor: pointer;
+}
+
+.sm-material-card:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow-lg);
+	border-color: var(--color-brand-100);
+}
+
+/* Card Header (Type badge) */
+.sm-material-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: var(--spacing-4);
+	border-bottom: 1px solid var(--color-secondary-white);
+	background: var(--color-secondary-white);
+}
+
+/* Type Badge */
+.sm-type-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--spacing-1) var(--spacing-3);
+	border-radius: var(--rounded-lg);
+	font-weight: 700;
+	font-size: var(--text-xs);
+	color: var(--color-brand-700);
+	letter-spacing: 0.5px;
+	border: 1px solid var(--color-brand-200);
+	background: var(--color-brand-50);
+}
+
+
+/* Share Button */
+.sm-share-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--spacing-2) var(--spacing-2);
+	border-radius: var(--rounded-lg);
+	border: 1px solid var(--color-brand-200);
+	background: var(--color-brand-50);
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+	color: var(--color-brand-700);
+}
+
+.sm-share-btn:hover {
+	background: var(--color-brand-100);
+	border-color: var(--color-brand-300);
+}
+
+.sm-share-btn:active {
+	transform: scale(0.95);
+}
+
+.sm-share-icon {
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+}
+
+
+/* Card Body */
+.sm-material-body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-2);
+	padding: var(--spacing-4);
+	flex-grow: 1;
+}
+
+/* Title */
+.sm-material-title {
+	margin: 0;
+	font-size: var(--text-lg);
+	font-weight: 600;
+	color: #111827;
+	line-height: 1.4;
+}
+
+/* category Tag */
+.sm-category-tag {
+	display: inline-block;
+	padding: var(--spacing-1) var(--spacing-3);
+	background: var(--color-brand-50);
+	border: 1px solid var(--color-brand-200);
+	border-radius: var(--rounded-full);
+	font-size: var(--text-xs);
+	color: var(--color-brand-700);
+	font-weight: 500;
+	width: fit-content;
+}
+
+/* Description */
+.sm-material-description {
+	margin: var(--spacing-1) 0 0 0;
+	font-size: var(--text-sm);
+	color: #374151;
+	line-height: 1.6;
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Card Footer */
+.sm-material-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--spacing-3) var(--spacing-4);
+	border-top: 1px solid var(--color-secondary-white);
+	background: var(--color-secondary-white);
+}
+
+/* Footer Items Container */
+.sm-footer-items {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-4);
+}
+
+/* Footer Item */
+.sm-footer-item {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-1);
+}
+
+.sm-footer-icon {
+	width: 16px;
+	height: 16px;
+	color: #9ca3af;
+	flex-shrink: 0;
+}
+
+.sm-footer-text {
+	font-size: var(--text-xs);
+	color: #6b7280;
+	font-weight: 500;
+}
+
+/* View Button */
+.sm-view-btn {
+	padding: var(--spacing-1) var(--spacing-4);
+	border: 2px solid var(--color-brand-400);
+	border-radius: var(--rounded-full);
+	background: var(--color-brand-400);
+	color: white;
+	font-size: var(--text-sm);
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+
+.sm-view-btn:hover {
+	background: var(--color-brand-600);
+	border-color: var(--color-brand-600);
+}
+
+.sm-view-btn:active {
+	transform: translateY(1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.sm-grid {
+		grid-template-columns: 1fr;
+	}
+}
