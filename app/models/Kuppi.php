@@ -3,7 +3,7 @@ class KuppiModel {
     use Model;
     protected $table = 'kuppi';
 
-    public function getKuppi($offset, $limit, $categories = []){
+    public function getKuppi($offset, $limit, $categories = [], $searchTerm = ''){
        $conditions = [
             ['m.host_id','IS', 'NOT NULL'],
             ['m.status', 'IN', ['Upcoming', 'In Progress']]
@@ -11,6 +11,14 @@ class KuppiModel {
 
         if (!empty($categories)) {
             $conditions[] = ['m.category_id', 'IN', $categories];
+        }
+        
+        if (!empty($searchTerm)) {
+            $conditions[] = ['m.topic', 'ILIKE', "%$searchTerm%", 'OR'];
+            $conditions[] = ['c.category_name', 'ILIKE', "%$searchTerm%", 'OR']; 
+            $conditions[] = ['h.f_name', 'ILIKE', "%$searchTerm%", 'OR'];
+            $conditions[] = ['h.l_name', 'ILIKE', "%$searchTerm%", 'OR']; 
+            $conditions[] = ['u.name', 'ILIKE', "%$searchTerm%", 'OR'];          
         }
     
         $join = [

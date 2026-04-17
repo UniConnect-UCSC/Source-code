@@ -809,11 +809,11 @@ class Kuppi extends Controller
             
         }
     }
-    private function fetchKuppis($offset, $limit, $categories = []){
+    private function fetchKuppis($offset, $limit, $categories = [], $searchTerm = ''){
         
         
         $kuppiModel = new KuppiModel();
-        $kuppies = $kuppiModel->getKuppi($offset, $limit, $categories) ?? [];
+        $kuppies = $kuppiModel->getKuppi($offset, $limit, $categories, $searchTerm) ?? [];
 
         foreach ($kuppies as $item){
             $item->host_name = $item->host_f_name." ".$item->host_l_name;
@@ -1062,7 +1062,8 @@ class Kuppi extends Controller
         switch ($data['scrollIdentifier']) {
             case 'getAllKuppies':
                 $categories = $data['context']['categories'] ?? [];
-                $response = $this->fetchKuppis($data['offset'], $data['limit'], $categories);
+                $searchTerm = trim((string)($data['context']['searchTerm'] ?? ''));
+                $response = $this->fetchKuppis($data['offset'], $data['limit'], $categories, $searchTerm);
                 echo json_encode($response);
                 break;
             case 'getMyHostKuppies':
