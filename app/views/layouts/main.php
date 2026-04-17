@@ -48,6 +48,10 @@
     <script src="/assets/js/post.js"></script>
     <script src="/assets/js/comment.js"></script>
 
+    <script src="/assets/js/settings.js"></script>
+
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
