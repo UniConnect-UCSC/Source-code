@@ -7,7 +7,7 @@ class UniversityRepresentative
 
     public function isRep($userId){
         $result = $this->first(['id' => $userId]);
-        return $result !== null;
+        return $result ? true : false;
     }
     
     public function getRepDetails($userId){

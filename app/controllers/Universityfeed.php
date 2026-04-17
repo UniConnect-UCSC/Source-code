@@ -16,17 +16,19 @@ class UniversityFeed extends Controller
             $isAnonymous = (isset($_POST['isAnonymous']) && ($_POST['isAnonymous'] === '1' || $_POST['isAnonymous'] === 'true')) ? 1 : 0;
 
             // handle media upload
-            $mediaURL = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
+            $mediaURL = uploadImageToCloudinary($_FILES['media'] ?? null, 'uniconnect_posts');
 
             try {
                 $postModel = new UniversityPost();
-                $insertId = $postModel->insert([
+                $insertdata = [
                     'user_id' => $_SESSION['user_id'],
                     'caption'   => $caption,
                     'is_anonymous' => $isAnonymous,
                     'media_url' => $mediaURL,
                     'university_id' => $_SESSION['user_universityID'],
-                ]);
+                ];
+                
+                $insertId = $postModel->insert( array_keys($insertdata), [array_values($insertdata)]);
 
                 echo json_encode([
                     'success' => true,
@@ -50,7 +52,7 @@ class UniversityFeed extends Controller
             $isAnonymous = isset($_POST['is_anonymous']) ? (int)$_POST['is_anonymous'] : 0;
 
             // Handle file upload if present
-            $mediaUrl = uploadImageToCloudinary($tmpPath, 'uniconnect_posts');
+            $mediaUrl = uploadImageToCloudinary($_FILES['media'] ?? null, 'uniconnect_posts');
 
 
             $updateData = [

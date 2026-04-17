@@ -79,7 +79,7 @@ class Kuppi extends Controller
             ];
 
             // Insert the new Kuppi session into the database
-            $insertedId = $kuppiModel->insert($data);
+            $insertedId = $kuppiModel->insert(array_keys($data), [array_values($data)]);
 
             if ($insertedId) {
                 echo "Kuppi session created successfully!";
@@ -111,7 +111,7 @@ class Kuppi extends Controller
                 'status' => 'Requested' // Initial status
             ];
 
-            $insertedId = $kuppiModel->insert($data);
+            $insertedId = $kuppiModel->insert(array_keys($data), [array_values($data)]);
 
             if ($insertedId) {
                 echo "Kuppi request submitted successfully!";

@@ -25,21 +25,85 @@ class EventModel
         return $this->first(['id' => $id]);
     }
 
+    public function getParticipantCount($eventId){
+        $event = $this->getEvent($eventId);
+        return $event ? $event->participant_count : null;
+    }
+
+    public function incrementParticipantCount($eventId, $incrementType = true) {
+        // Increment or decrement based on $incrementType 
+
+        $amount = $incrementType ? 1 : -1;
+        return $this->increment(id: $eventId, column: 'participant_count', amount: $amount);
+
+    }
     public function getEventUni($id){
         $event = $this->getEvent($id);
         return $event ? $event->university_id : null;
+    }
+
+    public function getEventTitle($id){
+        $event = $this->getEvent($id);
+        return $event ? $event->title : "";
     }
 
     public function getEventByUniversity($universityId){
         return $this->where(['university_id' => $universityId]);
     }
 
-    public function getEvents($limit, $offset, $categories = []){
+    public function getUpcomingEvents($limit, $offset, $categories = [], $searchTerm = '', $onlyFavorites = false, $filterType = "for-you"){
 
-        
+        $conditions = [
+            ['event_timestamp', '>=', date('Y-m-d H:i:s', time())],
+        ];
 
-        return $this->findAll(limit: $limit, offset: $offset);
+        if(!empty($searchTerm)){
+            $conditions[] = ['title', 'ILIKE', '%' . $searchTerm . '%'];
+        } 
 
+        $join = [];
+        $selected = [];
+
+        $favoritesJoinType = $onlyFavorites ? "INNER" : "LEFT";
+
+        $join = [
+            ["event_favorites", ["m.id = f.event_id", ["f.user_id", "=", $_SESSION["user_id"]]], $favoritesJoinType, "f"],
+            ["event_participations", ["m.id = p.event_id", ["p.user_id", "=", $_SESSION["user_id"]]], "LEFT", "p"]
+        ];
+
+        if($filterType === "my-university"){
+            $join[] = ["universities", ["m.university_id = u.id", ['u.id', '=', $_SESSION['user_universityID']]], "INNER", "u"];
+        } else {
+            $join[] = ["universities", "m.university_id = u.id", "INNER", "u"];
+        }
+
+        $selected = [
+            "m.*",
+            ["u.name", "university_name"],
+            ["CASE WHEN f.event_id IS NULL THEN 0 ELSE 1 END", "is_favorite"],
+            ["CASE WHEN p.event_id IS NULL THEN 0 ELSE 1 END", "is_participating"]
+        ];
+
+        // If categories provided, join the mapping table and filter by category_id (match ANY)
+        $groupBy = null;
+        if (!empty($categories)) {
+            $join[] = ["event_category_mapping", "m.id = ecm.event_id", "INNER", "ecm"];
+            $conditions[] = ['ecm.category_id', 'IN', $categories];
+            $groupBy = ['m.id', 'u.name', 'is_favorite', 'is_participating']; // Group by event to avoid duplicates
+        }
+
+        $tempData = $this->where(
+            conditions: $conditions,
+            limit: $limit,
+            offset: $offset,
+            orderBy: ['event_timestamp' => 'ASC'],
+            join: $join,
+            selected: $selected,
+            showDeleted: false,
+            groupBy: $groupBy
+        );
+
+        return $tempData;
     }
 
     public function createEvent($data){
@@ -50,7 +114,7 @@ class EventModel
             return false;
         }
 
-        return $this->insert($data);
+        return $this->insertAndFetch($data)->id;
     }
 
     public function getUniUpcomingEvents($universityId , $limit, $offset){
@@ -58,21 +122,33 @@ class EventModel
     }
 
     public function updateEvent($eventId, $data){
-        $requiredFields = ['updated_at'];        
 
-        if (!$this->validate($data, $requiredFields)) {
-            return false;
-        }
-
-        $id_column = 'id';
-        $id = $data[$id_column];
-        unset($data[$id_column]); // Remove id from data to prevent updating it
-
-        return $this->update($id, $data, $id_column);
+        $this->update($eventId, $data, 'id');
+        return true;
     }
 
-    public function deleteEvent($eventId){
-        return $this->delete($eventId, 'id');
+    public function deleteEvent($userId, $eventId){
+        return $this->delete([['id', '=', $eventId], ['posted_by', '=', $userId]], softDelete: false);
     }
 
+    public function getEventSuggestions($limit, $offset, $searchTerm){
+        $conditions = [
+            ['event_timestamp', '>=', date('Y-m-d H:i:s', time())],
+            ['title', 'ILIKE', '%' . $searchTerm . '%']
+        ];
+
+        $selected = [
+            "m.id",
+            "m.title"
+        ];
+
+        return $this->where(
+            conditions: $conditions,
+            limit: $limit,
+            offset: $offset,
+            orderBy: ['event_timestamp' => 'ASC'],
+            selected: $selected,
+            showDeleted: false
+        );
+    }
 }

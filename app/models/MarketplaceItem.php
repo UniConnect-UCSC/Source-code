@@ -27,7 +27,7 @@ class MarketplaceItem
     public function create($data)
     {
         $requiredFields = ['title', 'description', 'price', 'category_id', 'student_id', 'status'];
-        return $this->insert($data);
+        return $this->insert(array_keys($data), [array_values($data)]);
     }
 
     public function updateItem($data)

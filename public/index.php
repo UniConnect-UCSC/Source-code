@@ -15,6 +15,15 @@ session_start();
 require_once __DIR__ . '/../vendor/autoload.php';
 
 require '../app/core/init.php';
+
+// Singleton Notification service
+$notificationService = new NotificationService();
+
+if ($_ENV['INSTANT_NOTIFICATION'] == "true") {
+    $notificationService->enableInstantNotifications();
+    error_log("Instant notifications enabled");
+}
+
 handleAuth();
 
 // Load controllers
