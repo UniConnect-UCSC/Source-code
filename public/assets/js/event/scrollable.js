@@ -15,7 +15,7 @@ const repEventScroll = new InfinityScroll(
     document.getElementById('repEventsList'),
     repEventRenderer,
     0,
-    100
+    10
 );
 
 const categoryScroll = new InfinityScroll(

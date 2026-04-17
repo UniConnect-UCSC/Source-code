@@ -1,7 +1,7 @@
 <?php
 
 // $file should be passed the $_FILE['name'] associative array
-function uploadImageToCloudinary($file, $locationFolder): ?string
+function uploadImageToCloudinary($file, $locationFolder, $signed = false): ?string
 {
     if(empty($file)){
         error_log("No file uploaded by user " . ($_SESSION['user_id']));
@@ -14,14 +14,28 @@ function uploadImageToCloudinary($file, $locationFolder): ?string
     }
 
     $mediaStorageService = new CloudinaryMediaStorageService();
-    $uploadedUrl = $mediaStorageService->uploadMedia($file['tmp_name'], $locationFolder);
+    $uploadedKey = $signed 
+        ? $mediaStorageService->uploadSignedMedia($file['tmp_name'], $locationFolder)
+        : $mediaStorageService->uploadMedia($file['tmp_name'], $locationFolder);
 
-    if(!$uploadedUrl){
+    if(!$uploadedKey){
         error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
         return null;
     }
 
-    return $uploadedUrl;
+    return $uploadedKey;
+}
+
+function getCloudinarySignedURL($secretKey, $expireInSeconds = 600): ?string{
+    $mediaStorageService = new CloudinaryMediaStorageService();
+    $responseUrl = $mediaStorageService->getMediaSignedURL($secretKey, $expireInSeconds);
+
+    if(!$responseUrl){
+        error_log('Cloudinary get signed URL failed for key ' . $secretKey);
+        return null;
+    }
+
+    return $responseUrl;
 }
 
 
