@@ -112,7 +112,7 @@ class Kuppi extends Controller
                 'host_id' => $_SESSION['user_id'],
                 'category_id' => $category_id,
                 'university_id' => $_SESSION['user_universityID'],
-                'status' => 'In Progress',
+                'status' => 'Upcoming ',
                 'kuppi_url' => $link,
                 
             ];
@@ -304,7 +304,6 @@ class Kuppi extends Controller
             }
             $data = [
                 'is_reported' => true,
-                'status' => 'Reported'
             ];
             $rData = [
                 'kuppi_id' => $id,
