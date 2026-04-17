@@ -6,7 +6,7 @@ class KuppiModel {
     public function getKuppi($offset, $limit, $categories = []){
        $conditions = [
             ['m.host_id','IS', 'NOT NULL'],
-            ['m.status', 'IN', ['Upcoming', 'In Progress', 'Reported']]
+            ['m.status', 'IN', ['Upcoming', 'In Progress']]
         ];
 
         if (!empty($categories)) {

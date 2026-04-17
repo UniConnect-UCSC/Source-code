@@ -469,10 +469,29 @@
 
   class MyReportCard extends ModalKuppiCard {
     buildContentFields(content) {
-      super.buildContentFields(content);
+      
+  if (this.item.category) {
+    content.appendChild(el('p', 'post-category', this.item.category));
+  }
+  if (this.item.host_name) {
+    content.appendChild(el('p', 'post-host-name', this.item.host_name));
+  }
+  if (this.item.kuppi_date_time) {
+    content.appendChild(el('p', 'post-datetime', this.item.kuppi_date_time));
+  }
+  if (this.item.platform) {
+    content.appendChild(el('p', 'post-platform', 'Platform: ' + this.item.platform));
+  }
 
       var count = Number(this.item.report_count || 0);
       content.appendChild(el('p', 'post-participants', 'Reports: ' + count));
+
+      var decision = this.item.decision;
+      if (decision !== null && decision !== undefined && String(decision).trim() !== '') {
+        content.appendChild(el('p', 'post-status', decision));
+      } else if (this.item.report_status) {
+        content.appendChild(el('p', 'post-status', this.item.report_status));
+      }
     }
 
     buildActions() {
@@ -494,6 +513,16 @@
             });
         };
         actions.appendChild(editBtn);
+
+        
+  var dltBtn = el('button', 'btn btn-danger', 'Delete');
+  dltBtn.onclick = function (e) {
+    e.stopPropagation();
+    if (!confirm('Delete this kuppi session?')) return;
+    window.location.href = '/kuppi/delete_kuppi/' + item.id;
+  };
+  actions.appendChild(dltBtn);
+
 
         return actions ;
     }

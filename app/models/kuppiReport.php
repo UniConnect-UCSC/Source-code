@@ -24,6 +24,7 @@ class KuppiReportModel {
         ];
 
         $selected = [
+            "m.*",
             "k.*",
             ["h.f_name" , "host_f_name"],
             ["r.f_name" , "requester_f_name"],
@@ -36,6 +37,7 @@ class KuppiReportModel {
         ];
 
         $groupBy = [
+        "m.id",
         "k.id",
         "h.f_name",
         "r.f_name",
@@ -61,5 +63,30 @@ class KuppiReportModel {
         }
 
         return $data;
+    }
+   /*
+    * report_status ENUMS : Pending , Resolved
+    * decision ENUMS : "Kuppi Approved" , "Kuppi Rejected"
+    * if decision made by admin : report_status -> Resolved , Decision -> Kuppi Rejected or Kuppi Approved
+    * if kuppi rejected should change the kuppi Status to Reported
+    *
+   */
+    public function getAllKuppiReports ($offset = 0, $limit = null) {
+    $conditions = [
+        ['m.kuppi_id', 'IS', 'NOT NULL']
+    ];
+
+    $orderBy = [
+        'm.created_at' => 'DESC'
+    ];
+
+    $data = $this->where(
+        conditions: $conditions,
+        orderBy: $orderBy,
+        offset: $offset,
+        limit: $limit 
+    );
+
+    return is_array($data) ? $data : [];
     }
 }
