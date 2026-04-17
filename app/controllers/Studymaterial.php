@@ -69,6 +69,17 @@ class StudyMaterial extends Controller
 		return $ownerId === $userId;
 	}
 
+	private function incrementSMCountForVolunteer($userId){
+		require_once(__DIR__ . "/../models/studyMaterialVolunteer.php");
+		$smVolunteerModel = new SMVolunteerModel();
+		return $smVolunteerModel->incrementSMCount($userId, false);
+	}
+	private function decrementSMCountForVolunteer($userId){
+		require_once(__DIR__ . "/../models/studyMaterialVolunteer.php");
+		$smVolunteerModel = new SMVolunteerModel();
+		return $smVolunteerModel->incrementSMCount($userId, true);
+	}
+
 	private function verifyFileType($file, $expectedType){
 		if (empty($file) || $file['error'] !== UPLOAD_ERR_OK) {
 			return false;
@@ -162,12 +173,16 @@ class StudyMaterial extends Controller
 				$this->createVolunteerRecord($_SESSION['user_id']);
 			}
 
+			// Increment the total material count as this isn't a concurrent update
+			$this->incrementSMCountForVolunteer($_SESSION['user_id']);
+
 			$studyMaterialModel = new StudyMaterialModel();
 			$response = $studyMaterialModel->createSM($data);
 
 			if(!$response){
 				http_response_code(500);
 				echo json_encode(['error' => 'Failed to create study material']);
+				$this->decrementSMCountForVolunteer($_SESSION['user_id']);
 				return;
 			}
 
@@ -248,12 +263,15 @@ class StudyMaterial extends Controller
 				return;
 			}
 
+			$this->decrementSMCountForVolunteer($_SESSION['user_id']);
+
 			$studyMaterialModel = new StudyMaterialModel();
 			$response = $studyMaterialModel->deleteSM($id);
 
 			if(!$response){
 				http_response_code(500);
 				echo json_encode(['error' => 'Failed to delete study material']);
+				$this->incrementSMCountForVolunteer($_SESSION['user_id']);
 				return;
 			}
 
