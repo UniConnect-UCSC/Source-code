@@ -1,46 +1,52 @@
 <?php
+require_once(__DIR__ . "/../../models/Friendship.php");
 
-$friends = [
-    (object)[
-        'name' => 'Alice Johnson',
-        'profile_picture' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fG1hbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=900'
-    ],
-    (object)[
-        'name' => 'Bob Smith',
-        'profile_picture' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fG1hbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=900'
-    ],
-    (object)[
-        'name' => 'Charlie Brown',
-        'profile_picture' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fG1hbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=900'
-    ],
-    (object)[
-        'name' => 'Diana Prince',
-        'profile_picture' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fG1hbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=900'
-    ],
-    (object)[
-        'name' => 'Ethan Hunt',
-        'profile_picture' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fG1hbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=900'
-    ],
-    (object)[
-        'name' => 'Fiona Gallagher',
-        'profile_picture' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fG1hbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=900'
-    ],
-];
+$profileUser = $profileUser ?? null;
+$targetUserId = $profileUser->id ?? ($_SESSION['user_id'] ?? null);
+
+$friends = [];
+if ($targetUserId) {
+    $friendshipModel = new Friendship();
+    $allFriends = $friendshipModel->getFriends($targetUserId) ?: [];
+    $friends = array_slice($allFriends, 0, 6);
+}
 ?>
+
 <div class="friends-widget">
     <div>
         <h2>Friends</h2>
     </div>
 
-    <div class="friends-grid">
-        <?php foreach ($friends as $friend): ?>
-        <a class="friend" href="/">
-            <img src="<?= htmlspecialchars($friend->profile_picture) ?>"
-                alt="<?= htmlspecialchars($friend->name) ?>'s profile picture" />
-            <p><?= htmlspecialchars($friend->name) ?></p>
-        </a>
-        <?php endforeach; ?>
-    </div>
+    <?php if (empty($friends)): ?>
+        <p class="no-friends-message">No friends yet</p>
+    <?php else: ?>
+        <div class="friends-grid">
+            <?php foreach ($friends as $friendship): ?>
+                <?php $friend = $friendship->friend_details ?? null; ?>
+                <?php if (!$friend) continue; ?>
+
+                <?php
+                $friendId = $friend['id'] ?? '';
+                $firstName = $friend['firstname'] ?? '';
+                $lastName = $friend['lastname'] ?? '';
+                $fullName = trim($firstName . ' ' . $lastName);
+                $profilePicture = $friend['profile_picture'] ?? '';
+                ?>
+
+                <a class="friend" href="/users/<?= htmlspecialchars($friendId) ?>">
+                    <?php if (!empty($profilePicture)): ?>
+                        <img src="<?= htmlspecialchars($profilePicture) ?>"
+                            alt="<?= htmlspecialchars($fullName ?: 'Friend') ?> profile picture" />
+                    <?php else: ?>
+                        <div class="profile">
+                            <?= htmlspecialchars(strtoupper(substr($firstName, 0, 1) . substr($lastName, 0, 1))) ?>
+                        </div>
+                    <?php endif; ?>
+                    <p><?= htmlspecialchars($fullName ?: 'Unknown User') ?></p>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 
     <a class="see-all-friends" href="/friends">
         See All
