@@ -14,6 +14,7 @@ class PostComment
             pc.student_id,
             pc.comment_text,
             pc.commented_at,
+            u.profile_picture,
             CONCAT(u.f_name, ' ', u.l_name) AS author
         FROM post_comments pc
         INNER JOIN users u ON u.id = pc.student_id
