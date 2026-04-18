@@ -373,10 +373,10 @@ class Boardings extends Controller
                 $columnMap = $this->getBoardingRoomImageColumnMap($imageModel);
 
                 foreach ($uploadedImageUrls as $uploadedImageUrl) {
-                    $imageModel->insert([
-                        $columnMap['room'] => $roomId->id,
-                        $columnMap['image'] => $uploadedImageUrl
-                    ]);
+                    $imageModel->insert(
+                    [$columnMap['room'], $columnMap['image']], 
+                    [$roomId->id, $uploadedImageUrl]
+                    );
                 }
 
                 echo json_encode([
@@ -566,17 +566,17 @@ class Boardings extends Controller
                     foreach ($removeImageIds as $imageId) {
                         $imageRow = $imageModel->first(['id' => $imageId]);
                         if ($imageRow && (($imageRow->{$columnMap['room']} ?? null) === $roomId)) {
-                            $imageModel->delete($imageId, 'id');
+                            $imageModel->delete([['id', '=', $imageId]]);
                             $imagesChanged = true;
                         }
                     }
 
                     if (!empty($uploadedImageUrls)) {
                     foreach ($uploadedImageUrls as $uploadedImageUrl) {
-                        $imageModel->insert([
-                            $columnMap['room'] => $roomId,
-                            $columnMap['image'] => $uploadedImageUrl
-                        ]);
+                        $imageModel->insert(
+                            [$columnMap['room'], $columnMap['image']],
+                            [$roomId, $uploadedImageUrl]
+                        );
                     }
                         $imagesChanged = true;
                     }
@@ -781,7 +781,7 @@ class Boardings extends Controller
                 exit;
             }
 
-            $result = $roomModel->delete($roomId, 'id');
+            $result = $roomModel->delete([['id', '=', $roomId]]);
 
             if ($result) {
                 echo json_encode(['success' => true, 'message' => 'Listing deleted successfully']);

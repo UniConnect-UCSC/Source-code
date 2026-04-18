@@ -55,7 +55,7 @@ class BoardingRoom
     public function create($data)
     {
         $requiredFields = ['student_id', 'rent', 'occupancy', 'status', 'location_id', 'description', 'contact_number'];
-        return $this->insert($data);
+        return $this->insert(array_keys($data), array_values($data));
     }
 
     public function updateRoom($data)

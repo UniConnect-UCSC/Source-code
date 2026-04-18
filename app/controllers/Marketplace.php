@@ -185,10 +185,10 @@ class Marketplace extends Controller
 
                 // Optional: also save into marketplace_item_images table (keeps existing design)
                 foreach ($imageUrls as $imageUrl) {
-                    $imageModel->insert([
-                        'image_url' => $imageUrl,
-                        'marketplace_item_id' => $item->id
-                    ]);
+                    $imageModel->insert(
+                        ['image_url', 'marketplace_item_id'],
+                        [$imageUrl,$item->id]
+                    );
                 }
 
                 echo json_encode([
@@ -325,10 +325,10 @@ class Marketplace extends Controller
                     $newImageUrls = $this->uploadMarketplaceImages($uploadedFiles);
 
                     foreach ($newImageUrls as $newImageUrl) {
-                        $imageModel->insert([
-                            'marketplace_item_id' => $itemId,
-                            'image_url' => $newImageUrl,
-                        ]);
+                        $imageModel->insert(
+                            ['marketplace_item_id', 'image_url'],
+                            [$itemId, $newImageUrl]
+                        );
                     }
 
                 }
@@ -424,10 +424,10 @@ class Marketplace extends Controller
 
             // delete related images first
             if (method_exists($imageModel, 'delete')) {
-                $imageModel->delete($itemId, 'marketplace_item_id');
+                $imageModel->delete([['marketplace_item_id', '=', $itemId]]);
             }
 
-            $result = $itemModel->delete($itemId, 'id');
+            $result = $itemModel->delete([['id', '=', $itemId]]);
 
             if ($result) {
                 echo json_encode(['success' => true, 'message' => 'Item deleted successfully']);
