@@ -23,8 +23,8 @@
 
 .post-author img {
   aspect-ratio: 1 / 1;
-  width: 100%;
-  object-fit: contain;
+  width: 50px;
+  object-fit: cover;
 }
 
 .post-author div p {
@@ -63,7 +63,9 @@
   /* animation properties */
   transform: translateY(-8px);
   pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 
 /* visible state */
@@ -111,7 +113,7 @@
   justify-content: space-around;
 }
 
-.post-actions div {
+.post-actions button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -124,7 +126,7 @@
   padding: var(--spacing-2) var(--spacing-4);
 }
 
-.post-actions div:hover {
+.post-actions button:hover {
   background-color: var(--color-brand-100);
 }
 
@@ -182,4 +184,88 @@
   width: 100%;
   max-height: 150px;
   object-fit: contain;
+}
+
+.like-btn.liked svg {
+  fill: var(--color-brand-300) !important;
+  stroke: currentColor;
+}
+
+/* COmments panel */
+.comment-panel {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 380px;
+  height: 100vh;
+  background: var(--color-primary-white);
+  border-left: 0.5px solid var(--color-primary-gray);
+  z-index: 1000;
+  transition: right 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-panel.open {
+  right: 0;
+}
+
+.comment-panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  display: none;
+}
+
+.comment-panel-overlay.open {
+  display: block;
+}
+
+.comment-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 0.5px solid var(--color-primary-gray);
+  font-weight: 500;
+}
+
+.comment-panel-header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-brand-600);
+  padding: 4px;
+}
+
+.comment-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+}
+
+.comment-panel-footer {
+  padding: 1rem 1.25rem;
+  border-top: 0.5px solid var(--color-primary-gray);
+  display: flex;
+  gap: 8px;
+}
+
+.comment-panel-footer textarea {
+  flex: 1;
+  resize: none;
+  border: 0.5px solid var(--color-primary-gray);
+  border-radius: var(--rounded-2xl);
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.comment-panel-footer button {
+  padding: 8px 16px;
+  border-radius: var(--border-radius-md);
+  font-size: 14px;
+  cursor: pointer;
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
 }

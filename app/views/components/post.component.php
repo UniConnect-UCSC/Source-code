@@ -11,24 +11,20 @@ if (!isset($postType)) {
             <!-- User Profile Picture -->
             <div class="profile-section">
                 <?php
-                $userEmail = $_SESSION['user_email'] ?? "";
-                $userFName = $_SESSION['user_fName'] ?? "";
-                $userLName = $_SESSION['user_lName'] ?? "";
-                $profilePic = $_SESSION['user_profilePicture'] ?? null;
                 ?>
-                <?php if ($profilePic): ?>
-                <a href="/profile">
-                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-                </a>
+                <?php if ($profilePic && !$isAnonymous): ?>
+                    <a href="/profile">
+                        <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                    </a>
                 <?php else: ?>
-                <?php
+                    <?php
                     $fNameInitial = strtoupper($userFName[0] ?? '');
                     $lNameInitial = strtoupper($userLName[0] ?? '');
                     ?>
-                <a class="profile" href="/profile">
-                    <!-- //Is isAnonymous do not display initials -->
-                    <?= htmlspecialchars($isAnonymous ? 'An' : $fNameInitial) ?><?= htmlspecialchars($isAnonymous ? '' : $lNameInitial) ?>
-                </a>
+                    <a class="profile" href="/profile">
+                        <!-- //Is isAnonymous do not display initials -->
+                        <?= htmlspecialchars($isAnonymous ? 'An' : $fNameInitial) ?><?= htmlspecialchars($isAnonymous ? '' : $lNameInitial) ?>
+                    </a>
                 <?php endif; ?>
             </div>
 
@@ -46,16 +42,16 @@ if (!isset($postType)) {
 
                 <!-- Optionally render if the post belongs to the user -->
                 <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $authorId): ?>
-                <div onclick="openEditPostModal('<?= htmlspecialchars($mediaUrl ?? '') ?>')">Edit Post</div>
-                <div class="delete-post-btn" onclick="deletePost(this, event, '<?= htmlspecialchars($postType) ?>')">
-                    Delete Post</div>
+                    <div onclick="openEditPostModal('<?= htmlspecialchars($mediaUrl ?? '') ?>')">Edit Post</div>
+                    <div class="delete-post-btn" onclick="deletePost(this, event, '<?= htmlspecialchars($postType) ?>')">
+                        Delete Post</div>
                 <?php endif; ?>
 
                 <div>Copy URL</div>
 
                 <!-- Optionally Render if post doesnt belong to user -->
                 <?php if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != $authorId): ?>
-                <div>Report Post</div>
+                    <div>Report Post</div>
                 <?php endif; ?>
             </div>
         </div>
@@ -65,24 +61,35 @@ if (!isset($postType)) {
     </div>
 
     <?php if (isset($mediaUrl) && !empty($mediaUrl)): ?>
-    <div class="post-image">
-        <img src="<?= htmlspecialchars($mediaUrl) ?>" alt="Post Media">
-    </div>
+        <div class="post-image">
+            <img src="<?= htmlspecialchars($mediaUrl) ?>" alt="Post Media">
+        </div>
     <?php endif; ?>
 
     <div class="post-interactions">
-        <div><i data-lucide="thumbs-up"></i> 4</div>
+        <!-- <div class="reaction-count" data-post-id="<?= htmlspecialchars($postId) ?>">
+            <i data-lucide="thumbs-up"></i> <?= htmlspecialchars($reactionCount) ?>
+        </div> -->
         <div class="interaction-counts">
-            <div>5 Comments</div>
-            <i data-lucide="dot"></i>
-            <div>43 Reposts</div>
+            <!-- <div>5 Comments</div> -->
+
+
+            <!-- <i data-lucide="dot"></i>
+            <div>43 Reposts</div> -->
         </div>
     </div>
 
     <div class="post-actions">
-        <div> <i data-lucide="thumbs-up"></i>Like</div>
-        <div><i data-lucide="message-circle"></i>Comment</div>
-        <div><i data-lucide="repeat-2"></i>Repost</div>
+        <button class="like-btn <?= $userHasReacted ? 'liked' : '' ?>" data-post-id="<?= htmlspecialchars($postId) ?>"
+            onclick="reactOnPost(<?= htmlspecialchars($postId) ?>, '<?= htmlspecialchars($postType) ?>', this)">
+            <i data-lucide="thumbs-up"></i> <?= htmlspecialchars($reactionCount) ?>
+        </button>
+
+        <button onclick="openCommentPanel(<?= htmlspecialchars($postId) ?>)">
+            <i data-lucide="message-circle"></i> Comment
+        </button>
+
+
     </div>
 </div>
 
@@ -98,13 +105,13 @@ if (!isset($postType)) {
         <div class="edit-modal-header">
             <div>
                 <?php if ($profilePic): ?>
-                <a href="/profile">
-                    <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-                </a>
+                    <a href="/profile">
+                        <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
+                    </a>
                 <?php else: ?>
-                <a class="profile" href="/profile">
-                    <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-                </a>
+                    <a class="profile" href="/profile">
+                        <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+                    </a>
                 <?php endif; ?>
             </div>
 

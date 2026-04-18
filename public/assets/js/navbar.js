@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-ocument.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   const input =
     document.querySelector(".search-wrapper .search") ||
     document.querySelector(".search");

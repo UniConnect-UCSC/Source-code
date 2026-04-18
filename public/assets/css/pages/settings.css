@@ -1,0 +1,125 @@
+.settings-layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--spacing-4);
+  margin: var(--spacing-24) var(--spacing-4);
+}
+
+.settings-content {
+  grid-column: 4 / 13;
+  background: var(--color-primary-white);
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+}
+
+.settings-content h2 {
+  margin-bottom: var(--spacing-4);
+}
+
+.settings-actions {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+.settings-form [hidden] {
+  display: none !important;
+}
+
+.settings-alert {
+  margin-bottom: var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--rounded-lg);
+  font-size: var(--text-sm);
+}
+
+.settings-alert.success {
+  background: #eaf9ef;
+  color: #1f7a3f;
+  border: 1px solid #b8e7c6;
+}
+
+.settings-alert.error {
+  background: #fdecec;
+  color: #b42318;
+  border: 1px solid #f7c4c0;
+}
+
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  align-items: flex-start;
+}
+
+.settings-card {
+  width: 50%;
+  border: 1px solid var(--color-primary-gray);
+  border-radius: var(--rounded-lg);
+  padding: var(--spacing-4);
+  background: var(--color-primary-white);
+}
+
+.settings-card h3 {
+  margin-bottom: var(--spacing-3);
+}
+
+.settings-card form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.settings-card input,
+.settings-card textarea {
+  border: 1px solid var(--color-primary-gray);
+  border-radius: var(--rounded-md);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--color-secondary-white);
+  font-size: var(--text-sm);
+}
+
+.settings-card button {
+  margin-top: var(--spacing-1);
+  border: none;
+  border-radius: var(--rounded-md);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--color-brand-600);
+  color: var(--color-primary-white);
+  cursor: pointer;
+  width: fit-content;
+  align-self: flex-start;
+  font-size: var(--text-sm);
+}
+
+.current-avatar {
+  margin-bottom: var(--spacing-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.current-avatar .profile-image {
+  width: 50px;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: var(--rounded-full);
+}
+
+.current-avatar .profile {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  aspect-ratio: 1/1;
+  border-radius: var(--rounded-full);
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+  font-size: var(--text-sm);
+}
+
+.settings-content + .settings-content {
+  margin-top: var(--spacing-4);
+}
