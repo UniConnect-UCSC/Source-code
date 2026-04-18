@@ -23,8 +23,8 @@
 
 .post-author img {
   aspect-ratio: 1 / 1;
-  width: 100%;
-  object-fit: contain;
+  width: 50px;
+  object-fit: cover;
 }
 
 .post-author div p {
@@ -259,7 +259,6 @@
   border-radius: var(--rounded-2xl);
   padding: 8px 12px;
   font-size: 14px;
-  rows: 2;
 }
 
 .comment-panel-footer button {

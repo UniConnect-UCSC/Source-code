@@ -11,7 +11,6 @@
         field.dataset.initialValue = "";
         return;
       }
-
       field.dataset.initialValue = field.value;
     });
   }
@@ -82,6 +81,14 @@
     setActionButtons(form, "view");
   }
 
+  function updateSnapshot(form) {
+    getEditableFields(form).forEach((field) => {
+      if (field.type !== "file") {
+        field.dataset.initialValue = field.value;
+      }
+    });
+  }
+
   async function submitSettingsForm(form) {
     const action = form.dataset.action;
     if (!action) {
@@ -123,6 +130,12 @@
     alertBox.textContent = message;
     alertBox.classList.remove("success", "error");
     alertBox.classList.add(type === "success" ? "success" : "error");
+
+    // Auto hide after 4 seconds
+    setTimeout(() => {
+      alertBox.textContent = "";
+      alertBox.classList.remove("success", "error");
+    }, 4000);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -149,9 +162,10 @@
         if (saveBtn) saveBtn.disabled = true;
 
         try {
-          await submitSettingsForm(form);
+          const response = await submitSettingsForm(form);
+          updateSnapshot(form); // Update snapshot so cancel doesn't revert to old value
           cancelEditMode(form);
-          showFlash("Updated successfully.", "success");
+          showFlash(response.message || "Updated successfully.", "success");
         } catch (error) {
           showFlash(error.message || "Update failed.", "error");
           console.error(error);

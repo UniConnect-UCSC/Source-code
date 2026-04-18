@@ -5,6 +5,8 @@ class Settings extends Controller
 {
     public function index()
     {
+        ob_start();
+
         $userId = $_SESSION['user_id'] ?? null;
         if (!$userId) {
             redirect('/login');
@@ -14,7 +16,20 @@ class Settings extends Controller
         $flash = ['type' => null, 'message' => null];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $action = $_POST['action'] ?? '';
+            header('Content-Type: application/json');
+
+            $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+
+            if (str_contains($contentType, 'application/json')) {
+                $body = json_decode(file_get_contents('php://input'), true) ?? [];
+                $action = $body['action'] ?? '';
+                $_POST = array_merge($_POST, $body);
+            } else {
+                $action = $_POST['action'] ?? '';
+            }
+
+            error_log("Action: " . $action);
+            error_log("POST data: " . print_r($_POST, true));
 
             try {
                 switch ($action) {
@@ -87,13 +102,21 @@ class Settings extends Controller
                         break;
 
                     default:
-                        throw new Exception('Invalid settings action.');
+                        throw new Exception('Invalid settings action: ' . $action);
                 }
+
+                ob_end_clean();
+                echo json_encode(['success' => true, 'message' => $flash['message']]);
+                exit;
             } catch (Exception $e) {
-                $flash = ['type' => 'error', 'message' => $e->getMessage()];
+                ob_end_clean();
+                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+                exit;
             }
         }
 
+        // GET - render the view
+        ob_end_clean();
         $user = $userModel->first(['id' => $userId]);
 
         $this->view('settings', [

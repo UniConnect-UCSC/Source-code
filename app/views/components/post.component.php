@@ -12,7 +12,7 @@ if (!isset($postType)) {
             <div class="profile-section">
                 <?php
                 ?>
-                <?php if ($profilePic): ?>
+                <?php if ($profilePic && !$isAnonymous): ?>
                     <a href="/profile">
                         <img class="profile-image" src="<?= htmlspecialchars($profilePic) ?>">
                     </a>
@@ -71,7 +71,9 @@ if (!isset($postType)) {
             <i data-lucide="thumbs-up"></i> <?= htmlspecialchars($reactionCount) ?>
         </div> -->
         <div class="interaction-counts">
-            <div>5 Comments</div>
+            <!-- <div>5 Comments</div> -->
+
+
             <!-- <i data-lucide="dot"></i>
             <div>43 Reposts</div> -->
         </div>

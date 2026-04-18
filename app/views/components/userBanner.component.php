@@ -19,17 +19,17 @@
     <div class="profile-section">
         <div class="user-profile-picture">
             <?php if ($profilePic): ?>
-            <a href="/profile">
+
                 <img class="banner-profile-image" src="<?= htmlspecialchars($profilePic) ?>">
-            </a>
+
             <?php else: ?>
-            <?php
+                <?php
                 $fNameInitial = strtoupper($userFName[0] ?? '');
                 $lNameInitial = strtoupper($userLName[0] ?? '');
                 ?>
-            <a class="banner-profile" href="/profile">
-                <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
-            </a>
+                <a class="banner-profile" href="/profile">
+                    <?= htmlspecialchars($fNameInitial) ?><?= htmlspecialchars($lNameInitial) ?>
+                </a>
             <?php endif; ?>
         </div>
 
@@ -37,7 +37,7 @@
             <h2 class=""><?= htmlspecialchars($userFName . ' ' . $userLName) ?></h2>
             <!-- //if bio exists -->
             <?php if (!empty($profileUser->bio)): ?>
-            <p class="user-bio"><?= htmlspecialchars($profileUser->bio) ?></p>
+                <p class="user-bio"><?= htmlspecialchars($profileUser->bio) ?></p>
             <?php endif; ?>
 
             <div class="user-university-info">
