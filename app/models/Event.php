@@ -107,7 +107,7 @@ class EventModel
     }
 
     public function createEvent($data){
-        $requiredFields = ['university_id','posted_by' ,'title', 'description', 'event_timestamp', 'held_at'];
+        $requiredFields = ['university_id','title', 'description', 'event_timestamp', 'held_at'];
 
         if (!$this->validate($data, $requiredFields)) {
             error_log("Validation failed");
@@ -127,8 +127,8 @@ class EventModel
         return true;
     }
 
-    public function deleteEvent($userId, $eventId){
-        return $this->delete([['id', '=', $eventId], ['posted_by', '=', $userId]], softDelete: false);
+    public function deleteEvent($eventId){
+        return $this->delete([['id', '=', $eventId]], softDelete: false);
     }
 
     public function getEventSuggestions($limit, $offset, $searchTerm){
