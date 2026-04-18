@@ -82,17 +82,18 @@ function deleteItem(btn, event) {
   if (confirm("Are you sure you want to delete this item?")) {
     console.log("Confirmed delete, sending request...");
 
-    fetch(`/marketplace/deleteItem/${itemId}`, {
+    const formData = new FormData();
+    formData.append("delete_item_id", itemId);
+
+    fetch(`/marketplace/deleteItem`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      body: formData,
+      credentials: "same-origin",
     })
-      .then((res) => {
-        console.log("Response status:", res.status);
-        if (!res.ok) throw new Error("Failed to delete item");
-        console.log("Item deleted successfully, reloading...");
-        window.location.reload();
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) window.location.reload();
+        else alert("Error: " + (data.message || "Failed to delete item"));
       })
       .catch((err) => {
         console.error("Delete error:", err);
@@ -136,6 +137,36 @@ document.addEventListener("click", function (event) {
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Marketplace card JS loaded");
 
+  const interactiveSelector =
+    "a, button, input, textarea, select, label, .my-items-options, .my-items-options-dropdown, .edit-item-btn, .delete-item-btn, .marketplace-save-btn, .marketplace-contact-seller";
+
+  const marketplaceCards = document.querySelectorAll(".marketplace-item-card");
+  marketplaceCards.forEach((card) => {
+    const detailsUrl = card.dataset.detailsUrl || `/marketplace/details/${card.dataset.itemId}`;
+
+    const navigateToDetails = () => {
+      if (!detailsUrl) return;
+      window.location.href = detailsUrl;
+    };
+
+    card.addEventListener("click", function (e) {
+      if (e.target.closest(interactiveSelector)) {
+        return;
+      }
+      navigateToDetails();
+    });
+
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        if (e.target.closest(interactiveSelector)) {
+          return;
+        }
+        e.preventDefault();
+        navigateToDetails();
+      }
+    });
+  });
+
   const deleteButtons = document.querySelectorAll(".delete-item-btn");
   console.log("Found delete buttons:", deleteButtons.length);
 
@@ -158,7 +189,10 @@ document.addEventListener("DOMContentLoaded", function () {
       e.stopPropagation();
       const itemId = this.dataset.itemId;
       console.log("Edit item:", itemId);
+      window.location.href = `/marketplace/editItem/${itemId}`;
       // TODO: Implement edit functionality
     });
   });
+
+  
 });
