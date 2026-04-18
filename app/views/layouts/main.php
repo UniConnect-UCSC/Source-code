@@ -50,7 +50,8 @@
 
     <script src="/assets/js/settings.js"></script>
 
-
+    <!-- Admin Panel -->
+    <script src="/assets/js/admin/admindashboard.js"></script>
 
 
     <script>

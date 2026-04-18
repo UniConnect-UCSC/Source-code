@@ -104,4 +104,11 @@ class User
             'password' => $hashedPassword,
         ]);
     }
+
+    public function getTotalUsers()
+    {
+        return (int) $this->count([]);
+    }
+
+    public function getTotalActiveUsers() {}
 }

@@ -53,4 +53,9 @@ class PostComment
             ['student_id', '=', $userId]
         ]);
     }
+
+    public function getTotalComments()
+    {
+        return (int) $this->count([]);
+    }
 }

@@ -28,23 +28,22 @@ class Ajax {
         const separator = urlPath.includes("?") ? "&" : "?";
         return urlPath + separator + queryString;
       }
+      return urlPath;
     } else if (method === "POST") {
       return urlPath;
     } else {
       throw new Error(
-        `Ajax.#FinalUrl: Method ${method} is not supported for URL building.`
+        `Ajax.#FinalUrl: Method ${method} is not supported for URL building.`,
       );
     }
   }
 
   static #buildHeader(passedHeaders) {
-
     // passed headers override defaults
     return { ...Ajax.defaults.headers, ...passedHeaders };
   }
 
   static #buildBody(method, data) {
-
     if (data instanceof FormData) {
       return data;
     }
@@ -62,7 +61,7 @@ class Ajax {
     passedHeaders = {},
     timeout = 0,
     credentials,
-    abortSignal = null
+    abortSignal = null,
   ) {
     const finalHeaders = this.#buildHeader(passedHeaders); // Overrides defaults if provided
     const finalTimeout =
@@ -84,13 +83,15 @@ class Ajax {
     if (finalTimeout > 0) {
       timerId = setTimeout(
         () => controller.abort(`Timeout after ${finalTimeout}ms`),
-        finalTimeout
+        finalTimeout,
       );
     }
 
     // Listen to external abort signal if provided
     if (abortSignal) {
-      abortSignal.addEventListener('abort', () => controller.abort(abortSignal.reason));
+      abortSignal.addEventListener("abort", () =>
+        controller.abort(abortSignal.reason),
+      );
     }
 
     let response;
@@ -104,12 +105,12 @@ class Ajax {
       });
     } catch (err) {
       if (timerId) clearTimeout(timerId);
-      
+
       // Check if request was aborted
       if (controller.signal.aborted) {
         throw new AjaxError(`user_aborted Reason: ${controller.signal.reason}`);
       }
-      
+
       // Network error
       throw new AjaxError(err?.message || "Network error");
     }
@@ -120,7 +121,9 @@ class Ajax {
     let parsed;
 
     if (!contentType.includes("application/json")) {
-      throw new AjaxError("Unsupported content type. Expected application/json");
+      throw new AjaxError(
+        "Unsupported content type. Expected application/json",
+      );
     }
 
     try {
@@ -144,53 +147,71 @@ class Ajax {
 
   // Convenience methods
   static jsonPost(urlPath, data, abortSignal = null) {
-    return this.request("POST", urlPath, data, { "Content-Type": "application/json" }, undefined, undefined, abortSignal);
+    return this.request(
+      "POST",
+      urlPath,
+      data,
+      { "Content-Type": "application/json" },
+      undefined,
+      undefined,
+      abortSignal,
+    );
   }
 
-  static formDataPost(urlPath, formData, abortSignal = null){
-    return this.request("POST", urlPath, formData, undefined, undefined, undefined, abortSignal);
+  static formDataPost(urlPath, formData, abortSignal = null) {
+    return this.request(
+      "POST",
+      urlPath,
+      formData,
+      undefined,
+      undefined,
+      undefined,
+      abortSignal,
+    );
   }
 
   static fireAndForget(urlPath, data) {
     var length = 0;
     var selectedHeader = 0;
     const allHeaders = [
-      'text/plain',
-      'application/json',
-      'multipart/form-data'
-    ]
+      "text/plain",
+      "application/json",
+      "multipart/form-data",
+    ];
 
+    switch (typeof data) {
+      case "number":
+      case "boolean":
+        data = data.toString();
 
-    switch(typeof data){
-      case 'number':
-      case 'boolean':
-          data = data.toString();
+      case "string":
+        length = data.length;
+        selectedHeader = 0;
+        break;
 
-      case 'string':
-          length = data.length;
-          selectedHeader = 0;
-          break;
-
-      case 'object':
-          data = JSON.stringify(data);
-          length = data.length;
-          selectedHeader = 1;
-          break;
+      case "object":
+        data = JSON.stringify(data);
+        length = data.length;
+        selectedHeader = 1;
+        break;
 
       default:
-        console.warn("Ajax.fireAndForget: Data is not a string, number, boolean, or object. No action taken.");
+        console.warn(
+          "Ajax.fireAndForget: Data is not a string, number, boolean, or object. No action taken.",
+        );
         return;
     }
 
-    if(length > 64000) {console.warn("Ajax.fireAndForget: Data size exceeds 64KB after conversion, request may be dropped.");}
+    if (length > 64000) {
+      console.warn(
+        "Ajax.fireAndForget: Data size exceeds 64KB after conversion, request may be dropped.",
+      );
+    }
 
     const blobData = new Blob([data], { type: allHeaders[selectedHeader] });
     navigator.sendBeacon(urlPath, blobData);
   }
-
-
 }
-
 
 // Expose globally for easy use in views
 window.Ajax = Ajax;
