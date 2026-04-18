@@ -45,4 +45,9 @@ $navbarPanelLinks = [
     //     "pageLink" => "/",
     //     "icon" => "users"
     // ],
+    [
+        "pageName" => "University Representative",
+        "pageLink" => "/unirepresentative",
+        "icon" => "shield"
+    ]
 ];
