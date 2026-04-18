@@ -22,7 +22,7 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "Study Materials",
-        "pageLink" => "/",
+        "pageLink" => "/studymaterial",
         "icon" => "notebook-pen"
     ],
     [
