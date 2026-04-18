@@ -21,6 +21,22 @@ class EventModel
         return $isValid;
     }
 
+    public function getMostRecentEvents($limit = 5){
+        $join = [
+            ["universities", "m.university_id = u.id", "INNER", "u"]
+        ];
+        $selected = [
+            "m.title",
+            "m.event_timestamp",
+            ["u.name", "university_name"]
+        ];
+
+        $conditions = [
+            ['event_timestamp', '>=', date('Y-m-d H:i:s', time())],
+        ];
+        return $this->where(conditions: $conditions, join: $join, selected: $selected, limit: $limit, orderBy: ['event_timestamp' => 'ASC']);
+    }
+
     private function getEvent($id){
         return $this->first(['id' => $id]);
     }
