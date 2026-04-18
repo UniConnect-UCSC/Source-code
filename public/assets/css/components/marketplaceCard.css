@@ -5,7 +5,11 @@
   transition: box-shadow 0.3s ease;
   overflow: hidden;
   cursor: pointer;
-  position: relative;
+  position: relative; /* already there, required for absolute children */
+  padding-bottom: calc(var(--spacing-3) + 40px); /* reserve space for button */
+}
+.marketplace-item-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .marketplace-item-details {
@@ -15,19 +19,26 @@
 .marketplace-item-image {
   width: 100%;
   height: 200px;
-  object-fit: cover;
   border-radius: var(--rounded-lg);
   margin-bottom: var(--rounded-none);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow-x: auto;
+  overflow-y: hidden;
   position: relative;
 }
 
+.marketplace-item-image-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  scroll-snap-type: x mandatory;
+}
+
 .marketplace-item-image img {
+  flex: 0 0 100%;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  scroll-snap-align: start;
 }
 
 .marketplace-item h3 {
@@ -38,6 +49,30 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+
+.marketplace-item-title {
+  margin: var(--spacing-2) var(--spacing-2);
+  font-size: 18px;
+  font-weight: 500;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.marketplace-item-description {
+   background-color: var(--color-brand-100);
+  color:#1f2937;
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 8px 0;
+  text-transform: capitalize;
 }
 
 .marketplace-item-price {
@@ -58,13 +93,18 @@
 }
 
 .marketplace-item-status.available {
-  background: #d1fae5;
-  color: #065f46;
+  background: #6861df;
+  color: #ffffff;
 }
 
 .marketplace-item-status.sold {
-  background: #fee2e2;
-  color: #991b1b;
+  background: #6861df;
+  color: #ffffff;
+}
+
+.marketplace-item-status.reserved {
+  background: #6861df;
+  color: #ffffff;
 }
 
 .marketplace-item-date {
@@ -120,3 +160,90 @@
 .my-items-options-dropdown div:hover {
   background-color: var(--color-brand-100);
 }
+
+.marketplace-item-actions {
+  position: absolute;
+  right: var(--spacing-3);
+  bottom: var(--spacing-3);
+  margin-top: 0; /* override existing margin */
+  z-index: 2;
+}
+
+.marketplace-contact-seller {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--rounded-lg);
+  background: var(--color-brand-600);
+  color: var(--color-primary-white);
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.marketplace-item-category {
+  background-color: var(--color-brand-100);
+  color: var(--color-brand-700);
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 8px 0;
+  text-transform: capitalize;
+}
+
+.marketplace-item-category-badge {
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-2);
+  z-index: 5;          /* make sure it’s visible */
+
+  background-color: var(--color-brand-100);
+  color: var(--color-brand-700);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* avoid overlapping the "..." menu on My Items cards */
+.marketplace-item-card.has-my-items-options .marketplace-item-category-badge {
+  right: calc(var(--spacing-2) + 40px);
+}
+
+/* marketplace cards with save button -> push badge left */
+.marketplace-item-card .marketplace-item-category-badge{
+  right: calc(var(--spacing-2) + 44px);
+}
+
+/* Save button top-right */
+.marketplace-save-btn{
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-2);
+  z-index: 4;
+
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--color-gray-200);
+  background: var(--color-primary-white);
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marketplace-save-btn svg{ width: 18px; height: 18px; }
+
+.marketplace-save-btn.is-saved{
+  background: var(--color-brand-600);
+  border-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+}
+
+

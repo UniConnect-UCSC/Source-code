@@ -44,10 +44,19 @@
     <script src="/assets/js/marketplace.js"></script>
     <script src="/assets/js/marketplaceCard.js"></script>
 
+    <script src="/assets/js/friends.js"></script>
+    <script src="/assets/js/post.js"></script>
+    <script src="/assets/js/comment.js"></script>
+
+    <script src="/assets/js/settings.js"></script>
+
+
+
+
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        if (window.lucide?.createIcons) lucide.createIcons();
-    });
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide?.createIcons) lucide.createIcons();
+        });
     </script>
 </body>
 

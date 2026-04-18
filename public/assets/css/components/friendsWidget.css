@@ -20,13 +20,28 @@
   gap: var(--spacing-2);
 }
 
-.friends-grid img {
+.friend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.friend img,
+.friend .profile {
   width: 100%;
-  height: auto;
+  aspect-ratio: 1 / 1;
   border-radius: var(--rounded-lg);
   object-fit: cover;
-  aspect-ratio: 1 / 1;
-  object-position: top;
+}
+
+.friend .profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+  font-weight: 600;
+  font-size: var(--text-sm);
 }
 
 .friend p {

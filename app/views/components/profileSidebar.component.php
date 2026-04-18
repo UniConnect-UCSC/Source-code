@@ -1,5 +1,5 @@
 <div class="profile-sidebar">
-    <?php component("photosWidget"); ?>
-    <?php component("friendsWidget"); ?>
-    <?php component("achievementsWidget"); ?>
+    <?php component("photosWidget", ["profileUser" => $profileUser ?? null]); ?>
+    <?php component("friendsWidget", ["profileUser" => $profileUser ?? null]); ?>
+    <?php component("achievementsWidget", ["profileUser" => $profileUser ?? null]); ?>
 </div>

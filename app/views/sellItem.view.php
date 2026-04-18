@@ -25,8 +25,11 @@
                 <label for="price">Price:</label>
                 <input type="number" id="price" name="price" step="0.01" required><br>
 
-                <label for="image">Upload Image:</label>
-                <input type="file" id="image" name="image" accept="image/*"><br>
+                <label for="contact_number">Contact Number:</label>
+                <input type="text" id="contact_number" name="contact_number" required><br>
+
+                <label for="image">Upload Images:</label>
+                <input type="file" id="image" name="images[]" accept="image/*" multiple><br>
 
                 <button type="submit" class="btn submit-btn">Submit</button>
             </form>

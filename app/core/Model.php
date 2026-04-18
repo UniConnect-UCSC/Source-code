@@ -368,4 +368,18 @@ trait Model
             die("JOIN query failed: " . $e->getMessage());
         }
     }
+
+    public function count($conditions = []){
+        try {
+            $selected = [["COUNT(*)", "count"]];
+            
+            $result = $this->where(
+                conditions: $conditions,
+                selected: $selected
+            );
+            return $result[0]->count ?? 0;
+        } catch (PDOException $e) {
+            die("COUNT query failed: " . $e->getMessage());
+        }
+    }
 }
