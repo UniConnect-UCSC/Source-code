@@ -418,8 +418,8 @@ class Kuppi extends Controller
 
         $participantsPayload = [
             'type' => 'kuppi_participant_status_changed',
-            'title' => 'Kuppi You Joined Has Updated',
-            'message' => 'A kuppi you joined, "' . $topic . '", changed status to ' . $newStatus . '.',
+            'title' => 'Kuppi You Are Participating In Has Updated',
+            'message' => 'A kuppi you Are participating in, "' . $topic . '", changed status to ' . $newStatus . '.',
             'metadata' => $baseMeta,
         ];
 
