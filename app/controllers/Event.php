@@ -67,7 +67,7 @@ class Event extends Controller
     //Done this instead of using a cascade is for a easier transition into soft deletion
     //Can break if exited in middle of the process
     //Implement a transaction like feature in the future
-    private function deleteEventOrchestrator($userId, $eventId){
+    private function deleteEventOrchestrator($eventId){
 
         global $notificationService;
         require_once(__DIR__ . "/../notifications/recipientProviders/deterministicMultiUserProvider.php");
@@ -107,7 +107,7 @@ class Event extends Controller
 
         // Removal of the event
         $eventModel = new EventModel();
-        $status = $eventModel->deleteEvent($userId, $eventId); 
+        $status = $eventModel->deleteEvent($eventId); 
         if(!$status){return false;}
 
         return true;
@@ -213,7 +213,6 @@ class Event extends Controller
             return;
         }
 
-
         // Validation of user access
         if(!isset($_SESSION['user_id']) || !$this->checkIfUniRep($_SESSION['user_id'])){
             http_response_code(403);
@@ -221,7 +220,16 @@ class Event extends Controller
             return;
         }
 
-        $result = $this->deleteEventOrchestrator($_SESSION['user_id'], $data['event_id']);
+
+        $model = new EventModel();
+        $eventUni = $model->getEventUni($data['event_id']);
+        if($eventUni != $this->getUniRepUniversity()){
+            http_response_code(403);
+            echo json_encode(['error' => 'Unauthorized to delete this event']);
+            return;
+        }
+
+        $result = $this->deleteEventOrchestrator($data['event_id']);
 
         if($result){
             echo json_encode(['success' => 'Event deleted successfully']);
@@ -319,7 +327,6 @@ class Event extends Controller
         // Data from view to model conversion
         $eventData = [
             'university_id' => $_SESSION['user_universityID'],
-            'posted_by' => $_SESSION['user_id'],
             'title' => trim($data['title']),
             'description' => trim($data['description']),
             'event_timestamp' => trim($data['event_timestamp']),
