@@ -68,7 +68,7 @@ class KuppiReportModel {
     * report_status ENUMS : Pending , Resolved
     * decision ENUMS : "Kuppi Approved" , "Kuppi Rejected"
     * if decision made by admin : report_status -> Resolved , Decision -> Kuppi Rejected or Kuppi Approved
-    * if kuppi rejected should change the kuppi Status to Reported
+    * if kuppi rejected should change the kuppi Status to Rejected
     *
    */
     public function getAllKuppiReports ($offset = 0, $limit = null) {

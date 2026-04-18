@@ -13,7 +13,7 @@
         kuppi_url:   itemOrCard.dataset?.link || '',
         host_name:   itemOrCard.dataset?.hostName || '',
         requester_name: itemOrCard.getAttribute('data-requester-name') || itemOrCard.dataset?.requesterName || '',
-        image_url:   itemOrCard.querySelector('.kuppi-image img')?.src || '',
+        image_url:   itemOrCard.querySelector('.kuppi-image img')?.src || itemOrCard.querySelector('.post-image img')?.src || '',
         category:    itemOrCard.dataset?.category || itemOrCard.querySelector('.post-category')?.innerText || '',
         status:      itemOrCard.querySelector('.post-status')?.innerText || '',
         host_id:     itemOrCard.dataset?.hostId || '',
@@ -35,7 +35,7 @@
     if (link && !/^https?:\/\//i.test(link)) link = 'https://' + link;
     var hostName     = item.host_name || '';
     var requesterName = item.requester_name || item.requester_f_name ? ((item.requester_f_name || '') + ' ' + (item.requester_l_name || '')).trim() : '';
-    var image    = item.image_url ? (item.image_url.startsWith('http') ? item.image_url : '/' + item.image_url.replace(/^\/+/, '')) : '';
+    var image    = item.image_url ? (item.image_url.startsWith('http') ? item.image_url : '/' + item.image_url.replace(/^\/+/, '')) : '/assets/images/ml-banner.jpg';
     var category = item.category || '';
     var status   = item.status || '';
     var isCompleted = (status === 'Completed');
@@ -45,7 +45,7 @@
     body.innerHTML = '\n' +
       '<h2>' + topic + '</h2>\n' +
       '<div class="kuppi-modal-layout">\n' +
-        (image ? '<div class="kuppi-modal-image"><img src="' + image + '" alt="' + topic + '"></div>' : '') +
+        '<div class="kuppi-modal-image"><img src="' + image + '" alt="' + topic + '"></div>' +
         '<div class="kuppi-modal-side">\n' +
           '<div class="kuppi-details kuppi-details-compact">\n' +
             (requesterName ? '<div class="kuppi-detail-value">Requested by <strong>' + requesterName + '</strong></div>' : '') +

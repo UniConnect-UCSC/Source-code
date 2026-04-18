@@ -6,6 +6,11 @@
     }
     const body = document.getElementById('kuppiModalBody');
     if (!body) return;
+    const rawImage = (kuppiData.image_url || '').trim();
+    const imageUrl = rawImage
+      ? (/^https?:\/\//i.test(rawImage) ? rawImage : '/' + rawImage.replace(/^\/+/, ''))
+      : '/assets/images/ml-banner.jpg';
+
     body.innerHTML = `
       <h2>Edit Kuppi</h2>
       <form action="/kuppi/edit_kuppi/${kuppiData.id}" method="POST" enctype="multipart/form-data">
@@ -23,7 +28,7 @@
         </div>
         <div class="form-row">
           <label for="link">Meeting Link</label>
-          <input type="url" id="link" name="link" value="${kuppiData.kuppi_url || ''}" placeholder="Add meeting link" required>
+          <input type="url" id="link" name="link" value="${kuppiData.link}" placeholder="Add meeting link" required>
         </div>
         <div class="form-row">
           <label for="platform">Platform</label>
@@ -33,13 +38,37 @@
             <option value="MS teams" ${kuppiData.platform === 'MS teams' ? 'selected' : ''}>MS teams</option>
           </select>
         </div>
-        <div class="form-row">
-          <label for="kuppi_image">Session Image</label>
-          <input type="file" id="kuppi_image" name="kuppi_image" accept="image/*">
+        <div class="form-row edit-kuppi-image-row">
+          <div class="edit-kuppi-image-col">
+            <label>Current Image</label>
+            <img id="editKuppiImagePreview" src="${imageUrl}" alt="Current Kuppi Image" class="edit-kuppi-image-preview">
+          </div>
+          <div class="edit-kuppi-image-col">
+            <label for="kuppi_image">Update Image</label>
+            <input type="file" id="kuppi_image" name="kuppi_image" accept="image/*">
+          </div>
         </div>
         <button type="submit">Save Changes</button>
       </form>
     `;
+
+    const fileInput = document.getElementById('kuppi_image');
+    const previewImg = document.getElementById('editKuppiImagePreview');
+    if (fileInput && previewImg) {
+      fileInput.addEventListener('change', function () {
+        const file = fileInput.files && fileInput.files[0];
+        if (!file) {
+          previewImg.src = imageUrl;
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          previewImg.src = e.target && e.target.result ? e.target.result : imageUrl;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
     // If MyKuppis overlay is open, hide it before showing the edit modal
     const myOverlay = document.getElementById('myKuppisModal');
     if (myOverlay && myOverlay.style.display !== 'none') {

@@ -248,7 +248,7 @@ class Kuppi extends Controller
             $platform = $_POST['platform'] ?? '';
             $date_time = $_POST['date'].' '.$_POST['time'] ?? '';
             $data = [
-                'status' => 'In Progress',
+                'status' => 'Upcoming',
                 'university_id' => $_SESSION['user_universityID'],
                 'platform' => $platform,
                 'host_id' => $_SESSION['user_id'],
@@ -342,15 +342,19 @@ class Kuppi extends Controller
     }
 
     private function notifyVolunteered($context, $kuppi ) {
-        $topic = $kuppi->topic ?? 'Kuppi';
+        $userModel = new User;
+        $topic = $kuppi->topic ;
+        $hostId = $kuppi->host_id;
+        $hostName = $userModel->getUserNameById($hostId);
+
         $baseMeta = [
             'context' => $context,
         ];
 
         $requesterPayload = [
             'type' => 'kuppi_volunteered_request',
-            'title' => 'Someone Volunteered for your Request!',
-            'message' => 'Someone has volunteered to host your requested kuppi "' . $topic . '".',
+            'title' => '"'. $hostName .'"  Volunteered for your Request!',
+            'message' => '"'. $hostName .'"  has volunteered to host your requested kuppi "' . $topic . '".',
             'metadata' => $baseMeta,
         ];
 

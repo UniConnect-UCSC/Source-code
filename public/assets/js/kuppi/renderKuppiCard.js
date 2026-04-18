@@ -274,6 +274,7 @@
       var item    = this.item;
       var actions = el('div', 'kuppi-post-actions');
       var isCompleted = item.status === 'Completed';
+      var isCancelled = item.status === 'Cancelled';
 
         // "My Hosts" tab: user is host of these sessions, allow host edit + status
       if (!isCompleted) {
@@ -288,20 +289,24 @@
               date:     parts[0]     || '',
               time:     parts[1]     || '',
               platform: item.platform || '',
-              link:     item.kuppi_url || item.link || ''
+              link:     item.kuppi_url || item.link || '',
+              image_url: item.image_url || ''
             });
         };
         actions.appendChild(editBtn);
 
-        var changeStatusBtn = el('button', 'btn btn-primary', 'Change Status');
-          changeStatusBtn.onclick = function (e) {
-            e.stopPropagation();
-            window.openChangeStatusModal({
-                item
-            });
-        };
+        if(!isCancelled){
+
+          var changeStatusBtn = el('button', 'btn btn-primary', 'Change Status');
+            changeStatusBtn.onclick = function (e) {
+              e.stopPropagation();
+              window.openChangeStatusModal({
+                  item
+              });
+          };
+          actions.appendChild(changeStatusBtn);
+        }
   
-        actions.appendChild(changeStatusBtn);
       }
       
 
@@ -509,7 +514,8 @@
               date:     parts[0]     || '',
               time:     parts[1]     || '',
               platform: item.platform || '',
-              link:     item.kuppi_url || item.link || ''
+              link:     item.kuppi_url || item.link || '',
+              image_url: item.image_url || ''
             });
         };
         actions.appendChild(editBtn);

@@ -92,6 +92,10 @@
             ${categoryOptions}
           </select>
         </div>
+        <div class="form-row">
+            <label for="kuppi_image">Session Image</label>
+            <input type="file" id="kuppi_image" name="kuppi_image" accept="image/*">
+        </div>
         <button type="submit">Volunteer</button>
       </form>
     `;
