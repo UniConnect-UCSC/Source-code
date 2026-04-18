@@ -1,9 +1,11 @@
 # Run notification job worker every 1mins
-* * * * * /usr/bin/php {{SITE_DIR}}/cronjobs/notifications/run_notification_worker.php
+* * * * * /usr/bin/php {{SITE_DIR}}/cronjobs/notifications/run_notification_worker.php >> {{SITE_DIR}}/cronjobs/logs/notification_worker.log 2>&1
+
+# Run Study Material Volunteer total view count updater and badge assigner every 1hr
+0 * * * * /usr/bin/php {{SITE_DIR}}/cronjobs/study_material/sm_updater.php >> {{SITE_DIR}}/cronjobs/logs/sm_updater.log 2>&1
 
 # Generate daily reports at midnight
 # 0 0 * * * /usr/bin/php {{SITE_DIR}}/scripts/generate_reports.php
 
 # Backup database every day at 3 AM
 # 0 3 * * * /usr/bin/php {{SITE_DIR}}/scripts/backup_database.php
-#v2

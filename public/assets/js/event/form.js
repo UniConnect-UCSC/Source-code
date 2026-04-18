@@ -2,6 +2,9 @@ const formEventModal = document.getElementById('formEventModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const eventForm = document.getElementById('eventForm');
 
+const eventDateInput = document.getElementById('eventDate');
+eventDateInput.min = new Date().toISOString().slice(0,16); 
+
 closeModalBtn.addEventListener('click', () => {
     resetEventModal();
 });

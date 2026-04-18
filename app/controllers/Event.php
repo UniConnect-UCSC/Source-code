@@ -308,6 +308,12 @@ class Event extends Controller
             return;
         }
 
+        // Validate the event time
+        if($data['event_timestamp'] < date('Y-m-d H:i:s')){
+            echo json_encode(['error' => 'Event time must be in the future']);
+            return;
+        }
+
         $mediaUrl = uploadImageToCloudinary($data['FILES']['event_image'] ?? null, 'uniconnect_events');
 
         // Data from view to model conversion
@@ -326,7 +332,9 @@ class Event extends Controller
 
         if (!$eventId) {
             http_response_code(500);
-        } 
+            echo json_encode(['error' => 'Failed to create event']);
+            return;
+        }
 
         // Handle event categories
         if (!empty($data["eventCategories"])){
