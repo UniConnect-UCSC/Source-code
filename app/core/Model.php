@@ -266,7 +266,6 @@ trait Model
             $columns = implode(", ", $keys);
             $placeholders = implode(", ", array_map(fn($key) => ":$key", $keys));
             $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders) RETURNING *";
-            error_log("InsertAndFetch SQL: " . $sql . " with data: " . print_r($data, true));
             return $this->get_row($sql, $data);
         } catch (PDOException $e) {
             die("INSERT+FETCH failed: " . $e->getMessage());

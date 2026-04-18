@@ -9,13 +9,7 @@ function uploadImageToCloudinary($file, $locationFolder, $signed = false): ?stri
     }
 
     if($file['error'] !== UPLOAD_ERR_OK){
-
-        error_log(json_encode([
-            'error' => $file['error'],
-            'message' => "File upload to server failed",
-            
-            'user_id' => $_SESSION['user_id'] ?? 'unknown',
-        ]));
+        error_log("File upload to server failed: " . $file['error'] . 'by user ' . $_SESSION['user_id']);
         return null;
     }
 
