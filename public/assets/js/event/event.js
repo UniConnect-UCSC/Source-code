@@ -6,28 +6,30 @@ const filterButtons = document.querySelectorAll('#filterButtons .btn');
 document.body.classList.add('body-class');
 
 // Modal controls
-createEventBtn.addEventListener('click', () => {
-    document.getElementById('modalHeaderName').innerText = "Create New Event";
-    document.getElementById('submitEventBtn').innerText = "Create Event";
-    document.getElementById('eventForm').setAttribute('type', 'create');
-    formEventModal.classList.add('active');
-});
+if(createEventBtn && viewEventBtn){
+    createEventBtn.addEventListener('click', () => {
+        document.getElementById('modalHeaderName').innerText = "Create New Event";
+        document.getElementById('submitEventBtn').innerText = "Create Event";
+        document.getElementById('eventForm').setAttribute('type', 'create');
+        formEventModal.classList.add('active');
+    });
 
-viewEventBtn.addEventListener('click', () => {
-    (async () => {
-        
-        if(await repEventScroll.loadNextElements()){
+    viewEventBtn.addEventListener('click', () => {
+        (async () => {
+            
+            if(await repEventScroll.loadNextElements()){
+                lucide.createIcons();
+                document.getElementById('repEventsEmptyMessage').style.display = 'none';
+            }else{
+                document.getElementById('repEventsEmptyMessage').style.display = 'block'; 
+            }
+
             lucide.createIcons();
-            document.getElementById('repEventsEmptyMessage').style.display = 'none';
-        }else{
-            document.getElementById('repEventsEmptyMessage').style.display = 'block'; 
-        }
+        })();
 
-        lucide.createIcons();
-    })();
-
-    viewEventModal.classList.add('active');
-});
+        viewEventModal.classList.add('active');
+    });
+}
 
 
 filterButtons.forEach(btn => {
