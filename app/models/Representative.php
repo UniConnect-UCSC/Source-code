@@ -13,4 +13,13 @@ class UniversityRepresentative
     public function getRepDetails($userId){
         return $this->first(['id' => $userId]);
     }
+
+    public function getRep($universityId){
+        $result = $this->first(['university_id' => $universityId]);
+        return $result ? $result->id : null;
+    }
+
+    public function stepDown($userId){
+        return $this->delete([['id', '=', $userId]]);
+    }
 }
