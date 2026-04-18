@@ -1,0 +1,760 @@
+/* Kuppi Modal — professional, clean, and consistent */
+
+.kuppi-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(17, 24, 39, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 900; 
+}
+
+.kuppi-modal-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-0);
+  background: transparent;
+}
+
+.kuppi-modal-tabs button{
+  cursor: pointer;
+  padding: var(--spacing-1) var(--spacing-6);
+  border-radius: var(--rounded-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  border: none;
+  position: relative;
+  z-index: 2;
+  font-size: var(--text-sm);
+  color: #374151;
+  background-color: var(--color-brand-100);
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .08s ease;
+}
+
+.kuppi-modal-tabs button:hover:not(.active) {
+  background-color: var(--color-brand-300); 
+}
+
+.kuppi-modal-tabs button:focus-visible {
+  outline: 3px solid var(--color-brand-200); 
+  outline-offset: 2px;
+}
+
+.kuppi-modal-tabs .active {
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+  border-radius: var(--rounded-full);
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
+  z-index: 1;
+  pointer-events: none; /* prevents double-click on active */
+}
+
+/* Sub-filter rows inside My Kuppis modal (per-tab) */
+.kuppi-modal-filters {
+  display: none;            /* hidden by default; JS shows the active one */
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing-2);
+  margin: var(--spacing-3) 0 var(--spacing-6);
+  padding: 0 var(--spacing-4);
+}
+
+.kuppi-modal-filters.visible {
+  display: flex;
+}
+
+.kuppi-modal-filters button {
+  cursor: pointer;
+  padding: var(--spacing-1) var(--spacing-4);
+  border-radius: var(--rounded-full);
+  border: none;
+  background-color: var(--color-brand-50);
+  color: #374151;
+  font-size: var(--text-xs);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.kuppi-modal-filters button:hover:not(.active) {
+  background-color: var(--color-brand-200);
+}
+
+.kuppi-modal-filters button.active {
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+}
+
+/* Special "Manage Topics" accent button in My Favourites sub-filters */
+.kuppi-modal-filters .manage-topics-btn {
+  background-color: var(--color-brand-500);
+  color: var(--color-primary-white);
+  margin-left: auto;        /* push to far right */
+}
+
+.kuppi-modal-filters .manage-topics-btn:hover {
+  background-color: var(--color-brand-700);
+}
+/* Ensure specific overlays stack correctly relative to each other */
+#kuppiModal.kuppi-modal-overlay { z-index: 950; }
+#myKuppisModal.kuppi-modal-overlay { z-index: 900; }
+#kuppiRequestsModal.kuppi-modal-overlay { z-index: 900; }
+
+.kuppi-modal-overlay.active { display: flex; }
+
+.kuppi-modal-content {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  width: 100%;
+  max-width: 720px; /* wider to give details more room */
+  max-height: 84vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  position: relative; /* anchor the top-right close icon inside content */
+}
+
+/* Header with close */
+.kuppi-modal-content > .kuppi-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #374151; /* slightly darker for better contrast */
+  font-size: 26px; /* modestly larger */
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .2s ease, color .2s ease, transform .08s ease;
+}
+.kuppi-modal-content > .kuppi-modal-close:hover { background: #eef2f7; color: #111827; }
+.kuppi-modal-content > .kuppi-modal-close:active { transform: scale(0.98); }
+
+/* Body area */
+#kuppiModalBody,
+#myKuppisModalBody,
+#kuppiRequestsModalBody,
+#reportKuppiModalBody {
+  padding: 24px 28px;
+  overflow-y: auto;
+}
+
+/* Typography within modal */
+#kuppiModalBody h2,
+#myKuppisModalBody h2,
+#kuppiRequestsModalBody h2,
+#reportKuppiModalBody h3 {
+  margin: 4px 0 14px 0;
+  font-weight: 600;
+  font-size: 22px;
+  color: #111827;
+  text-align: center;
+}
+#kuppiModalBody p,
+#myKuppisModalBody p,
+#kuppiRequestsModalBody p,
+#reportKuppiModalBody p { color: #374151; line-height: 1.6; }
+#kuppiModalBody a { color: #2563eb; text-decoration: none; }
+#kuppiModalBody a:hover { text-decoration: underline; }
+
+/* Forms inside modal */
+#kuppiModalBody .form-row { margin-bottom: 14px; }
+#kuppiModalBody label { display:block; margin-bottom:8px; color:#374151; font-weight:500; }
+#kuppiModalBody input,
+#kuppiModalBody select,
+#kuppiModalBody textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+#kuppiModalBody input:focus,
+#kuppiModalBody select:focus,
+#kuppiModalBody textarea:focus { outline: none; border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(147,197,253,0.35); }
+#kuppiModalBody button[type="submit"] {
+  margin-top: 6px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .2s ease, transform .08s ease;
+}
+#kuppiModalBody button[type="submit"]:hover { background: #1d4ed8; }
+#kuppiModalBody button[type="submit"]:active { transform: translateY(1px); }
+
+/* Edit Kuppi image preview */
+#kuppiModalBody .edit-kuppi-image-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+#kuppiModalBody .edit-kuppi-image-col {
+  flex: 1;
+}
+
+#kuppiModalBody .edit-kuppi-image-preview {
+  display: block;
+  width: 120px;
+  height: 78px;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  margin-top: 6px;
+}
+
+@media (max-width: 680px) {
+  #kuppiModalBody .edit-kuppi-image-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #kuppiModalBody .edit-kuppi-image-preview {
+    width: 100%;
+    height: 120px;
+  }
+}
+
+/* Report modal actions area */
+.kuppi-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+.kuppi-modal-actions .btn {
+  appearance: none;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #111827;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease, transform .08s ease;
+}
+.kuppi-modal-actions .btn:hover { background: #f3f4f6; }
+.kuppi-modal-actions .btn:active { transform: translateY(1px); }
+.kuppi-modal-actions .btn.btn-danger {
+  background: #dc2626;
+  border-color: #b91c1c;
+  color: #ffffff;
+}
+.kuppi-modal-actions .btn.btn-danger:hover { background: #b91c1c; }
+
+/* Grid lists inside My Kuppis / Requests */
+.kuppi-modal-list { 
+  display:grid; 
+  grid-template-columns: repeat(2, minmax(0,1fr)); 
+  gap: 16px; 
+}
+
+.kuppi-modal-list.reviewed-table-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.reviewed-kuppi-header,
+.reviewed-kuppi-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 2fr 1fr;
+  gap: var(--spacing-3);
+  align-items: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 2px solid var(--color-primary-gray);
+  border-radius: var(--rounded-lg);
+}
+
+.reviewed-kuppi-header {
+  background: var(--color-secondary-white);
+  color: #374151;
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
+.reviewed-kuppi-row {
+  background: var(--color-primary-white);
+}
+
+.reviewed-kuppi-cell-title,
+.reviewed-kuppi-cell-review {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reviewed-kuppi-rating {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reviewed-kuppi-rating-stars {
+  color: #f59e0b;
+  letter-spacing: 1px;
+}
+
+.reviewed-kuppi-rating-value {
+  color: #6b7280;
+  font-size: var(--text-xs);
+}
+
+.reviewed-kuppi-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-2);
+}
+
+.reviewed-action-btn.delete-btn i {
+  color: #b91c1c;
+}
+
+.reviewed-action-btn.edit-btn i {
+  color: var(--color-brand-700);
+}
+
+.reviewed-kuppi-header .text-right {
+  text-align: right;
+}
+
+@media (max-width: 760px){ 
+  .kuppi-modal-list { grid-template-columns: 1fr; } 
+
+  .reviewed-kuppi-header {
+    display: none;
+  }
+
+  .reviewed-kuppi-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2);
+  }
+
+  .reviewed-kuppi-actions {
+    justify-content: flex-start;
+  }
+}
+
+#kuppiModalBody img { 
+  border: 1px solid #e5e7eb; 
+  border-radius:12px; 
+}
+
+#kuppiModalBody img { 
+  max-height: 160px; 
+  object-fit: cover; 
+  width: 100%; 
+  margin-top: 12px; 
+}
+
+/* Structured details within modal (labels + values) */
+.kuppi-details {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  column-gap: 12px;
+  row-gap: 10px;
+  align-items: start;
+  margin-top: 12px;
+}
+.kuppi-details .kuppi-detail-label { 
+  color: #374151;
+  font-weight: 600; 
+}
+
+.kuppi-details .kuppi-detail-value { 
+  color: #111827; 
+  font-size: 16px; 
+}
+
+/* Smaller, lighter meta rows (date/time, platform) */
+.kuppi-details .kuppi-detail-value.kuppi-meta {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.kuppi-details a { 
+  color: #2563eb; 
+  text-decoration: none; 
+}
+
+.kuppi-details a:hover { 
+  text-decoration: underline; 
+}
+
+/* Compact, label-free layout */
+.kuppi-details.kuppi-details-compact {
+  grid-template-columns: 1fr;
+  row-gap: 6px; /* tighter spacing across rows */
+}
+
+/* Keep generous spacing for the external meeting link */
+.kuppi-details .kuppi-link-row { margin-top: 10px; }
+
+/* Host row with mini profile circle (non-linked) */
+.kuppi-host-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.kuppi-profile-mini {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #f3f4f6;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06) inset;
+  display: inline-block;
+  flex: 0 0 28px;
+}
+
+/* Side-by-side modal layout: image left, details right */
+.kuppi-modal-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.kuppi-modal-image {
+  flex: 0 0 340px;
+  max-width: 340px;
+}
+
+.kuppi-modal-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.kuppi-modal-side {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Compact details alignment to match feed styling */
+.kuppi-modal-side .kuppi-details {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .kuppi-modal-layout {
+    flex-direction: column;
+  }
+  .kuppi-modal-image {
+    max-width: 100%;
+    flex: 0 0 auto;
+  }
+}
+
+/* --- Modal layout refinements --- */
+/* Make the left image smaller and remove extra top spacing */
+#kuppiModalBody .kuppi-modal-image img {
+  max-height: 140px !important;
+  margin-top: 0 !important;
+}
+
+/* Ensure container width is constrained even if other rules apply */
+#kuppiModalBody .kuppi-modal-image {
+  flex-basis: 240px; /* narrower image column */
+  max-width: 240px;
+}
+
+/* Tighten spacing for values to match feed compact feel */
+.kuppi-modal-side .kuppi-detail-value {
+  line-height: 1.6;
+}
+
+/* Ensure the requester/host rows sit closely without large gaps */
+.kuppi-modal-side .kuppi-detail-value + .kuppi-detail-value {
+  margin-top: 4px;
+}
+
+/* --- Change Status modal (reuses base kuppi modal styles) --- */
+
+/* Overlay for change-status modal sits above other kuppi modals */
+#changeStatusModal.kuppi-modal-overlay {
+  display: flex; /* always visible when created */
+  z-index: 960; /* slightly above #kuppiModal (950) */
+}
+
+/* Body spacing + typography */
+#changeStatusModalBody {
+  padding: 24px 28px;
+}
+
+#changeStatusModalBody h3 {
+  margin: 0 0 16px 0;
+  font-weight: 600;
+  font-size: 20px;
+  color: #111827;
+  text-align: center;
+}
+
+#changeStatusModalBody p {
+  margin: 0 0 16px 0;
+  color: #4b5563;
+  font-size: 14px;
+  text-align: center;
+}
+
+#changeStatusModalBody .form-row {
+  margin-bottom: 18px;
+}
+
+#changeStatusModalBody label {
+  display: block;
+  margin-bottom: 8px;
+  color: #374151;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+#changeStatusModalBody select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+#changeStatusModalBody select:focus {
+  outline: none;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(147,197,253,0.35);
+}
+
+#changeStatusModalBody .kuppi-modal-actions {
+  margin-top: 10px;
+}
+
+/* ── Review Modal ─────────────────────────────────────── */
+
+#reviewModal.kuppi-modal-overlay {
+  display: flex;
+  z-index: 960;
+}
+
+#reviewModalBody {
+  padding: 24px 28px;
+  text-align: center;
+}
+
+#reviewModalBody h3 {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  font-size: 20px;
+  color: #111827;
+}
+
+#reviewModalBody .review-intro {
+  margin: 0 0 20px 0;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+/* Star rating */
+.review-stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.review-star {
+  font-size: 36px;
+  color: #d1d5db;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+  user-select: none;
+  line-height: 1;
+}
+
+.review-star:hover {
+  transform: scale(1.15);
+}
+
+.review-star.active {
+  color: #f59e0b;
+}
+
+.review-rating-label {
+  min-height: 22px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* Comment */
+#reviewModalBody .review-comment-label {
+  display: block;
+  text-align: left;
+  margin-bottom: 6px;
+  color: #374151;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.review-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  resize: vertical;
+  font-family: inherit;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.review-textarea:focus {
+  outline: none;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.35);
+}
+
+/* Error */
+.review-error {
+  min-height: 20px;
+  margin: 8px 0 4px;
+  color: #dc2626;
+  font-size: 13px;
+}
+
+/* Success */
+.review-success {
+  font-size: 48px;
+  color: #16a34a;
+  margin: 16px 0 8px;
+}
+
+.review-success-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+}
+
+#reviewModalBody .kuppi-modal-actions {
+  margin-top: 14px;
+}
+
+.status-error {
+  min-height: 20px;
+  margin: 8px 0 4px;
+  color: #dc2626;
+  font-size: 13px;
+}
+
+/* ── Reviews section inside kuppi detail modal ── */
+.kuppi-modal-reviews-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.kuppi-reviews-btn {
+  margin-bottom: 14px;
+}
+
+.reviews-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 12px 0;
+  text-align: left;
+}
+
+.reviews-loading,
+.reviews-error,
+.reviews-empty {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  padding: 12px 0;
+}
+
+.reviews-error {
+  color: #dc2626;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.review-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.review-card-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #111827;
+}
+
+.review-card-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.review-star-display {
+  font-size: 16px;
+  color: #d1d5db;
+}
+
+.review-star-display.filled {
+  color: #f59e0b;
+}
+
+.review-card-text {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.5;
+  margin: 6px 0;
+}
+
+.review-card-date {
+  font-size: 12px;
+  color: #9ca3af;
+}

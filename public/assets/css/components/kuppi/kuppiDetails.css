@@ -1,0 +1,26 @@
+/* Precise detail layout for Kuppi modal */
+
+.kuppi-details {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  column-gap: 12px;
+  row-gap: 10px;
+  align-items: start;
+  margin-top: 12px;
+}
+
+.kuppi-details .kuppi-detail-label {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.kuppi-details .kuppi-detail-value {
+  color: #111827;
+}
+
+/* Line spacing between detail rows */
+#kuppiModalBody .kuppi-details-row + .kuppi-details-row { margin-top: 8px; }
+
+/* Link styling inside values */
+.kuppi-details a { color: #2563eb; text-decoration: none; }
+.kuppi-details a:hover { text-decoration: underline; }

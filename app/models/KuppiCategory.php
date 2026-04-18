@@ -11,4 +11,12 @@ class KuppiCategoryModel {
         $result = $this->where(conditions: [['id', '=', $category_id]], limit: 1);
         return $result ? $result[0] : null;
     }
+
+    public function getKuppiCategories($offset ,$limit) {
+        return $this->where(
+            conditions: [['id', 'IS', 'NOT NULL']],
+            limit: $limit,
+            offset: $offset,
+        );
+    }
 }
