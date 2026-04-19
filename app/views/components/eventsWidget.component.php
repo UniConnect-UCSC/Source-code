@@ -4,7 +4,7 @@ require_once(__DIR__ . "/../../models/University.php");
 
 $eventModel = new EventModel();
 $universityModel = new University();
-$latestEvents = $eventModel->findAll();
+$latestEvents = $eventModel->getMostRecentEvents(5);
 
 ?>
 
@@ -14,21 +14,12 @@ $latestEvents = $eventModel->findAll();
     </div>
 
     <?php foreach ($latestEvents as $event):
-        $id = $event->id;
-        $universityId = $event->university_id;
         $title = $event->title;
+        $universityName = $event->university_name;
         $eventDate = new DateTime($event->event_timestamp);
         $eventDay = $eventDate->format('d');
         $eventMonth = $eventDate->format('M');
-        $location = $event->held_at;
 
-        $postedBy = $event->posted_by;
-        $description = $event->description;
-        $createdAt = $event->created_at;
-        $updatedAt = $event->updated_at;
-
-        $university = $universityModel->first(['id' => $universityId]);
-        $universityName = $university ? $university->name : 'Unknown University';
     ?>
 
     <a class="event" href="">

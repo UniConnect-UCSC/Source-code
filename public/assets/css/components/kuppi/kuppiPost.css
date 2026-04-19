@@ -32,6 +32,7 @@
   font-weight: bold;
   margin-bottom: 6px;
   color: var(--color-brand-900);
+  
 }
 
 .post-university {
@@ -58,6 +59,13 @@
   letter-spacing: 0.5px;
   box-shadow: var(--shadow-sm);
 }
+
+.post-participants {
+  font-size: 15px;
+  color: var(--color-secondary-gray);
+  margin-bottom: 12px;
+}
+
 
 .card-platform {
   display: inline-block;

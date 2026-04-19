@@ -66,6 +66,8 @@
                                                                                 'date' => $date ?? '',
                                                                                 'time' => $time ?? '',
                                                                                 'platform' => $platform ?? '',
+                                                                                'link' => $link ?? '',
+                                                                                'image_url' => $image ?? '',
                                                                             ]), ENT_QUOTES, 'UTF-8') ?>)">Edit</a>
             <a href="/kuppi/delete_kuppi/<?= urlencode($id) ?>"
                 onclick="return confirm('Are you sure you want to delete this kuppi?');">Delete</a>

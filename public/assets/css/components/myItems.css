@@ -14,3 +14,32 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--spacing-4);
 }
+
+.no-items-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--spacing-12) var(--spacing-4);
+  color: var(--color-gray-500);
+  font-size: var(--text-lg);
+}
+
+.my-items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 2px solid var(--color-gray-200);
+  margin-bottom: 0;
+  background-color: var(--color-white);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.my-items-header-buttons {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+
+

@@ -22,7 +22,7 @@ $navbarPanelLinks = [
     ],
     [
         "pageName" => "Study Materials",
-        "pageLink" => "/",
+        "pageLink" => "/studymaterial",
         "icon" => "notebook-pen"
     ],
     [
@@ -40,52 +40,9 @@ $navbarPanelLinks = [
         "pageLink" => "/friends",
         "icon" => "handshake"
     ],
-];
-
-$adminPanelLinks = [
-    [
-        "pageName" => "Dashboard",
-        "pageLink" => "/admin/dashboard",
-        "icon" => "layout-dashboard"
-    ],
-    [
-        "pageName" => "Users",
-        "pageLink" => "/admin/users",
-        "icon" => "users"
-    ],
-    [
-        "pageName" => "Posts",
-        "pageLink" => "/admin/posts",
-        "icon" => "book-image"
-    ],
-    [
-        "pageName" => "Events",
-        "pageLink" => "/admin/events",
-        "icon" => "calendar"
-    ],
-    [
-        "pageName" => "Uni Representative",
-        "pageLink" => "/admin/unirep",
-        "icon" => "calendar"
-    ],
-    [
-        "pageName" => "Kuppi",
-        "pageLink" => "/admin/kuppi ",
-        "icon" => "graduation-cap"
-    ],
-    [
-        "pageName" => "Study Materials",
-        "pageLink" => "/admin/studymaterials",
-        "icon" => "notebook-pen"
-    ],
-    [
-        "pageName" => "Boardings",
-        "pageLink" => "/admin/boardings",
-        "icon" => "bed"
-    ],
-    [
-        "pageName" => "Marketplace",
-        "pageLink" => "/admin/marketplace",
-        "icon" => "store"
-    ],
+    // [
+    //     "pageName" => "Groups",
+    //     "pageLink" => "/",
+    //     "icon" => "users"
+    // ],
 ];

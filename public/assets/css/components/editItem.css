@@ -1,0 +1,209 @@
+.edit-item-container {
+  grid-column-start: 4;
+  grid-column-end: 13;
+  padding: var(--spacing-4);
+}
+
+.edit-item-header {
+  padding: var(--spacing-4) 0;
+  border-bottom: 2px solid var(--color-gray-200);
+  margin-bottom: var(--spacing-4);
+}
+
+.edit-item-header h2 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  margin: 0;
+}
+
+.edit-item-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-6);
+  background: var(--color-primary-white);
+  border-radius: var(--rounded-xl);
+  box-shadow: var(--shadow-lg);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.edit-item-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.edit-item-form label {
+  display: block;
+  font-weight: 500;
+  color: var(--color-gray-700);
+  margin-bottom: var(--spacing-2);
+  font-size: var(--text-sm);
+}
+
+.edit-item-form input[type="number"],
+.edit-item-form input[type="text"],
+.edit-item-form textarea,
+.edit-item-form select {
+  width: 100%;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--color-primary-gray);
+  border-radius: var(--rounded-lg);
+  font-size: var(--text-base);
+  background-color: #fafbfc;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-item-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.edit-item-form input[type="number"]:focus,
+.edit-item-form input[type="text"]:focus,
+.edit-item-form textarea:focus,
+.edit-item-form select:focus {
+  outline: none;
+  border-color: var(--color-brand-600);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-6);
+  justify-content: flex-end;
+}
+
+.btn {
+  padding: var(--spacing-3) var(--spacing-8);
+  border-radius: var(--rounded-full);
+  font-size: var(--text-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  border: none;
+}
+
+.submit-btn {
+  background-color: var(--color-brand-600);
+  color: var(--color-primary-white);
+}
+
+.submit-btn:hover {
+  background-color: var(--color-brand-700);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.cancel-btn {
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+.cancel-btn:hover {
+  background-color: var(--color-gray-300);
+}
+
+/* Error states (optional) */
+.edit-item-form input.error,
+.edit-item-form textarea.error,
+.edit-item-form select.error {
+  border-color: #ef4444;
+}
+
+.edit-item-form input.success,
+.edit-item-form textarea.success,
+.edit-item-form select.success {
+  border-color: #10b981;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: var(--text-sm);
+  margin-top: var(--spacing-1);
+  display: none;
+}
+
+.error-message.show {
+  display: block;
+}
+
+.submit-btn:disabled {
+  background-color: var(--color-gray-400);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.current-image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.current-image-item {
+  position: relative;
+}
+
+.current-image-item img {
+  width: 160px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--rounded-lg);
+  border: 1px solid var(--color-gray-200);
+}
+
+.remove-current-image-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .edit-item-form-container {
+    padding: var(--spacing-4);
+    margin: var(--spacing-4);
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.edit-item-form input:focus-visible,
+.edit-item-form textarea:focus-visible,
+.edit-item-form select:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
+}
