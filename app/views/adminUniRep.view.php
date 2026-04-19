@@ -4,6 +4,6 @@
     <?php component("adminNavpanel"); ?>
 
     <div class="admin-posts-content">
-        <?php component("uniRepTable", ['users' => $users]); ?>
+        <?php component("uniRepTable", ['repRequests' => $repRequests, 'uniReps' => $uniReps]); ?>
     </div>
 </div>

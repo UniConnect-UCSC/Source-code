@@ -4,12 +4,15 @@ require_once __DIR__ . '/../models/GlobalPost.php';
 require_once __DIR__ . '/../models/UniversityPost.php';
 require_once __DIR__ . '/../models/University.php';
 require_once __DIR__ . '/../models/PostComment.php';
+require_once __DIR__ . '/../models/RepresentativeRequest.php';
+require_once __DIR__ . '/../models/Representative.php';
 
 require_once __DIR__ . '/admin-traits/AdminUsersTrait.php';
 require_once __DIR__ . '/admin-traits/AdminDashboardTrait.php';
 require_once __DIR__ . '/admin-traits/AdminPostsTrait.php';
 require_once __DIR__ . '/admin-traits/AdminUniRepTrait.php';
 require_once __DIR__ . '/admin-traits/AdminEventTrait.php';
+
 
 
 
