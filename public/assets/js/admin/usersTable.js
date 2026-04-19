@@ -26,7 +26,7 @@ function renderUserRow(user) {
     <td>
       <button class="table-btn view-btn" onclick="viewUser('${user.id}')">View</button>
       <button class="table-btn ban-btn" onclick="toggleBanStatus('${user.id}', ${isBanned}, this)">${banLabel}</button>
-      <button class="table-btn delete-btn" onclick="deleteUser('${user.id}', this)">Delete</button>
+      
     </td>
   `;
 

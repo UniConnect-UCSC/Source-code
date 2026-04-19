@@ -1,0 +1,10 @@
+.admin-posts-layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--spacing-4);
+  margin: var(--spacing-24) var(--spacing-4);
+}
+
+.admin-posts-content {
+  grid-column: span 9;
+}
