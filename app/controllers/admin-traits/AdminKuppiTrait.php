@@ -108,4 +108,41 @@ trait AdminKuppiTrait
         echo json_encode($kuppi);
         exit;
     }
+
+    public function approveKuppiRequest()
+    {
+        ob_start();
+        header('Content-Type: application/json');
+
+        if (empty($_SESSION['is_admin'])) {
+            ob_end_clean();
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            ob_end_clean();
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+            exit;
+        }
+
+        $body = json_decode(file_get_contents('php://input'), true) ?? [];
+        $kuppiId = trim($body['kuppi_id'] ?? '');
+
+        if (empty($kuppiId)) {
+            ob_end_clean();
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'kuppi_id is required']);
+            exit;
+        }
+
+        $kuppiModel = new KuppiModel();
+        $ok = $kuppiModel->update($kuppiId, ['status' => 'Upcoming']);
+
+        ob_end_clean();
+        echo json_encode(['success' => (bool)$ok]);
+        exit;
+    }
 }

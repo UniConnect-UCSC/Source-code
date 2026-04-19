@@ -78,19 +78,19 @@ $adminPanelLinks = [
         "pageLink" => "/admin/kuppi ",
         "icon" => "graduation-cap"
     ],
-    [
-        "pageName" => "Study Materials",
-        "pageLink" => "/admin/studymaterials",
-        "icon" => "notebook-pen"
-    ],
-    [
-        "pageName" => "Boardings",
-        "pageLink" => "/admin/boardings",
-        "icon" => "bed"
-    ],
-    [
-        "pageName" => "Marketplace",
-        "pageLink" => "/admin/marketplace",
-        "icon" => "store"
-    ],
+    // [
+    //     "pageName" => "Study Materials",
+    //     "pageLink" => "/admin/studymaterials",
+    //     "icon" => "notebook-pen"
+    // ],
+    // [
+    //     "pageName" => "Boardings",
+    //     "pageLink" => "/admin/boardings",
+    //     "icon" => "bed"
+    // ],
+    // [
+    //     "pageName" => "Marketplace",
+    //     "pageLink" => "/admin/marketplace",
+    //     "icon" => "store"
+    // ],
 ];

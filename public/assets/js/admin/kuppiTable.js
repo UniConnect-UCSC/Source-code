@@ -17,9 +17,46 @@ function formatDateTime(value) {
   });
 }
 
+async function approveKuppiRequest(kuppiId, btn) {
+  if (!confirm("Approve this requested kuppi?")) return;
+
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = "Approving...";
+
+  try {
+    const res = await Ajax.jsonPost("/admin/approveKuppiRequest", {
+      kuppi_id: kuppiId,
+    });
+
+    if (res?.success) {
+      const row = btn.closest("tr");
+      const statusCell = row?.querySelector(".kuppi-status-cell");
+      if (statusCell) statusCell.textContent = "Upcoming";
+      btn.closest("td").innerHTML = "<span>-</span>";
+    } else {
+      alert(res?.message || "Failed to approve kuppi request.");
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  } catch (e) {
+    console.error(e);
+    alert("An error occurred. Please try again.");
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
 function renderKuppiRow(item) {
   var tr = document.createElement("tr");
   var host = ((item.host_f_name || "") + " " + (item.host_l_name || "")).trim();
+
+  var actionHtml =
+    item.status === "Requested"
+      ? '<button class="table-btn approve-btn" onclick="approveKuppiRequest(\'' +
+        escapeHtml(item.id) +
+        "', this)\">Approve</button>"
+      : "<span>-</span>";
 
   tr.innerHTML =
     "<td>" +
@@ -37,7 +74,7 @@ function renderKuppiRow(item) {
     "<td>" +
     escapeHtml(item.category_name || "-") +
     "</td>" +
-    "<td>" +
+    '<td class="kuppi-status-cell">' +
     escapeHtml(item.status || "-") +
     "</td>" +
     "<td>" +
@@ -45,6 +82,9 @@ function renderKuppiRow(item) {
     "</td>" +
     "<td>" +
     (item.participants ?? 0) +
+    "</td>" +
+    "<td>" +
+    actionHtml +
     "</td>";
 
   return tr;
@@ -68,7 +108,7 @@ function initKuppiTable() {
   kuppiScroll.setSkeletonLoader(function () {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      '<td colspan="8" style="text-align:center; padding:1rem; color: var(--color-secondary-gray);">Loading...</td>';
+      '<td colspan="9" style="text-align:center; padding:1rem; color: var(--color-secondary-gray);">Loading...</td>';
     return tr;
   });
 

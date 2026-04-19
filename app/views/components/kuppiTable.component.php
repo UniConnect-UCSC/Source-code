@@ -16,6 +16,7 @@
                 <th>Status</th>
                 <th>Time</th>
                 <th>Participants</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody id="kuppi-table-body">
@@ -26,7 +27,7 @@
                     <td><?= htmlspecialchars(trim(($item->host_f_name ?? '') . ' ' . ($item->host_l_name ?? ''))) ?></td>
                     <td><?= htmlspecialchars($item->university_name ?? '-') ?></td>
                     <td><?= htmlspecialchars($item->category_name ?? '-') ?></td>
-                    <td><?= htmlspecialchars($item->status ?? '-') ?></td>
+                    <td class="kuppi-status-cell"><?= htmlspecialchars($item->status ?? '-') ?></td>
                     <td>
                         <?php
                         $kuppiDateTime = $item->kuppi_date_time ?? null;
@@ -34,6 +35,16 @@
                         ?>
                     </td>
                     <td><?= htmlspecialchars($item->participants ?? 0) ?></td>
+                    <td>
+                        <?php if (($item->status ?? '') === 'Requested'): ?>
+                            <button class="table-btn approve-btn"
+                                onclick="approveKuppiRequest('<?= htmlspecialchars($item->id) ?>', this)">
+                                Approve
+                            </button>
+                        <?php else: ?>
+                            <span>-</span>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
