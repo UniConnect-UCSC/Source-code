@@ -4,6 +4,14 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
+function getKuppiStatusClass(status) {
+  var normalized = String(status || "unknown")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-");
+  return normalized || "unknown";
+}
+
 function formatDateTime(value) {
   if (!value) return "-";
   var date = new Date(value);
@@ -32,7 +40,10 @@ async function approveKuppiRequest(kuppiId, btn) {
     if (res?.success) {
       const row = btn.closest("tr");
       const statusCell = row?.querySelector(".kuppi-status-cell");
-      if (statusCell) statusCell.textContent = "Upcoming";
+      if (statusCell) {
+        statusCell.innerHTML =
+          '<span class="kuppi-status-pill status-upcoming">Upcoming</span>';
+      }
       btn.closest("td").innerHTML = "<span>-</span>";
     } else {
       alert(res?.message || "Failed to approve kuppi request.");
@@ -75,7 +86,11 @@ function renderKuppiRow(item) {
     escapeHtml(item.category_name || "-") +
     "</td>" +
     '<td class="kuppi-status-cell">' +
+    '<span class="kuppi-status-pill status-' +
+    escapeHtml(getKuppiStatusClass(item.status)) +
+    '">' +
     escapeHtml(item.status || "-") +
+    "</span>" +
     "</td>" +
     "<td>" +
     escapeHtml(formatDateTime(item.kuppi_date_time)) +

@@ -25,8 +25,10 @@ function renderPostRow(post) {
         ${isReported ? "Reported" : "Not reported"}
       </span>
     </td>
-    <td>
-      <button class="table-btn view-btn" onclick="viewPost(${post.id}, '${rowType}')">View</button>
+    <td class="deleted-status-cell">
+      <span class="status-pill ${isDeleted ? "status-yes" : "status-no"}">
+        ${isDeleted ? "Deleted" : "Active"}
+      </span>
     </td>
     <td>${date}</td>
     <td>

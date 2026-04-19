@@ -27,7 +27,15 @@
                     <td><?= htmlspecialchars(trim(($item->host_f_name ?? '') . ' ' . ($item->host_l_name ?? ''))) ?></td>
                     <td><?= htmlspecialchars($item->university_name ?? '-') ?></td>
                     <td><?= htmlspecialchars($item->category_name ?? '-') ?></td>
-                    <td class="kuppi-status-cell"><?= htmlspecialchars($item->status ?? '-') ?></td>
+                    <?php
+                    $status = trim((string)($item->status ?? '-'));
+                    $statusSlug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $status));
+                    ?>
+                    <td class="kuppi-status-cell">
+                        <span class="kuppi-status-pill status-<?= htmlspecialchars($statusSlug ?: 'unknown') ?>">
+                            <?= htmlspecialchars($status) ?>
+                        </span>
+                    </td>
                     <td>
                         <?php
                         $kuppiDateTime = $item->kuppi_date_time ?? null;

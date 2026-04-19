@@ -74,11 +74,19 @@
 
 .remove-btn {
   cursor: pointer;
+  padding: var(--spacing-1) var(--spacing-2);
   background: rgba(239, 68, 68, 0.12);
   border-color: rgba(239, 68, 68, 0.25);
   color: #b91c1c;
+  border-radius: var(--rounded-full);
 }
 
 .remove-btn:hover {
   background: rgba(239, 68, 68, 0.2);
+}
+
+.events-table th:nth-child(5),
+.events-table td:nth-child(5) {
+  white-space: nowrap;
+  width: 1%;
 }

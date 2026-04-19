@@ -86,11 +86,10 @@
 
 .status-pill {
   display: inline-block;
-  border-radius: var(--rounded-md);
-  padding: 2px 8px;
+  border-radius: var(--rounded-full);
   font-size: var(--text-xs);
   font-weight: 500;
-  border: 1px solid transparent;
+  padding: var(--spacing-1) var(--spacing-2);
 }
 
 .status-pending {
@@ -109,6 +108,12 @@
   background: var(--color-brand-100);
   border-color: var(--color-brand-200);
   color: var(--color-brand-800);
+  display: inline-block;
+  border-radius: var(--rounded-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  padding: var(--spacing-1) var(--spacing-2);
+  text-wrap: nowrap;
 }
 
 .view-proof-btn:hover {
@@ -128,10 +133,13 @@
 }
 
 .remove-btn {
+  cursor: pointer;
+  padding: var(--spacing-1) var(--spacing-2);
   background: rgba(239, 68, 68, 0.12);
   border-color: rgba(239, 68, 68, 0.25);
   color: #b91c1c;
-  cursor: pointer;
+  font-size: var(--text-xs);
+  border-radius: var(--rounded-full);
 }
 
 .remove-btn:hover {
