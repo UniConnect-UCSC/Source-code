@@ -37,12 +37,12 @@
 
             <?php component("statcard", ['title' => 'Total Universities', 'value' => '...', 'valueId' => 'total-universities-value']);    ?>
 
-            <?php component("statcard", ['title' =>
-            "Kuppi's posted", 'value' => '3,210']);    ?>
+            <!-- <?php component("statcard", ['title' =>
+                    "Kuppi's posted", 'value' => '3,210']);    ?>
 
             <?php component("statcard", ['title' => "Items Listed", 'value' => '6,543']);    ?>
 
-            <?php component("statcard", ['title' => "Events Created", 'value' => '89']);    ?>
+            <?php component("statcard", ['title' => "Events Created", 'value' => '89']);    ?> -->
         </div>
     </div>
 </div>
