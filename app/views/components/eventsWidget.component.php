@@ -36,6 +36,6 @@ $latestEvents = $eventModel->getMostRecentEvents(5);
     <?php endforeach; ?>
 
     <div class="view-all-events">
-        <a href="/events">See all Events</a>
+        <a href="/event">See all Events</a>
     </div>
 </div>

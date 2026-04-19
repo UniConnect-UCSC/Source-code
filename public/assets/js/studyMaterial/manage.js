@@ -62,7 +62,7 @@ if (smManageList) {
             const id = row.getAttribute('data-id');
 
             if (confirm('Are you sure you want to delete this study material?')) {
-                Ajax.jsonPost('/studyMaterial/deleteSM', { id: id });
+                Ajax.jsonPost('/studymaterial/deleteSM', { id: id });
                 manageStudyMaterialsModal.classList.remove('active');
             }
         }

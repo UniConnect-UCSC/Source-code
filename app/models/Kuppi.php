@@ -317,4 +317,31 @@ class KuppiModel {
         }
         return $data;
     }
+
+    public function getKuppiFavoritesAndParticipants($userId) {
+        $conditions = [
+            ['m.status', 'IN', ['Upcoming', 'In Progress']],
+            ['f.kuppi_id', 'IS', 'NOT NULL', 'OR'],
+            ['p.kuppi_id', 'IS', 'NOT NULL']
+        ];
+
+        $join = [
+            ["kuppi_favorites", ["m.id = f.kuppi_id", ["f.user_id", "=", $userId]], "LEFT", "f"],
+            ["kuppi_participants", ["m.id = p.kuppi_id", ["p.user_id", "=", $userId]], "LEFT", "p"]
+        ];
+
+        $selected = [
+            ["m.topic", "title"],
+            ["m.kuppi_date_time", "timestamp"],
+            ["CASE WHEN f.kuppi_id IS NULL THEN 0 ELSE 1 END", "is_favorite"],
+            ["CASE WHEN p.kuppi_id IS NULL THEN 0 ELSE 1 END", "is_participating"]
+        ];
+
+        return $this->where(
+            conditions: $conditions,
+            join: $join,
+            selected: $selected,
+        );
+    }
+
 }

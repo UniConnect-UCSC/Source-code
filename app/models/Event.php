@@ -167,4 +167,29 @@ class EventModel
             showDeleted: false
         );
     }
+
+    public function getEventFavoritesAndParticipants($userId){
+        $join = [
+            ["event_favorites", ["m.id = f.event_id", ["f.user_id", "=", $userId]], "LEFT", "f"],
+            ["event_participations", ["m.id = p.event_id", ["p.user_id", "=", $userId]], "LEFT", "p"]
+        ];
+
+        $selected = [
+            "m.title",
+            ["m.event_timestamp", "timestamp"],
+            ["CASE WHEN f.event_id IS NULL THEN 0 ELSE 1 END", "is_favorite"],
+            ["CASE WHEN p.event_id IS NULL THEN 0 ELSE 1 END", "is_participating"]
+        ];
+
+        $conditions = [
+            ['f.event_id', 'IS', 'NOT NULL', 'OR'],
+            ['p.event_id', 'IS', 'NOT NULL']
+        ];
+
+        return $this->where(
+            conditions: $conditions,
+            join: $join,
+            selected: $selected,
+        );
+    }
 }
