@@ -302,6 +302,19 @@ class Kuppi extends Controller
                 echo json_encode(['success' => false, 'message' => 'Kuppi not found']);
                 exit;
             }
+            $alreadyReportedByUser = $kuppiReportModel->first([
+                'kuppi_id' => $id,
+                'reporter_id' => $_SESSION['user_id']
+            ]);
+
+            if ($alreadyReportedByUser) {
+                http_response_code(409);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'You have already reported this kuppi'
+                ]);
+                exit;
+            }
             $data = [
                 'is_reported' => true,
             ];
