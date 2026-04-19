@@ -8,7 +8,7 @@ function renderPostRow(post) {
   });
 
   const universityCell = post.university_id
-    ? `${post.university_id}`
+    ? escapeHtml(post.university_name || post.university_id)
     : '<span class="type-pill">Global</span>';
 
   const isReported = Boolean(post.reported);

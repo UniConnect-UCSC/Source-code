@@ -8,6 +8,10 @@ require_once __DIR__ . '/../models/PostComment.php';
 require_once __DIR__ . '/admin-traits/AdminUsersTrait.php';
 require_once __DIR__ . '/admin-traits/AdminDashboardTrait.php';
 require_once __DIR__ . '/admin-traits/AdminPostsTrait.php';
+require_once __DIR__ . '/admin-traits/AdminUniRepTrait.php';
+require_once __DIR__ . '/admin-traits/AdminEventTrait.php';
+
+
 
 
 class Admin extends Controller
@@ -85,4 +89,6 @@ class Admin extends Controller
     use AdminDashboardTrait;
     use AdminUsersTrait;
     use AdminPostsTrait;
+    use AdminUniRepTrait;
+    use AdminEventTrait;
 }

@@ -58,4 +58,34 @@ $adminPanelLinks = [
         "pageLink" => "/admin/posts",
         "icon" => "book-image"
     ],
+    [
+        "pageName" => "Events",
+        "pageLink" => "/admin/events",
+        "icon" => "calendar"
+    ],
+    [
+        "pageName" => "Uni Representative",
+        "pageLink" => "/admin/unirep",
+        "icon" => "calendar"
+    ],
+    [
+        "pageName" => "Kuppi",
+        "pageLink" => "/admin/kuppi ",
+        "icon" => "graduation-cap"
+    ],
+    [
+        "pageName" => "Study Materials",
+        "pageLink" => "/admin/studymaterials",
+        "icon" => "notebook-pen"
+    ],
+    [
+        "pageName" => "Boardings",
+        "pageLink" => "/admin/boardings",
+        "icon" => "bed"
+    ],
+    [
+        "pageName" => "Marketplace",
+        "pageLink" => "/admin/marketplace",
+        "icon" => "store"
+    ],
 ];

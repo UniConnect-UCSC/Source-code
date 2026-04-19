@@ -57,6 +57,8 @@
     <script src="/assets/js/admin/adminUsers.js"></script>
     <script src="/assets/js/admin/usersTable.js"></script>
     <script src="/assets/js/admin/postsTable.js"></script>
+    <script src="/assets/js/admin/eventsTable.js"></script>
+    <script src="/assets/js/admin/uniRepTable.js"></script>
 
 
     <script>

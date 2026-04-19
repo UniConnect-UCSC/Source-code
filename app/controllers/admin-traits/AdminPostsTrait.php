@@ -53,20 +53,35 @@ trait AdminPostsTrait
 
         if ($type === 'university') {
             $model = new UniversityPost();
-            $selected = ['id', 'user_id', 'university_id', 'caption', 'is_anonymous', 'reported', 'deleted_at', 'created_at'];
+
+            $selected = [
+                'm.id',
+                'm.user_id',
+                'm.university_id',
+                'u.name AS university_name',
+                'm.caption',
+                'm.is_anonymous',
+                'm.reported',
+                'm.deleted_at',
+                'm.created_at',
+            ];
+
+            $join = [
+                ['universities', 'm.university_id = u.id', 'LEFT', 'u'],
+            ];
 
             if ($search !== '') {
                 $rows = $model->where(
                     [
-                        ['caption', 'ILIKE', '%' . $search . '%', 'OR'],
-                        ['user_id', 'ILIKE', '%' . $search . '%', 'OR'],
-                        ['id', 'ILIKE', '%' . $search . '%', 'OR'],
-                        ['university_id', 'ILIKE', '%' . $search . '%'],
+                        ['m.caption', 'ILIKE', '%' . $search . '%', 'OR'],
+                        ['CAST(m.id AS TEXT)', 'ILIKE', '%' . $search . '%', 'OR'],
+                        ['CAST(m.user_id AS TEXT)', 'ILIKE', '%' . $search . '%', 'OR'],
+                        ['u.name', 'ILIKE', '%' . $search . '%'],
                     ],
                     $limit,
                     $offset,
-                    ['created_at' => 'DESC'],
-                    [],
+                    ['m.created_at' => 'DESC'],
+                    $join,
                     $selected
                 ) ?: [];
             } else {
@@ -74,8 +89,8 @@ trait AdminPostsTrait
                     [],
                     $limit,
                     $offset,
-                    ['created_at' => 'DESC'],
-                    [],
+                    ['m.created_at' => 'DESC'],
+                    $join,
                     $selected
                 ) ?: [];
             }
@@ -87,8 +102,8 @@ trait AdminPostsTrait
                 $rows = $model->where(
                     [
                         ['caption', 'ILIKE', '%' . $search . '%', 'OR'],
-                        ['user_id', 'ILIKE', '%' . $search . '%', 'OR'],
-                        ['id', 'ILIKE', '%' . $search . '%'],
+                        ['CAST(id AS TEXT)', 'ILIKE', '%' . $search . '%', 'OR'],
+                        ['CAST(user_id AS TEXT)', 'ILIKE', '%' . $search . '%'],
                     ],
                     $limit,
                     $offset,
