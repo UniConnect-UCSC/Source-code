@@ -35,6 +35,8 @@
     <script src="/assets/js/postOptions.js"></script>
     <script src="/assets/js/createPost.js"></script>
 
+
+
     <!-- Notification related scripts -->
     <script src="/assets/js/notification/convenienceFunctions.js"></script>
     <script src="/assets/js/notification/notificationRender.js"></script>
@@ -52,6 +54,8 @@
 
     <!-- Admin Panel -->
     <script src="/assets/js/admin/admindashboard.js"></script>
+    <script src="/assets/js/admin/adminUsers.js"></script>
+    <script src="/assets/js/admin/usersTable.js"></script>
 
 
     <script>

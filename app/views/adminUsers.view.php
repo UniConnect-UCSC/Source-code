@@ -1,11 +1,9 @@
 <?php component("adminNavbar"); ?>
 
 <div class="admin-users-layout">
-    <?php
-    component("adminNavpanel");
-    ?>
+    <?php component("adminNavpanel"); ?>
 
     <div class="admin-users-content">
-        <?php var_dump($users); ?>
+        <?php component("usersTable", ['users' => $users]); ?>
     </div>
 </div>

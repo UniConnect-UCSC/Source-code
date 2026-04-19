@@ -1,5 +1,5 @@
 <?php require(__DIR__ . "/../../core/utils.php"); ?>
-<div class="nav-panel">
+<div class="nav-panel admin-navpanel">
     <div class="">
         <?php foreach ($adminPanelLinks as $link): ?>
             <div class="nav-panel__link__container no-select">
