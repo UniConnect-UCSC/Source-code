@@ -27,9 +27,9 @@ smUploadForm.addEventListener('submit', async (e) => {
     var url = '';
     if (smUploadForm.getAttribute('type') === 'update') {
         formData.append('id', smUploadForm.getAttribute('data-id'));
-        url = '/studyMaterial/updateSM';
+        url = '/studymaterial/updateSM';
     } else if (smUploadForm.getAttribute('type') === 'create') {
-        url = '/studyMaterial/createNewSM';
+        url = '/studymaterial/createNewSM';
     }
 
     console.log('Study Material form data being sent:', ...formData.entries());
