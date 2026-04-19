@@ -5,28 +5,36 @@
 
 	<div class="feed">
 		<header>
-			<h1>Calendar</h1>
+			<h1>Schedule</h1>
 			<p class="subtitle">View your favorite and participating Events and Kuppi</p>
 		</header>
-		<div style="padding: var(--spacing-6);">
-			<script src="/assets/js/calender.js"></script>
-			<div class="simple-calendar">
-				<div class="simple-calendar-header">
-					<button id="prevMonthBtn">&lt;</button>
-					<span id="calendarMonthYear"></span>
-					<button id="nextMonthBtn">&gt;</button>
+		
+		<div class="controls">
+			<div class="date-range-picker">
+				<div class="date-range-inputs">
+					<div class="date-input-group">
+						<label for="startDate">From</label>
+						<input type="date" id="startDate" class="date-input">
+					</div>
+					
+					<div class="date-input-group">
+						<label for="endDate">To</label>
+						<input type="date" id="endDate" class="date-input">
+					</div>
+					
+					<button id="filterBtn" class="filter-btn">Filter</button>
+					<button id="clearBtn" class="clear-btn">Clear</button>
 				</div>
-				<table class="simple-calendar-table">
-					<thead>
-						<tr>
-							<th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
-						</tr>   
-					</thead>
-					<tbody id="calendarBody"></tbody>
-				</table>
 			</div>
+
+
+		<div id="calender-container"></div>
+
 		</div>
+		<div class="no-items-message hidden" id="noItemMsg">No items found for the selected date range.</div>
 	</div>
 
 	<?php component("widgetPanel"); ?>
 </div>
+
+<script src="/assets/js/calender.js"></script>
