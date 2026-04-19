@@ -4,6 +4,6 @@
     <?php component("adminNavpanel"); ?>
 
     <div class="admin-posts-content">
-        <?php component("eventsTable", ['users' => $users]); ?>
+        <?php component("eventsTable", ['events' => $events]); ?>
     </div>
 </div>

@@ -1,4 +1,4 @@
-.events-table-wrapper {
+.kuppi-table-wrapper {
   background: var(--color-primary-white);
   border: 1px solid var(--color-brand-100);
   border-radius: var(--rounded-xl);
@@ -7,7 +7,7 @@
   max-width: 100%;
 }
 
-.events-table-header {
+.kuppi-table-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,42 +16,26 @@
   border-bottom: 1px solid var(--color-brand-100);
 }
 
-.events-table-header h2 {
+.kuppi-table-header h2 {
   font-size: var(--text-base);
   font-weight: 500;
   margin: 0;
   color: var(--color-brand-900);
 }
 
-.events-search-input {
-  padding: 8px 12px;
-  border: 1px solid var(--color-brand-100);
-  border-radius: var(--rounded-lg);
-  width: 240px;
-  font-size: var(--text-sm);
-  background: var(--color-secondary-white);
-  color: var(--color-brand-900);
-  outline: none;
-  font-family: var(--font-sans);
-}
-
-.events-search-input:focus {
-  border-color: var(--color-brand-600);
-}
-
-.events-table {
+.kuppi-table {
   width: 100%;
-  min-width: 1100px;
+  min-width: 1200px;
   border-collapse: collapse;
   font-size: var(--text-sm);
   font-family: var(--font-sans);
 }
 
-.events-table thead tr {
+.kuppi-table thead tr {
   background: var(--color-secondary-white);
 }
 
-.events-table th {
+.kuppi-table th {
   text-align: left;
   padding: 12px 1.5rem;
   font-weight: 500;
@@ -62,23 +46,12 @@
   letter-spacing: 0.05em;
 }
 
-.events-table td {
+.kuppi-table td {
   padding: 12px 1.5rem;
   border-bottom: 1px solid var(--color-brand-100);
   color: var(--color-brand-900);
 }
 
-.events-table tbody tr:hover {
+.kuppi-table tbody tr:hover {
   background: var(--color-secondary-white);
-}
-
-.remove-btn {
-  cursor: pointer;
-  background: rgba(239, 68, 68, 0.12);
-  border-color: rgba(239, 68, 68, 0.25);
-  color: #b91c1c;
-}
-
-.remove-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
 }

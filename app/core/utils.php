@@ -71,7 +71,7 @@ $adminPanelLinks = [
     [
         "pageName" => "Uni Representative",
         "pageLink" => "/admin/unirep",
-        "icon" => "calendar"
+        "icon" => "shield"
     ],
     [
         "pageName" => "Kuppi",
