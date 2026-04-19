@@ -47,8 +47,6 @@ if (!isset($postType)) {
                         Delete Post</div>
                 <?php endif; ?>
 
-                <div>Copy URL</div>
-
                 <!-- Optionally Render if post doesnt belong to user -->
                 <?php if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != $authorId): ?>
                     <div>Report Post</div>

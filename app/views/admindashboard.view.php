@@ -35,7 +35,7 @@
 
             <?php component("statcard", ['title' => 'Total Comments', 'value' => '...', 'valueId' => 'total-comments-value']); ?>
 
-            <?php component("statcard", ['title' => 'Total Universities', 'value' => '45']);    ?>
+            <?php component("statcard", ['title' => 'Total Universities', 'value' => '...', 'valueId' => 'total-universities-value']);    ?>
 
             <?php component("statcard", ['title' =>
             "Kuppi's posted", 'value' => '3,210']);    ?>

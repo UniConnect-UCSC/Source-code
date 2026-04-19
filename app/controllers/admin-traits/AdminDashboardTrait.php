@@ -39,13 +39,14 @@ trait AdminDashboardTrait
         $globalPostModel = new GlobalPost();
         $universityPostModel = new UniversityPost();
         $commentModel = new PostComment();
+        $universityMode = new University();
 
         $totalUsers = $userModel->getTotalUsers();
         $totalPosts = $globalPostModel->getTotalPosts();
         $universityPosts = $universityPostModel->getTotalPosts();
         $totalComments = $commentModel->getTotalComments();
+        $totalUniversities = $universityMode->getTotalUniversitiees();
 
-        error_log("University posts count: " . $universityPosts);
 
         ob_end_clean();
         echo json_encode([
@@ -55,6 +56,7 @@ trait AdminDashboardTrait
                 'totalGlobalPosts' => $totalPosts,
                 'totalUniversityPosts' => $universityPosts,
                 'totalComments' => $totalComments,
+                'totalUniversities' => $totalUniversities,
             ],
         ]);
         exit;

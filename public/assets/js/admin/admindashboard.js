@@ -11,28 +11,42 @@ async function getDashboardStats() {
     const totalGlobalPosts = res.data.totalGlobalPosts;
     const totalUniversityPosts = res.data.totalUniversityPosts;
     const totalComments = res.data.totalComments;
+    const totalUniversities = res.data.totalUniversities;
 
     const totalUsersEl = document.getElementById("total-users-value");
-    if (totalUsersEl)
+    if (totalUsersEl) {
       totalUsersEl.textContent = (totalUsers ?? 0).toLocaleString();
+    }
 
     const totalGlobalPostsEl = document.getElementById(
       "total-global-posts-value",
     );
-    if (totalGlobalPostsEl)
+    if (totalGlobalPostsEl) {
       totalGlobalPostsEl.textContent = (totalGlobalPosts ?? 0).toLocaleString();
+    }
 
     const totalUniversityPostsEl = document.getElementById(
       "total-university-posts-value",
     );
-    if (totalUniversityPostsEl)
+    if (totalUniversityPostsEl) {
       totalUniversityPostsEl.textContent = (
         totalUniversityPosts ?? 0
       ).toLocaleString();
+    }
 
     const totalCommentsEl = document.getElementById("total-comments-value");
-    if (totalCommentsEl)
+    if (totalCommentsEl) {
       totalCommentsEl.textContent = (totalComments ?? 0).toLocaleString();
+    }
+
+    const totalUniversitiesEl = document.getElementById(
+      "total-universities-value",
+    );
+    if (totalUniversitiesEl) {
+      totalUniversitiesEl.textContent = (
+        totalUniversities ?? 0
+      ).toLocaleString();
+    }
   } catch (error) {
     console.error("Failed to fetch dashboard stats:", error);
   }
