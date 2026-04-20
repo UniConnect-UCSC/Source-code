@@ -11,7 +11,6 @@ function renderPostRow(post) {
     ? escapeHtml(post.university_name || post.university_id)
     : '<span class="type-pill">Global</span>';
 
-  const isReported = Boolean(post.reported);
   const isDeleted = Boolean(post.deleted_at);
   const rowType = post.university_id ? "university" : "global";
 
@@ -21,11 +20,6 @@ function renderPostRow(post) {
     <td>${universityCell}</td>
     <td class="caption-cell">${post.caption ? escapeHtml(post.caption) : "-"}</td>
     <td>
-      <span class="status-pill ${isReported ? "status-yes" : "status-no"}">
-        ${isReported ? "Reported" : "Not reported"}
-      </span>
-    </td>
-    <td class="deleted-status-cell">
       <span class="status-pill ${isDeleted ? "status-yes" : "status-no"}">
         ${isDeleted ? "Deleted" : "Active"}
       </span>

@@ -170,7 +170,7 @@ trait AdminPostsTrait
         }
 
         $model = $postType === 'global' ? new GlobalPost() : new UniversityPost();
-        $ok = $model->delete([['id', '=', $postId]], true); // soft delete
+        $ok = $model->delete([['id', '=', $postId]]);
 
         ob_end_clean();
         echo json_encode(['success' => (bool)$ok]);

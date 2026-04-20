@@ -21,7 +21,10 @@ $globalPosts = $globalModel->where(
     ],
     null,
     null,
-    ['created_at' => 'DESC']
+    ['created_at' => 'DESC'],
+    [],
+    [],
+    false
 );
 
 
@@ -31,7 +34,10 @@ $uniPosts = $uniModel->where(
     ],
     null,
     null,
-    ['created_at' => 'DESC']
+    ['created_at' => 'DESC'],
+    [],
+    [],
+    false
 );
 ?>
 <div class="profile-feed" data-user-id="<?= htmlspecialchars($userId) ?>">

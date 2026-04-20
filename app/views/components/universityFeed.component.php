@@ -11,7 +11,7 @@
         $uniPostsModel = new UniversityPost();
         $uniPosts = $uniPostsModel->where([
             ["university_id", '=', $_SESSION['user_universityID']],
-        ], null, null, ['created_at' => 'DESC']);
+        ], null, null, ['created_at' => 'DESC'], [], [], false);
 
         ?>
 

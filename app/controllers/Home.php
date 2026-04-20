@@ -46,7 +46,7 @@ class Home extends Controller
             $postId = $_POST['delete_post_id'];
             $postModel = new GlobalPost();
 
-            $postModel->delete($postId);
+            $postModel->delete($postId, true);
             exit;
         }
 

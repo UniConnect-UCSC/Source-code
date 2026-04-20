@@ -54,7 +54,7 @@ class Profile extends Controller
                 $postModel = new UniversityPost();
             }
 
-            $postModel->delete($postId);
+            $postModel->delete($postId, true);
             exit;
         }
 
