@@ -9,7 +9,7 @@
     <div class="global-feed">
         <?php
         $postsModel = new GlobalPost();
-        $posts = $postsModel->where([], null, null, ['created_at' => 'DESC']);
+        $posts = $postsModel->where([], null, null, ['created_at' => 'DESC'], [], [], false);
 
 
         ?>

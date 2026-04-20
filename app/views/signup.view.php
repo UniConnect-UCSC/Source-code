@@ -31,7 +31,8 @@
             <!-- Birthday -->
             <div class="birthday-section">
                 <div class="input-container">
-                    <input type="date" id="birthday" name="birthday" class="input-field">
+                    <input type="date" id="birthday" name="birthday" class="input-field"
+                        max="<?= date('Y-m-d', strtotime('-1 day')) ?>">
                     <label class="input-label">Select your birthday</label>
                 </div>
                 <div class="error-message" id="birthday-error"></div>
@@ -65,9 +66,9 @@
                 </div>
                 <div class="error-message" id="confirmPassword-error"></div>
                 <?php if (!empty($errors['email'])): ?>
-                <div class="error-message show" id="email-incorrect-error">
-                    <?= htmlspecialchars($errors['email']) ?>
-                </div>
+                    <div class="error-message show" id="email-incorrect-error">
+                        <?= htmlspecialchars($errors['email']) ?>
+                    </div>
                 <?php endif; ?>
 
             </div>

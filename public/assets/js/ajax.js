@@ -28,6 +28,7 @@ class Ajax {
         const separator = urlPath.includes("?") ? "&" : "?";
         return urlPath + separator + queryString;
       }
+      return urlPath;
     } else if (method === "POST") {
       return urlPath;
     } else {

@@ -62,14 +62,24 @@ function handleAuth()
 {
     $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $loggedIn = !empty($_SESSION['user_email']);
+    $adminLoggedIn = !empty($_SESSION['is_admin']);
 
-    // If user is logged in and visits login/signup → redirect to home
+    $isAdminRoute = str_starts_with($currentPath, '/admin');
+
+    if ($isAdminRoute) {
+        if (!$adminLoggedIn && !in_array($currentPath, ['/admin', '/admin/login', '/admin/loginAdmin'])) {
+            header("Location: /admin");
+            exit;
+        }
+
+        return;
+    }
+
     if ($loggedIn && in_array($currentPath, ['/login', '/signup'])) {
         header("Location: /");
         exit;
     }
 
-    // If user is NOT logged in and tries to access protected pages → redirect to login
     if (!$loggedIn && !in_array($currentPath, ['/login', '/signup'])) {
         header("Location: /login");
         exit;

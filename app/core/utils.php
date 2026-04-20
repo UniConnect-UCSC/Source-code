@@ -36,18 +36,61 @@ $navbarPanelLinks = [
         "icon" => "calendar"
     ],
     [
-        "pageName" => "Friend Requests",
+        "pageName" => "Friends",
         "pageLink" => "/friends",
         "icon" => "handshake"
     ],
-    // [
-    //     "pageName" => "Groups",
-    //     "pageLink" => "/",
-    //     "icon" => "users"
-    // ],
     [
         "pageName" => "University Representative",
         "pageLink" => "/unirepresentative",
         "icon" => "shield"
     ]
+];
+
+$adminPanelLinks = [
+    [
+        "pageName" => "Dashboard",
+        "pageLink" => "/admin/dashboard",
+        "icon" => "layout-dashboard"
+    ],
+    [
+        "pageName" => "Users",
+        "pageLink" => "/admin/users",
+        "icon" => "users"
+    ],
+    [
+        "pageName" => "Posts",
+        "pageLink" => "/admin/posts",
+        "icon" => "book-image"
+    ],
+    [
+        "pageName" => "Events",
+        "pageLink" => "/admin/events",
+        "icon" => "calendar"
+    ],
+    [
+        "pageName" => "Uni Representative",
+        "pageLink" => "/admin/unirep",
+        "icon" => "shield"
+    ],
+    [
+        "pageName" => "Kuppi",
+        "pageLink" => "/admin/kuppi ",
+        "icon" => "graduation-cap"
+    ],
+    // [
+    //     "pageName" => "Study Materials",
+    //     "pageLink" => "/admin/studymaterials",
+    //     "icon" => "notebook-pen"
+    // ],
+    // [
+    //     "pageName" => "Boardings",
+    //     "pageLink" => "/admin/boardings",
+    //     "icon" => "bed"
+    // ],
+    // [
+    //     "pageName" => "Marketplace",
+    //     "pageLink" => "/admin/marketplace",
+    //     "icon" => "store"
+    // ],
 ];
