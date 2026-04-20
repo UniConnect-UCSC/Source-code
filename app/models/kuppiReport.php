@@ -35,32 +35,29 @@ class KuppiReportModel
         ];
 
         $selected = [
-            "k.id",
-            "k.topic",
-            "k.status",
-            "k.kuppi_date_time",
-            "k.participants",
-            ["h.f_name", "host_f_name"],
-            ["h.l_name", "host_l_name"],
-            ["c.category_name", "category_name"],
-            ["n.name", "host_university"],
-            ["COUNT(DISTINCT m.id)", "report_count"],
-            ["MAX(m.created_at)", "last_reported_at"],
-            ["MAX(m.report_status)", "report_status"],
-            ["MAX(m.decision)", "decision"]
+            "m.report_status",
+            "k.*",
+            ["h.f_name" , "host_f_name"],
+            ["r.f_name" , "requester_f_name"],
+            ["h.l_name" , "host_l_name"],           
+            ["r.l_name" , "requester_l_name"],
+            ["c.category_name" , "category"],
+            ["n.name" , "host_university"],
+            ["s.name" , "requester_university"],
+            ["count(m.kuppi_id)", "report_count"]            
         ];
 
         $groupBy = [
-            "k.id",
-            "h.f_name",
-            "h.l_name",
-            "c.category_name",
-            "n.name"
-        ];
-
-        $orderBy = [
-            "MAX(m.created_at)" => "DESC"
-        ];
+        "m.report_status",
+        "k.id",
+        "h.f_name",
+        "r.f_name",
+        "h.l_name",
+        "r.l_name",
+        "c.category_name",
+        "n.name",
+        "s.name"
+    ];
 
         $data = $this->where(
             conditions: $conditions,
