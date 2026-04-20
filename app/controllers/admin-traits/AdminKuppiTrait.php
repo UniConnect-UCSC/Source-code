@@ -9,31 +9,8 @@ trait AdminKuppiTrait
             exit;
         }
 
-        $kuppiModel = new KuppiModel();
-
-        $kuppi = $kuppiModel->where(
-            [],
-            15,
-            0,
-            ['m.kuppi_date_time' => 'DESC'],
-            [
-                ['users', 'm.host_id = h.id', 'LEFT', 'h'],
-                ['universities', 'm.university_id = u.id', 'LEFT', 'u'],
-                ['kuppi_categories', 'm.category_id = c.id', 'LEFT', 'c'],
-            ],
-            [
-                'm.id',
-                'm.topic',
-                'm.status',
-                'm.kuppi_date_time',
-                'm.participants',
-                'm.host_id',
-                'u.name AS university_name',
-                'h.f_name AS host_f_name',
-                'h.l_name AS host_l_name',
-                'c.category_name AS category_name',
-            ]
-        ) ?: [];
+        $reportModel = new KuppiReportModel();
+        $kuppi = $reportModel->getAllKuppiReports(0, 15);
 
         $this->view('adminKuppi', [
             'title' => 'Admin Dashboard | UniConnect',
@@ -44,7 +21,7 @@ trait AdminKuppiTrait
             <link rel="stylesheet" href="/assets/css/components/navPanel.css">
             <link rel="stylesheet" href="/assets/css/components/kuppiTable.css">
             ',
-            'kuppi' => $kuppi,
+            'kuppi' => $kuppi ?: [],
         ]);
     }
 
@@ -64,52 +41,22 @@ trait AdminKuppiTrait
         $offset = (int)($body['offset'] ?? 0);
         $limit = (int)($body['limit'] ?? 10);
         $search = trim($body['context']['search'] ?? '');
+        $reportStatus = trim($body['context']['reportStatus'] ?? '');
 
-        $kuppiModel = new KuppiModel();
-
-        $conditions = [];
-        if ($search !== '') {
-            $conditions = [
-                ['m.topic', 'ILIKE', '%' . $search . '%', 'OR'],
-                ['m.status', 'ILIKE', '%' . $search . '%', 'OR'],
-                ['u.name', 'ILIKE', '%' . $search . '%', 'OR'],
-                ['h.f_name', 'ILIKE', '%' . $search . '%', 'OR'],
-                ['h.l_name', 'ILIKE', '%' . $search . '%', 'OR'],
-                ['c.category_name', 'ILIKE', '%' . $search . '%', 'OR'],
-                ['CAST(m.id AS TEXT)', 'ILIKE', '%' . $search . '%'],
-            ];
-        }
-
-        $kuppi = $kuppiModel->where(
-            $conditions,
-            $limit,
+        $reportModel = new KuppiReportModel();
+        $rows = $reportModel->getAllKuppiReports(
             $offset,
-            ['m.kuppi_date_time' => 'DESC'],
-            [
-                ['users', 'm.host_id = h.id', 'LEFT', 'h'],
-                ['universities', 'm.university_id = u.id', 'LEFT', 'u'],
-                ['kuppi_categories', 'm.category_id = c.id', 'LEFT', 'c'],
-            ],
-            [
-                'm.id',
-                'm.topic',
-                'm.status',
-                'm.kuppi_date_time',
-                'm.participants',
-                'm.host_id',
-                'u.name AS university_name',
-                'h.f_name AS host_f_name',
-                'h.l_name AS host_l_name',
-                'c.category_name AS category_name',
-            ]
-        ) ?: [];
+            $limit,
+            $reportStatus !== '' ? $reportStatus : null,
+            $search
+        );
 
         ob_end_clean();
-        echo json_encode($kuppi);
+        echo json_encode($rows);
         exit;
     }
 
-    public function approveKuppiRequest()
+    public function resolveKuppiReport()
     {
         ob_start();
         header('Content-Type: application/json');
@@ -130,19 +77,44 @@ trait AdminKuppiTrait
 
         $body = json_decode(file_get_contents('php://input'), true) ?? [];
         $kuppiId = trim($body['kuppi_id'] ?? '');
+        $action = trim($body['action'] ?? '');
 
-        if (empty($kuppiId)) {
+        if ($kuppiId === '' || !in_array($action, ['approve', 'reject'], true)) {
             ob_end_clean();
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'kuppi_id is required']);
+            echo json_encode(['success' => false, 'message' => 'Invalid input']);
             exit;
         }
 
+        $reportModel = new KuppiReportModel();
         $kuppiModel = new KuppiModel();
-        $ok = $kuppiModel->update($kuppiId, ['status' => 'Upcoming']);
+
+        if (!$reportModel->hasPendingReports($kuppiId)) {
+            ob_end_clean();
+            echo json_encode(['success' => false, 'message' => 'No pending reports for this kuppi']);
+            exit;
+        }
+
+        $decision = $action === 'approve' ? 'Kuppi Approved' : 'Kuppi Rejected';
+        $resolved = $reportModel->resolveReportsForKuppi($kuppiId, $decision);
+
+        if (!$resolved) {
+            ob_end_clean();
+            echo json_encode(['success' => false, 'message' => 'Failed to resolve reports']);
+            exit;
+        }
+
+        if ($action === 'reject') {
+            $kuppiModel->update($kuppiId, ['status' => 'Rejected']);
+        }
 
         ob_end_clean();
-        echo json_encode(['success' => (bool)$ok]);
+        echo json_encode([
+            'success' => true,
+            'report_status' => 'Resolved',
+            'decision' => $decision,
+            'kuppi_status' => $action === 'reject' ? 'Rejected' : null
+        ]);
         exit;
     }
 }

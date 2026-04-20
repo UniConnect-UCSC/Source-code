@@ -36,7 +36,7 @@ $navbarPanelLinks = [
         "icon" => "calendar"
     ],
     [
-        "pageName" => "Friend",
+        "pageName" => "Friends",
         "pageLink" => "/friends",
         "icon" => "handshake"
     ],

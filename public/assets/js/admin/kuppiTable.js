@@ -25,28 +25,48 @@ function formatDateTime(value) {
   });
 }
 
-async function approveKuppiRequest(kuppiId, btn) {
-  if (!confirm("Approve this requested kuppi?")) return;
+async function resolveKuppiReport(kuppiId, action, btn) {
+  var actionLabel =
+    action === "approve" ? "allow this kuppi" : "reject this kuppi";
+  if (!confirm("Are you sure you want to " + actionLabel + "?")) return;
 
   btn.disabled = true;
-  const originalText = btn.textContent;
-  btn.textContent = "Approving...";
+  var originalText = btn.textContent;
+  btn.textContent = "Processing...";
 
   try {
-    const res = await Ajax.jsonPost("/admin/approveKuppiRequest", {
+    var res = await Ajax.jsonPost("/admin/resolveKuppiReport", {
       kuppi_id: kuppiId,
+      action: action,
     });
 
-    if (res?.success) {
-      const row = btn.closest("tr");
-      const statusCell = row?.querySelector(".kuppi-status-cell");
-      if (statusCell) {
-        statusCell.innerHTML =
-          '<span class="kuppi-status-pill status-upcoming">Upcoming</span>';
+    if (res && res.success) {
+      var row = btn.closest("tr");
+      if (row) {
+        var reportStatusCell = row.querySelector(".report-status-cell");
+        var decisionCell = row.querySelector(".decision-cell");
+        var actionsCell = btn.closest("td");
+
+        if (reportStatusCell) {
+          reportStatusCell.innerHTML =
+            '<span class="kuppi-status-pill status-resolved">Resolved</span>';
+        }
+
+        if (decisionCell) {
+          decisionCell.innerHTML =
+            '<span class="kuppi-status-pill status-' +
+            getKuppiStatusClass(res.decision || "unknown") +
+            '">' +
+            escapeHtml(res.decision || "-") +
+            "</span>";
+        }
+
+        if (actionsCell) {
+          actionsCell.innerHTML = "<span>-</span>";
+        }
       }
-      btn.closest("td").innerHTML = "<span>-</span>";
     } else {
-      alert(res?.message || "Failed to approve kuppi request.");
+      alert((res && res.message) || "Failed to resolve report.");
       btn.disabled = false;
       btn.textContent = originalText;
     }
@@ -61,12 +81,26 @@ async function approveKuppiRequest(kuppiId, btn) {
 function renderKuppiRow(item) {
   var tr = document.createElement("tr");
   var host = ((item.host_f_name || "") + " " + (item.host_l_name || "")).trim();
+  var reportStatus = item.report_status || "Pending";
+  var decision = item.decision || "";
 
   var actionHtml =
-    item.status === "Requested"
-      ? '<button class="table-btn approve-btn" onclick="approveKuppiRequest(\'' +
+    reportStatus === "Pending"
+      ? '<button class="table-btn allow-btn" onclick="resolveKuppiReport(\'' +
         escapeHtml(item.id) +
-        "', this)\">Approve</button>"
+        "', 'approve', this)\">Allow</button> " +
+        '<button class="table-btn reject-btn" onclick="resolveKuppiReport(\'' +
+        escapeHtml(item.id) +
+        "', 'reject', this)\">Reject</button>"
+      : "<span>-</span>";
+
+  var decisionHtml =
+    decision !== ""
+      ? '<span class="kuppi-status-pill status-' +
+        escapeHtml(getKuppiStatusClass(decision)) +
+        '">' +
+        escapeHtml(decision) +
+        "</span>"
       : "<span>-</span>";
 
   tr.innerHTML =
@@ -80,23 +114,26 @@ function renderKuppiRow(item) {
     escapeHtml(host || "-") +
     "</td>" +
     "<td>" +
-    escapeHtml(item.university_name || "-") +
+    escapeHtml(item.host_university || "-") +
     "</td>" +
     "<td>" +
     escapeHtml(item.category_name || "-") +
     "</td>" +
-    '<td class="kuppi-status-cell">' +
+    "<td>" +
+    (item.report_count ?? 0) +
+    "</td>" +
+    "<td>" +
+    escapeHtml(formatDateTime(item.last_reported_at)) +
+    "</td>" +
+    '<td class="report-status-cell">' +
     '<span class="kuppi-status-pill status-' +
-    escapeHtml(getKuppiStatusClass(item.status)) +
+    escapeHtml(getKuppiStatusClass(reportStatus)) +
     '">' +
-    escapeHtml(item.status || "-") +
+    escapeHtml(reportStatus) +
     "</span>" +
     "</td>" +
-    "<td>" +
-    escapeHtml(formatDateTime(item.kuppi_date_time)) +
-    "</td>" +
-    "<td>" +
-    (item.participants ?? 0) +
+    '<td class="decision-cell">' +
+    decisionHtml +
     "</td>" +
     "<td>" +
     actionHtml +
@@ -120,10 +157,17 @@ function initKuppiTable() {
     10,
   );
 
+  kuppiScroll.setContextProvider(function () {
+    return {
+      reportStatus: "",
+      search: "",
+    };
+  });
+
   kuppiScroll.setSkeletonLoader(function () {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      '<td colspan="9" style="text-align:center; padding:1rem; color: var(--color-secondary-gray);">Loading...</td>';
+      '<td colspan="10" style="text-align:center; padding:1rem; color: var(--color-secondary-gray);">Loading...</td>';
     return tr;
   });
 

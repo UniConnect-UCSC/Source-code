@@ -8,6 +8,7 @@ require_once __DIR__ . '/../models/RepresentativeRequest.php';
 require_once __DIR__ . '/../models/Representative.php';
 require_once __DIR__ . '/../models/Event.php';
 require_once __DIR__ . '/../models/Kuppi.php';
+require_once __DIR__ . '/../models/kuppiReport.php';
 
 require_once __DIR__ . '/admin-traits/AdminUsersTrait.php';
 require_once __DIR__ . '/admin-traits/AdminDashboardTrait.php';
