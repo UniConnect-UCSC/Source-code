@@ -3,22 +3,22 @@
 // $file should be passed the $_FILE['name'] associative array
 function uploadImageToCloudinary($file, $locationFolder, $signed = false): ?string
 {
-    if (empty($file)) {
+    if(empty($file)){
         error_log("No file uploaded by user " . ($_SESSION['user_id']));
         return null;
     }
 
-    if ($file['error'] !== UPLOAD_ERR_OK) {
+    if($file['error'] !== UPLOAD_ERR_OK){
         error_log("File upload to server failed: " . $file['error'] . 'by user ' . $_SESSION['user_id']);
         return null;
     }
 
     $mediaStorageService = new CloudinaryMediaStorageService();
-    $uploadedKey = $signed
+    $uploadedKey = $signed 
         ? $mediaStorageService->uploadSignedMedia($file['tmp_name'], $locationFolder)
         : $mediaStorageService->uploadMedia($file['tmp_name'], $locationFolder);
 
-    if (!$uploadedKey) {
+    if(!$uploadedKey){
         error_log('Cloudinary upload failed for post by user ' . ($_SESSION['user_id'] ?? 'unknown'));
         return null;
     }
@@ -26,12 +26,11 @@ function uploadImageToCloudinary($file, $locationFolder, $signed = false): ?stri
     return $uploadedKey;
 }
 
-function getCloudinarySignedURL($secretKey, $expireInSeconds = 600): ?string
-{
+function getCloudinarySignedURL($secretKey, $expireInSeconds = 600): ?string{
     $mediaStorageService = new CloudinaryMediaStorageService();
     $responseUrl = $mediaStorageService->getMediaSignedURL($secretKey, $expireInSeconds);
 
-    if (!$responseUrl) {
+    if(!$responseUrl){
         error_log('Cloudinary get signed URL failed for key ' . $secretKey);
         return null;
     }
@@ -86,6 +85,7 @@ function handleAuth()
         exit;
     }
 }
+
 function getEmailDomain($email)
 {
     //Validate email
@@ -126,8 +126,7 @@ function timeAgo($datetime)
     }
 }
 
-function parseRequestData()
-{
+function parseRequestData(){
 
     $contentType = $_SERVER['CONTENT_TYPE'] ?? $_SERVER['HTTP_CONTENT_TYPE'] ?? '';
     $parts = explode(';', $contentType);
@@ -137,7 +136,7 @@ function parseRequestData()
 
     $data = [];
 
-    switch ($baseType) {
+    switch($baseType){
         case 'application/json':
             $rawData = file_get_contents('php://input');
             $data = json_decode($rawData, true);
@@ -151,7 +150,7 @@ function parseRequestData()
             $data = $_POST;
             $data["FILES"] = $_FILES;
             break;
-
+        
         case 'text/plain':
             $rawData = file_get_contents('php://input');
             $data = $rawData;

@@ -1,21 +1,21 @@
 const router = new window.NotificationRouter();
-const notificationContainer = document.getElementById("notificationsContainer");
+const notificationContainer = document.getElementById('notificationsContainer');
 var isNotificationPanelOpen = false;
 var checkingNewNotifications = false;
 var isFiltering = false;
-var notificationFilter = "all";
+var notificationFilter = 'all';
 const loadMoreThreshold = 20;
 
 //router.register('like', LikeNotificationRenderer);
 
 // Infinity scroll initialization
 const newNotificationScroll = new InfinityScroll(
-  "getNotifications",
-  "/Notifications/scrollable",
+  'getNotifications',
+  '/Notifications/scrollable',
   notificationContainer,
   router.render.bind(router),
   0,
-  6,
+  6
 );
 
 async function refreshNotifications() {
@@ -26,51 +26,50 @@ async function refreshNotifications() {
 
   // If after refresh the container is not scrollable, try loading more notifications
   while (!checkIfContainerIsScrollable()) {
-    if (!(await loadMoreNotifications())) {
-      break;
-    }
+    if(!(await loadMoreNotifications())) {break;}
   }
 }
 
 async function loadMoreNotifications() {
-  const endNotReached =
-    await newNotificationScroll.loadNextElements(notificationFilter);
+  const endNotReached = await newNotificationScroll.loadNextElements(notificationFilter);
   updateNotificationTimeAgo(notificationContainer);
 
   return endNotReached;
 }
 
 function checkIfContainerIsScrollable() {
-  if (
-    notificationContainer.scrollHeight <= notificationContainer.clientHeight
-  ) {
+  if (notificationContainer.scrollHeight <= notificationContainer.clientHeight) {
     return false;
   }
   return true;
 }
 
 function updateNotificationCount() {
-  Ajax.jsonPost("/notifications/getUnreadNotificationCount", {}).then(
-    (data) => {
-      const count = data.unreadNotificationCount;
-      const countBadge = document.getElementById("notificationCount");
+  
+  Ajax.jsonPost('/notifications/getUnreadNotificationCount', {}).then((data) => {
 
-      if (countBadge) {
-        if (count > 0) {
-          const displayCount = count > 99 ? "99+" : count.toString();
-          countBadge.textContent = displayCount;
-          countBadge.classList.remove("hidden");
-        } else {
-          countBadge.textContent = "";
-          countBadge.classList.add("hidden");
-        }
-      }
-    },
-  );
+  const count = data.unreadNotificationCount;
+  const countBadge = document.getElementById('notificationCount');
+  
+  if (countBadge) {
+    if (count > 0) {
+      const displayCount = count > 99 ? '99+' : count.toString();
+      countBadge.textContent = displayCount;
+      countBadge.classList.remove('hidden');
+    } else {
+      countBadge.textContent = '';
+      countBadge.classList.add('hidden');
+    }
+  }
+
+
+  });
 }
 
 function toggleNotifications() {
-  const notificationsWrapper = document.querySelector(".notifications-wrapper");
+  const notificationsWrapper = document.querySelector(
+    ".notifications-wrapper"
+  );
   const isVisible = notificationsWrapper.style.opacity === "1";
 
   if (isVisible) {
@@ -81,7 +80,9 @@ function toggleNotifications() {
 }
 
 function openNotifications() {
-  const notificationsWrapper = document.querySelector(".notifications-wrapper");
+  const notificationsWrapper = document.querySelector(
+    ".notifications-wrapper"
+  );
 
   isNotificationPanelOpen = true;
 
@@ -98,7 +99,9 @@ function openNotifications() {
 }
 
 function closeNotifications() {
-  const notificationsWrapper = document.querySelector(".notifications-wrapper");
+  const notificationsWrapper = document.querySelector(
+    ".notifications-wrapper"
+  );
 
   isNotificationPanelOpen = false;
 
@@ -115,42 +118,39 @@ function closeNotifications() {
 }
 
 function updateNotificationTimeAgo(notificationContainer) {
-  const notificationItems =
-    notificationContainer.querySelectorAll(".notification-item");
-
-  notificationItems.forEach((item) => {
-    const timestamp = item.getAttribute("data-timestamp");
+  const notificationItems = notificationContainer.querySelectorAll(".notification-item");
+  
+  notificationItems.forEach(item => {
+    const timestamp = item.getAttribute('data-timestamp');
     const timeAgo = calculateTimeAgo(timestamp);
-    const timeElement = item.querySelector(".notification-time");
+    const timeElement = item.querySelector('.notification-time');
     if (timeElement) {
       timeElement.textContent = timeAgo;
     }
   });
 }
 
+
 function markAllAsRead() {
-  Ajax.jsonPost("/notifications/markAllAsRead", {}).then(() => {
+  Ajax.jsonPost('/notifications/markAllAsRead', {}).then(() => {
     // instead of a refresh we can just update the classes of all notification items to reduce server load
     refreshNotifications();
   });
 }
 
 function filterNotifications(filter, parentElement) {
-  if (isFiltering || notificationFilter === filter) {
-    return;
-  }
+  
+  if(isFiltering || notificationFilter === filter) {return;}
   isFiltering = true;
 
   notificationFilter = filter;
 
-  const filterButtons = parentElement.querySelectorAll(
-    ".notification-filter-btn",
-  );
-  filterButtons.forEach((btn) => {
-    if (btn.getAttribute("data-filter") === filter) {
-      btn.classList.add("active");
+  const filterButtons = parentElement.querySelectorAll('.notification-filter-btn');
+  filterButtons.forEach(btn => {
+    if (btn.getAttribute('data-filter') === filter) {
+      btn.classList.add('active');
     } else {
-      btn.classList.remove("active");
+      btn.classList.remove('active');
     }
   });
 
@@ -159,26 +159,27 @@ function filterNotifications(filter, parentElement) {
   });
 }
 
-function checkForNewNotifications() {
-  if (checkingNewNotifications || isNotificationPanelOpen) {
-    return;
-  }
+function checkForNewNotifications(){
+
+  if(checkingNewNotifications || isNotificationPanelOpen){return} 
   checkingNewNotifications = true;
 
-  const mostRecentNotification = notificationContainer.querySelector("*");
+  const mostRecentNotification = notificationContainer.querySelector('*'); 
 
-  if (!mostRecentNotification) {
+  if(!mostRecentNotification) {
     checkingNewNotifications = false;
     return;
   }
 
   const data = {
-    lastCheckTimestamp: mostRecentNotification.getAttribute("data-timestamp"),
+    lastCheckTimestamp: mostRecentNotification.getAttribute('data-timestamp')
   };
 
-  Ajax.jsonPost("/notifications/checkNew", data).then((data) => {
-    if (data.hasNewNotifications) {
-      console.log("new Notifications available. Refreshing Notifications");
+  Ajax.jsonPost('/notifications/checkNew', data).then((data) => {
+
+    if(data.hasNewNotifications){
+
+      console.log("new Notifications available. Refreshing Notifications")
       refreshNotifications();
     }
   });
@@ -194,11 +195,8 @@ const pollInterval = setInterval(() => {
 }, 10000);
 
 // Load more on scroll to bottom
-notificationContainer.addEventListener("scroll", () => {
-  if (
-    notificationContainer.scrollTop + notificationContainer.clientHeight >=
-    notificationContainer.scrollHeight - loadMoreThreshold
-  ) {
+notificationContainer.addEventListener('scroll', () => {  
+  if (notificationContainer.scrollTop + notificationContainer.clientHeight >= notificationContainer.scrollHeight - loadMoreThreshold) {
     loadMoreNotifications();
   }
 });
