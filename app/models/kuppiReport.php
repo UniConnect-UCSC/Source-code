@@ -5,6 +5,7 @@ class KuppiReportModel
     use Model;
     protected $table = "kuppi_reports";
 
+
     public function getAllKuppiReports($offset = 0, $limit = null, $status = null, $search = '')
     {
         $conditions = [
@@ -35,29 +36,32 @@ class KuppiReportModel
         ];
 
         $selected = [
-            "m.report_status",
-            "k.*",
-            ["h.f_name" , "host_f_name"],
-            ["r.f_name" , "requester_f_name"],
-            ["h.l_name" , "host_l_name"],           
-            ["r.l_name" , "requester_l_name"],
-            ["c.category_name" , "category"],
-            ["n.name" , "host_university"],
-            ["s.name" , "requester_university"],
-            ["count(m.kuppi_id)", "report_count"]            
+            "k.id",
+            "k.topic",
+            "k.status",
+            "k.kuppi_date_time",
+            "k.participants",
+            ["h.f_name", "host_f_name"],
+            ["h.l_name", "host_l_name"],
+            ["c.category_name", "category_name"],
+            ["n.name", "host_university"],
+            ["COUNT(DISTINCT m.id)", "report_count"],
+            ["MAX(m.created_at)", "last_reported_at"],
+            ["MAX(m.report_status)", "report_status"],
+            ["MAX(m.decision)", "decision"]
         ];
 
         $groupBy = [
-        "m.report_status",
-        "k.id",
-        "h.f_name",
-        "r.f_name",
-        "h.l_name",
-        "r.l_name",
-        "c.category_name",
-        "n.name",
-        "s.name"
-    ];
+            "k.id",
+            "h.f_name",
+            "h.l_name",
+            "c.category_name",
+            "n.name"
+        ];
+
+        $orderBy = [
+            "MAX(m.created_at)" => "DESC"
+        ];
 
         $data = $this->where(
             conditions: $conditions,
@@ -98,5 +102,66 @@ class KuppiReportModel
         ]);
 
         return is_array($rows) && count($rows) > 0;
+    }
+
+    public function getMyReportedKuppiSessions ($userId ,$offset ,$limit) {
+        $conditions = [
+            ['k.host_id','=', $userId]
+        ];
+
+        $join = [
+            ["kuppi", "m.kuppi_id = k.id", "INNER", "k"],
+            ["users", "k.host_id = h.id", "INNER", "h"],
+            ["users", "k.requester_id = r.id", "LEFT", "r"],
+            ["kuppi_categories", "k.category_id = c.id", "INNER", "c"],
+            ["universities", "h.university_id = n.id", "INNER" ,"n"],
+            ["universities", "r.university_id = s.id", "LEFT" ,"s"]
+            
+        ];
+
+        $orderBy = [
+            "k.kuppi_date_time" => 'DESC'
+        ];
+
+        $selected = [
+            "m.report_status",
+            "k.*",
+            ["h.f_name" , "host_f_name"],
+            ["r.f_name" , "requester_f_name"],
+            ["h.l_name" , "host_l_name"],           
+            ["r.l_name" , "requester_l_name"],
+            ["c.category_name" , "category"],
+            ["n.name" , "host_university"],
+            ["s.name" , "requester_university"],
+            ["count(m.kuppi_id)", "report_count"]            
+        ];
+
+        $groupBy = [
+        "m.report_status",
+        "k.id",
+        "h.f_name",
+        "r.f_name",
+        "h.l_name",
+        "r.l_name",
+        "c.category_name",
+        "n.name",
+        "s.name"
+    ];
+
+        $data = $this->where(
+            conditions: $conditions,
+            join: $join,
+            orderBy: $orderBy,
+            offset: $offset,
+            limit: $limit,
+            selected: $selected,
+            groupBy: $groupBy
+        );
+
+        if(!is_array($data)) {
+            return [];
+        }
+
+        return $data;
     }
 }
