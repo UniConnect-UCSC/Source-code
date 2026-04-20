@@ -24,7 +24,7 @@ class KuppiReportModel {
         ];
 
         $selected = [
-            "m.*"
+            "m.*",
             "k.*",
             ["h.f_name" , "host_f_name"],
             ["r.f_name" , "requester_f_name"],
