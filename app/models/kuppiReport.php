@@ -24,7 +24,7 @@ class KuppiReportModel {
         ];
 
         $selected = [
-            "m.*",
+            "m.report_status",
             "k.*",
             ["h.f_name" , "host_f_name"],
             ["r.f_name" , "requester_f_name"],
@@ -37,6 +37,7 @@ class KuppiReportModel {
         ];
 
         $groupBy = [
+        "m.report_status",
         "k.id",
         "h.f_name",
         "r.f_name",
