@@ -4,7 +4,7 @@ async function reactOnPost(postId) {
   try {
     const res = await Ajax.jsonPost("/posts/reactOnPost", { post_id: postId });
 
-    console.log(res); // What does this show?
+    console.log(res);
 
     if (res?.success === false) throw new Error(res.message || "Failed");
 

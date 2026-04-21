@@ -1,3 +1,5 @@
+let currentEditModal = null;
+
 function toggleOptionsMenu(icon) {
   const menu = icon.parentElement.querySelector(".post-more-options-menu");
 
@@ -19,17 +21,16 @@ document.addEventListener("click", (e) => {
 
 function deletePost(btn, event, postType) {
   event.stopPropagation();
-  console.log(postType);
 
   const menu = btn.closest(".post-more-options-menu");
-  const postId = menu.getAttribute("data-post-id");
+  const postId = menu ? menu.getAttribute("data-post-id") : null;
+  if (!postId) return;
 
   if (confirm("Are you sure you want to delete this post? ")) {
     const formData = new FormData();
     formData.append("delete_post_id", postId);
-    if (postType) {
-      formData.append("post_type", postType);
-    }
+    if (postType) formData.append("post_type", postType);
+
     fetch(window.location.pathname, {
       method: "POST",
       body: formData,
@@ -37,12 +38,23 @@ function deletePost(btn, event, postType) {
   }
 }
 
-function openEditPostModal(postImageUrl) {
-  const modal = document.querySelector(".edit-post-modal");
-  const previewImg = document.getElementById("edit-preview-img");
-  const editPostImage = document.querySelector(".edit-post-image");
+function resolvePostModalFromTrigger(triggerEl) {
+  const postEl = triggerEl ? triggerEl.closest(".post") : null;
+  if (!postEl) return null;
+  const modal = postEl.nextElementSibling;
+  if (!modal || !modal.classList.contains("edit-post-modal")) return null;
+  return modal;
+}
 
-  // Handle image display based on whether post has an image
+function openEditPostModal(triggerEl, postImageUrl) {
+  const modal = resolvePostModalFromTrigger(triggerEl);
+  if (!modal) return;
+
+  currentEditModal = modal;
+
+  const previewImg = modal.querySelector("#edit-preview-img");
+  const editPostImage = modal.querySelector(".edit-post-image");
+
   if (previewImg && editPostImage) {
     if (postImageUrl && postImageUrl !== "" && postImageUrl !== "null") {
       previewImg.src = postImageUrl;
@@ -66,7 +78,8 @@ function openEditPostModal(postImageUrl) {
 }
 
 function closeEditPostModal() {
-  const modal = document.querySelector(".edit-post-modal");
+  const modal = currentEditModal || document.querySelector(".edit-post-modal");
+  if (!modal) return;
 
   gsap.to(modal, {
     opacity: 0,
@@ -75,40 +88,38 @@ function closeEditPostModal() {
       modal.style.zIndex = "-1";
       modal.style.pointerEvents = "none";
       document.body.style.overflow = "auto";
+      if (currentEditModal === modal) currentEditModal = null;
     },
   });
 }
 
 function openEditImageSelector() {
-  const media = document.getElementById("edit-media");
-  if (media) {
-    media.click();
-  }
+  const modal = currentEditModal;
+  if (!modal) return;
+
+  const media = modal.querySelector("#edit-media");
+  if (media) media.click();
 }
 
 function editPost(postId, postType) {
-  const caption = document.getElementById("edit-post-caption")?.value || "";
-  const anonymous = document.querySelector("#edit-anonymousSwitch input")
-    ?.checked
+  const modal = currentEditModal;
+  if (!modal) return;
+
+  const caption = modal.querySelector("#edit-post-caption")?.value || "";
+  const anonymous = modal.querySelector("#edit-anonymousSwitch input")?.checked
     ? 1
     : 0;
-  const mediaInput = document.getElementById("edit-media");
+  const mediaInput = modal.querySelector("#edit-media");
   const mediaFile = mediaInput?.files?.[0] || null;
 
-  // Build form data for AJAX
   const formData = new FormData();
   formData.append("edit_post_id", postId);
   formData.append("caption", caption);
   formData.append("is_anonymous", anonymous);
-  if (mediaFile) {
-    formData.append("media", mediaFile);
-  }
+  if (mediaFile) formData.append("media", mediaFile);
+  if (postType) formData.append("post_type", postType);
 
-  if (postType) {
-    formData.append("post_type", postType);
-  }
-
-  const spinner = document.getElementById("edit-post-loading-spinner");
+  const spinner = modal.querySelector("#edit-post-loading-spinner");
   if (spinner) spinner.style.display = "flex";
 
   fetch(window.location.pathname, {
@@ -132,21 +143,21 @@ function editPost(postId, postType) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  const mediaInput = document.getElementById("edit-media");
-  const previewImg = document.getElementById("edit-preview-img");
-  const editPostImage = document.querySelector(".edit-post-image");
+  document.querySelectorAll(".edit-post-modal").forEach((modal) => {
+    const mediaInput = modal.querySelector("#edit-media");
+    const previewImg = modal.querySelector("#edit-preview-img");
+    const editPostImage = modal.querySelector(".edit-post-image");
 
-  if (mediaInput && previewImg) {
-    mediaInput.addEventListener("change", function () {
-      const file = mediaInput.files[0];
-      if (file) {
-        previewImg.src = URL.createObjectURL(file);
-        previewImg.style.display = "block";
-        if (editPostImage) {
-          editPostImage.style.display = "block";
+    if (mediaInput && previewImg) {
+      mediaInput.addEventListener("change", function () {
+        const file = mediaInput.files[0];
+        if (file) {
+          previewImg.src = URL.createObjectURL(file);
+          previewImg.style.display = "block";
+          if (editPostImage) editPostImage.style.display = "block";
+          previewImg.onload = () => URL.revokeObjectURL(previewImg.src);
         }
-        previewImg.onload = () => URL.revokeObjectURL(previewImg.src);
-      }
-    });
-  }
+      });
+    }
+  });
 });

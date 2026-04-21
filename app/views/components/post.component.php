@@ -42,7 +42,7 @@ if (!isset($postType)) {
 
                 <!-- Optionally render if the post belongs to the user -->
                 <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $authorId): ?>
-                    <div onclick="openEditPostModal('<?= htmlspecialchars($mediaUrl ?? '') ?>')">Edit Post</div>
+                    <div onclick="openEditPostModal(this, '<?= htmlspecialchars($mediaUrl ?? '') ?>')">Edit Post</div>
                     <div class="delete-post-btn" onclick="deletePost(this, event, '<?= htmlspecialchars($postType) ?>')">
                         Delete Post</div>
                 <?php endif; ?>

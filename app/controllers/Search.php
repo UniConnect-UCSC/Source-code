@@ -13,7 +13,7 @@ class Search extends Controller
         if ($query !== '' && !empty($_SESSION['user_id'])) {
             $currentUserId = $_SESSION['user_id'];
             $userModel = new User();
-            $friendshipModel = new Friendship(); // create once, not inside loop
+            $friendshipModel = new Friendship();
 
             $users = $userModel->searchUsers($query, $currentUserId);
 

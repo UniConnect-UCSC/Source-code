@@ -30,6 +30,8 @@
                     "profilePic" => $user->profile_picture ?? null,
                     "authorId" => $post->user_id,
                     "author" => $post->is_anonymous ? "Anonymous" : $user->f_name . " " . $user->l_name,
+                    "userFName" => $user->f_name ?? '',
+                    "userLName" => $user->l_name ?? '',
                     "caption" => $post->caption,
                     "createdAt" => $post->created_at,
                     "updatedAt" => $post->updated_at,
